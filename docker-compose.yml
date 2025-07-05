@@ -1,0 +1,74 @@
+services:
+  django_app:
+    build: 
+      context: .
+      args:
+        PIP_TIMEOUT: 300
+    container_name: django_keurdoctor
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=1
+      - KEYCLOAK_SERVER_URL=http://keycloak_dev:8080
+    volumes:
+      - .:/app
+    depends_on:
+      keycloak_dev:
+        condition: service_healthy
+    command: python manage.py runserver 0.0.0.0:8000
+    profiles:
+      - full  # Ce service ne démarre que si on spécifie le profile "full"
+
+  keycloak_dev:
+    image: quay.io/keycloak/keycloak:26.1.2
+    container_name: keycloak_dev
+    command: start-dev --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false --http-enabled=true --hostname-strict=false
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres_dev
+      KC_DB_URL_DATABASE: keycloak_dev
+      KC_DB_USERNAME: keycloak_dev
+      KC_DB_PASSWORD: password
+      KC_DB_SCHEMA: public
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      # Configuration pour les logs
+      KC_LOG_LEVEL: INFO
+    volumes:
+      - ./keycloak-themes:/opt/keycloak/themes
+      # Persistence des données de développement
+      - keycloak_data_dev:/opt/keycloak/data
+    ports:
+      - "8080:8080"
+      - "9000:9000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 20
+
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres_dev
+    environment:
+      POSTGRES_DB: keycloak_dev
+      POSTGRES_USER: keycloak_dev
+      POSTGRES_PASSWORD: password
+    # ports:
+    #   - "5432:5432"
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+volumes:
+  postgres_data_dev:
+  keycloak_data_dev:

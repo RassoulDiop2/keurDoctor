@@ -1,0 +1,292 @@
+/* CHIFT Theme - Styles personnalisés */
+
+/* Variables CSS pour cohérence */
+:root {
+  --chift-primary: #2563eb;
+  --chift-primary-hover: #1d4ed8;
+  --chift-success: #059669;
+  --chift-danger: #dc2626;
+  --chift-warning: #d97706;
+  --chift-light: #f8fafc;
+  --chift-dark: #1e293b;
+  --chift-border: #e2e8f0;
+  --chift-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --chift-radius: 12px;
+  --chift-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Reset et base */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--chift-font);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Container principal */
+.login-pf-page {
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.card-pf, .login-container {
+  background: white;
+  border-radius: var(--chift-radius);
+  box-shadow: var(--chift-shadow);
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  border: none;
+}
+
+/* Header et logo */
+.kc-header-wrapper {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.kc-header-wrapper h1, .kc-header-wrapper h2 {
+  color: var(--chift-dark);
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+}
+
+.kc-logo-text {
+  color: var(--chift-primary);
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+/* Formulaires */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--chift-dark);
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--chift-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--chift-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+input.error,
+input:invalid {
+  border-color: var(--chift-danger);
+}
+
+/* Boutons */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.btn-primary,
+input[type="submit"] {
+  background: var(--chift-primary);
+  color: white;
+}
+
+.btn-primary:hover,
+input[type="submit"]:hover {
+  background: var(--chift-primary-hover);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
+.btn-secondary {
+  background: var(--chift-light);
+  color: var(--chift-dark);
+  border: 2px solid var(--chift-border);
+}
+
+.btn-secondary:hover {
+  background: #e2e8f0;
+}
+
+/* Liens */
+a {
+  color: var(--chift-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Messages d'alerte */
+.alert {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.alert-success {
+  background: #ecfdf5;
+  color: var(--chift-success);
+  border: 1px solid #a7f3d0;
+}
+
+.alert-error, .alert-danger {
+  background: #fef2f2;
+  color: var(--chift-danger);
+  border: 1px solid #fecaca;
+}
+
+.alert-warning {
+  background: #fffbeb;
+  color: var(--chift-warning);
+  border: 1px solid #fed7aa;
+}
+
+.alert-info {
+  background: #eff6ff;
+  color: var(--chift-primary);
+  border: 1px solid #bfdbfe;
+}
+
+/* Actions et liens */
+.kc-form-options {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.kc-form-options span {
+  display: block;
+  margin: 0.5rem 0;
+}
+
+/* Checkbox et radio */
+input[type="checkbox"],
+input[type="radio"] {
+  width: auto;
+  margin-right: 0.5rem;
+}
+
+    /* Responsive */
+    @media (max-width: 480px) {
+    body {
+        padding: 8px;
+    }
+
+    .card-pf,
+    .login-container {
+        padding: 1rem;
+        margin: 0;
+    }
+
+    .kc-header-wrapper h1,
+    .kc-header-wrapper h2,
+    #kc-page-title {
+        font-size: 1.1rem;
+        line-height: 1.2;
+        margin-bottom: 0.8rem;
+        word-break: break-word;
+    }
+    }
+
+
+/* Icônes et feedback visuel */
+.form-group {
+  position: relative;
+}
+
+.form-group.has-error input {
+  border-color: var(--chift-danger);
+  padding-right: 2.5rem;
+}
+
+.form-group.has-success input {
+  border-color: var(--chift-success);
+  padding-right: 2.5rem;
+}
+
+.input-group-addon {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+}
+
+/* Footer */
+.kc-footer {
+  text-align: center;
+  margin-top: 2rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+/* Loading state */
+.btn:disabled,
+.btn.loading {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn.loading::after {
+  content: '';
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 0.5rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

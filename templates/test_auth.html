@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeurDoctor - Test d'authentification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .user-info {
+            background-color: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .test-urls {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .test-urls a {
+            display: block;
+            margin: 5px 0;
+            color: #856404;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>🩺 KeurDoctor - Test d'authentification</h1>
+
+        {% if user.is_authenticated %}
+        <div class="success">
+            <h3>✅ Connexion réussie !</h3>
+            <div class="user-info">
+                <p><strong>Utilisateur :</strong> {{ user.username }}</p>
+                <p><strong>Email :</strong> {{ user.email }}</p>
+                <p><strong>Nom complet :</strong> {{ user.first_name }} {{ user.last_name }}</p>
+                <p><strong>Groupes :</strong>
+                    {% for group in user.groups.all %}
+                    <span
+                        style="background-color: #007bff; color: white; padding: 2px 8px; border-radius: 3px; margin: 2px;">{{
+                        group.name }}</span>
+                    {% empty %}
+                    Aucun groupe assigné
+                    {% endfor %}
+                </p>
+                <p><strong>Statut :</strong>
+                    {% if user.is_superuser %}
+                    <span style="color: red;">Superutilisateur</span>
+                    {% elif user.is_staff %}
+                    <span style="color: orange;">Staff</span>
+                    {% else %}
+                    <span style="color: green;">Utilisateur standard</span>
+                    {% endif %}
+                </p>
+            </div>
+
+            <h4>🎯 Actions disponibles :</h4>
+            <a href="{% url 'dashboard' %}" class="btn">Tableau de bord</a>
+            <a href="/admin/" class="btn">Administration Django</a>
+            <a href="{% url 'custom_logout' %}" class="btn btn-danger">Se déconnecter</a>
+        </div>
+
+        {% else %}
+        <div class="error">
+            <h3>🔒 Non connecté</h3>
+            <p>Vous devez vous connecter pour accéder aux fonctionnalités de KeurDoctor.</p>
+        </div>
+
+        <h4>🔑 Options de connexion :</h4>
+        <a href="{% url 'oidc_authentication_init' %}" class="btn">Se connecter avec Keycloak</a>
+        <a href="/admin/" class="btn">Connexion Admin Django</a>
+        {% endif %}
+
+        <div class="test-urls">
+            <h4>🧪 URLs de test utiles :</h4>
+            <a href="/" target="_blank">Accueil Django ({{ request.get_host }})</a>
+            <a href="http://localhost:8080/admin" target="_blank">Interface Admin Keycloak</a>
+            <a href="http://localhost:8080/realms/KeurDoctorSecure/account" target="_blank">Compte utilisateur
+                Keycloak</a>
+            <a href="/oidc/authenticate/" target="_blank">Connexion OIDC directe</a>
+        </div>
+
+        <div class="card" style="margin-top: 30px; background-color: #f8f9fa;">
+            <h4>📋 Instructions de test :</h4>
+            <ol>
+                <li><strong>Test Keycloak :</strong> Cliquez sur "Se connecter avec Keycloak"</li>
+                <li><strong>Identifiants de test :</strong>
+                    <ul>
+                        <li>Admin : <code>admin / admin123</code></li>
+                        <li>Médecin : <code>dr_martin / martin123</code></li>
+                        <li>Patient : <code>patient_marie / marie123</code> (si créé)</li>
+                    </ul>
+                </li>
+                <li><strong>Vérification :</strong> Après connexion, vérifiez que les groupes sont correctement assignés
+                </li>
+                <li><strong>Redirection :</strong> Vous devriez être redirigé vers le bon dashboard selon votre rôle
+                </li>
+            </ol>
+        </div>
+    </div>
+</body>
+
+</html>
