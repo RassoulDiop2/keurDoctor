@@ -1,95 +1,214 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Administration - KeurDoctor{% endblock %}
+{% block title %}Dashboard Administrateur - KeurDoctor{% endblock %}
 
 {% block content %}
-<div class="user-info">
-    <div class="d-flex align-items-center">
-        <div class="me-3">
-            <i class="fas fa-user-shield fa-3x"></i>
-        </div>
-        <div>
-            <h2 class="mb-1">Tableau de bord Administrateur</h2>
-            <p class="mb-0">Bienvenue, {{ user.get_full_name|default:user.username }}</p>
-            <span class="badge bg-light text-dark role-badge mt-2">
-                <i class="fas fa-crown"></i> Administrateur
-            </span>
-        </div>
-    </div>
-</div>
+<style>
+    body {
+        background: url('{% static "images/admin-bg.jpg" %}') no-repeat center center fixed;
+        background-size: cover;
+    }
 
-<!-- Actions d'administration -->
-<div class="row">
-    <div class="col-md-6">
-        <div class="card dashboard-card">
-            <div class="card-header">
-                <h5><i class="fas fa-users-cog"></i> Gestion des utilisateurs</h5>
+    .dashboard-overlay {
+        background: rgba(0, 0, 0, 0.55);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .dashboard-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 18px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+        padding: 2.5rem 2rem;
+        max-width: 900px;
+        width: 100%;
+        margin: 2rem auto;
+    }
+
+    .dashboard-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #1976d2;
+        margin-bottom: 1rem;
+    }
+
+    .dashboard-accroche {
+        font-size: 1.2rem;
+        color: #333;
+        margin-bottom: 2rem;
+        font-style: italic;
+    }
+
+    .dashboard-actions .btn {
+        margin: 0.5rem 0.5rem 0.5rem 0;
+        min-width: 180px;
+    }
+
+    .card-section {
+        background: #f8f9fa;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+        margin-bottom: 1.5rem;
+        padding: 1.5rem 1rem;
+    }
+
+    .section-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #1976d2;
+        margin-bottom: 1rem;
+    }
+
+    .stat-box {
+        background: #e3f2fd;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 0.5rem;
+        min-width: 120px;
+        display: inline-block;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #1976d2;
+    }
+
+    .stat-label {
+        font-size: 0.95rem;
+        color: #333;
+    }
+
+
+
+    @media (max-width: 900px) {
+        .dashboard-card {
+            max-width: 100%;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .dashboard-card {
+            padding: 1.2rem 0.5rem;
+        }
+
+        .dashboard-title {
+            font-size: 1.3rem;
+        }
+    }
+</style>
+<div class="dashboard-overlay">
+    <div class="dashboard-card">
+        <div class="text-center mb-4">
+            <i class="fas fa-user-shield fa-3x text-primary mb-3"></i>
+            <div class="dashboard-title">Espace Administrateur</div>
+            <div class="dashboard-accroche">
+                Bienvenue sur le centre de pilotage KeurDoctor.<br>
+                Gérez la plateforme et veillez à la santé numérique de tous.
             </div>
-            <div class="card-body">
-                <p>Gérez les comptes utilisateurs, leurs rôles et permissions.</p>
-                <div class="d-grid gap-2">
-                   <a href="{% url 'user_management' %}" class="btn btn-primary">
-                       <i class="fas fa-users"></i> Gestion des utilisateurs
-                   </a>>
-                    <a href="/admin/auth/user/" class="btn btn-outline-primary" target="_blank">
-                        <i class="fas fa-external-link-alt"></i> Interface d'administration Django
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card-section">
+                    <div class="section-title"><i class="fas fa-users-cog me-2"></i>Gestion des utilisateurs</div>
+                    <a href="{% url 'user_management' %}" class="btn btn-outline-success mb-2 w-100 position-relative">
+                        <i class="fas fa-users"></i> Gestion des utilisateurs
+                        {% if utilisateurs_en_attente > 0 %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                            {{ utilisateurs_en_attente }}
+                            <span class="visually-hidden">utilisateurs en attente</span>
+                        </span>
+                        {% endif %}
                     </a>
-                    <a href="http://localhost:8080/admin/" class="btn btn-secondary" target="_blank">
+                    <a href="{% url 'gestion_securite' %}" class="btn btn-outline-warning mb-2 w-100 position-relative">
+                        <i class="fas fa-shield-alt"></i> Gestion de la sécurité
+                        {% if alertes_non_lues_count > 0 %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{ alertes_non_lues_count }}
+                            <span class="visually-hidden">alertes non lues</span>
+                        </span>
+                        {% endif %}
+                        {% if utilisateurs_bloques > 0 %}
+                        <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger"
+                            style="left:10px;">
+                            {{ utilisateurs_bloques }}
+                            <span class="visually-hidden">utilisateurs bloqués</span>
+                        </span>
+                        {% endif %}
+                    </a>
+                    <a href="/admin/" class="btn btn-outline-primary mb-2 w-100" target="_blank">
+                        <i class="fas fa-cogs"></i> Administration Django
+                    </a>
+                    <a href="http://localhost:8080/admin/" class="btn btn-outline-secondary w-100" target="_blank">
                         <i class="fas fa-key"></i> Console Keycloak
                     </a>
                 </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-md-6">
-        <div class="card dashboard-card">
-            <div class="card-header">
-                <h5><i class="fas fa-chart-bar"></i> Rapports et statistiques</h5>
-            </div>
-            <div class="card-body">
-                <p>Consultez les rapports d'activité et les statistiques d'utilisation.</p>
-                <button class="btn btn-info">
-                    <i class="fas fa-chart-line"></i> Voir les statistiques
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row mt-4">
-    <div class="col-md-6">
-        <div class="card dashboard-card">
-            <div class="card-header">
-                <h5><i class="fas fa-cog"></i> Configuration système</h5>
-            </div>
-            <div class="card-body">
-                <p>Paramètres généraux de l'application et intégrations.</p>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Keycloak
-                        <span class="badge bg-success rounded-pill">Connecté</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Base de données
-                        <span class="badge bg-success rounded-pill">Opérationnelle</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-md-6">
-        <div class="card dashboard-card">
-            <div class="card-header">
-                <h5><i class="fas fa-bell"></i> État du système</h5>
-            </div>
-            <div class="card-body">
-                <div class="alert alert-success">
-                    <i class="fas fa-check-circle"></i>
-                    Tous les services fonctionnent normalement.
+                <div class="card-section">
+                    <div class="section-title"><i class="fas fa-cog me-2"></i>Configuration système</div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Keycloak
+                            <span class="badge bg-success rounded-pill">Connecté</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Base de données
+                            <span class="badge bg-success rounded-pill">Opérationnelle</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Système de sécurité
+                            <span class="badge bg-success rounded-pill">Actif</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="card-section">
+                    <div class="section-title"><i class="fas fa-chart-bar me-2"></i>Rapports & Statistiques</div>
+                    <div class="d-flex flex-wrap justify-content-center">
+                        <div class="stat-box text-center">
+                            <div class="stat-value">42</div>
+                            <div class="stat-label">Utilisateurs</div>
+                        </div>
+                        <div class="stat-box text-center">
+                            <div class="stat-value">15</div>
+                            <div class="stat-label">Médecins</div>
+                        </div>
+                        <div class="stat-box text-center">
+                            <div class="stat-value">27</div>
+                            <div class="stat-label">Patients</div>
+                        </div>
+                        <div class="stat-box text-center">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Rendez-vous</div>
+                        </div>
+                    </div>
+                    <a href="#" class="btn btn-info mt-3 w-100">
+                        <i class="fas fa-chart-line"></i> Voir les statistiques détaillées
+                    </a>
+                </div>
+                <div class="card-section">
+                    <div class="section-title"><i class="fas fa-bell me-2"></i>État du système</div>
+                    {% if utilisateurs_bloques > 0 or alertes_critiques > 0 %}
+                    <div class="alert alert-warning mb-0">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Attention:</strong> {{ utilisateurs_bloques }} utilisateur(s) bloqué(s), {{
+                        alertes_critiques }} alerte(s) critique(s).
+                    </div>
+                    {% else %}
+                    <div class="alert alert-success mb-0">
+                        <i class="fas fa-check-circle"></i>
+                        Tous les services fonctionnent normalement.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="mt-4 text-muted small text-center">
+            Connecté en tant que <strong>{{ user.email }}</strong>
         </div>
     </div>
 </div>

@@ -1,0 +1,299 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Créer un utilisateur - KeurDoctor{% endblock %}
+
+{% block content %}
+<style>
+    .create-user-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 2rem 0;
+    }
+
+    .create-user-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        padding: 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .form-section {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-left: 4px solid #007bff;
+    }
+
+    .section-title {
+        color: #007bff;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .role-specific-fields {
+        display: none;
+    }
+
+    .role-specific-fields.active {
+        display: block;
+    }
+
+    .btn-custom {
+        border-radius: 25px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+<div class="create-user-container">
+    <div class="create-user-card">
+        <div class="text-center mb-4">
+            <i class="fas fa-user-plus fa-3x text-primary mb-3"></i>
+            <h2 class="text-primary">Créer un nouvel utilisateur</h2>
+            <p class="text-muted">Remplissez les informations pour créer un nouvel utilisateur</p>
+        </div>
+
+        {% if messages %}
+        <div class="messages mb-4">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="post" id="createUserForm">
+            {% csrf_token %}
+
+            <!-- Informations de base -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-user me-2"></i>Informations de base
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.email.id_for_label }}" class="form-label">
+                            {{ form.email.label }} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                        <div class="text-danger small">{{ form.email.errors.0 }}</div>
+                        {% endif %}
+                        {% if form.email.help_text %}
+                        <div class="form-text">{{ form.email.help_text }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.role_autorise.id_for_label }}" class="form-label">
+                            {{ form.role_autorise.label }} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.role_autorise }}
+                        {% if form.role_autorise.errors %}
+                        <div class="text-danger small">{{ form.role_autorise.errors.0 }}</div>
+                        {% endif %}
+                        {% if form.role_autorise.help_text %}
+                        <div class="form-text">{{ form.role_autorise.help_text }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.prenom.id_for_label }}" class="form-label">
+                            {{ form.prenom.label }} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.prenom }}
+                        {% if form.prenom.errors %}
+                        <div class="text-danger small">{{ form.prenom.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.nom.id_for_label }}" class="form-label">
+                            {{ form.nom.label }} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.nom }}
+                        {% if form.nom.errors %}
+                        <div class="text-danger small">{{ form.nom.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mot de passe -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-lock me-2"></i>Mot de passe
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.password1.id_for_label }}" class="form-label">
+                            {{ form.password1.label }} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.password1 }}
+                        {% if form.password1.errors %}
+                        <div class="text-danger small">{{ form.password1.errors.0 }}</div>
+                        {% endif %}
+                        {% if form.password1.help_text %}
+                        <div class="form-text">{{ form.password1.help_text }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.password2.id_for_label }}" class="form-label">
+                            {{ form.password2.label }} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.password2 }}
+                        {% if form.password2.errors %}
+                        <div class="text-danger small">{{ form.password2.errors.0 }}</div>
+                        {% endif %}
+                        {% if form.password2.help_text %}
+                        <div class="form-text">{{ form.password2.help_text }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Champs spécifiques au médecin -->
+            <div class="form-section role-specific-fields" id="medecin-fields">
+                <div class="section-title">
+                    <i class="fas fa-user-md me-2"></i>Informations spécifiques au médecin
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.specialite.id_for_label }}" class="form-label">
+                            {{ form.specialite.label }} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.specialite }}
+                        {% if form.specialite.errors %}
+                        <div class="text-danger small">{{ form.specialite.errors.0 }}</div>
+                        {% endif %}
+                        {% if form.specialite.help_text %}
+                        <div class="form-text">{{ form.specialite.help_text }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.numero_praticien.id_for_label }}" class="form-label">
+                            {{ form.numero_praticien.label }} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.numero_praticien }}
+                        {% if form.numero_praticien.errors %}
+                        <div class="text-danger small">{{ form.numero_praticien.errors.0 }}</div>
+                        {% endif %}
+                        {% if form.numero_praticien.help_text %}
+                        <div class="form-text">{{ form.numero_praticien.help_text }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Champs spécifiques au patient -->
+            <div class="form-section role-specific-fields" id="patient-fields">
+                <div class="section-title">
+                    <i class="fas fa-user-injured me-2"></i>Informations spécifiques au patient
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.date_naissance.id_for_label }}" class="form-label">
+                            {{ form.date_naissance.label }} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.date_naissance }}
+                        {% if form.date_naissance.errors %}
+                        <div class="text-danger small">{{ form.date_naissance.errors.0 }}</div>
+                        {% endif %}
+                        {% if form.date_naissance.help_text %}
+                        <div class="form-text">{{ form.date_naissance.help_text }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.numero_dossier.id_for_label }}" class="form-label">
+                            {{ form.numero_dossier.label }} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.numero_dossier }}
+                        {% if form.numero_dossier.errors %}
+                        <div class="text-danger small">{{ form.numero_dossier.errors.0 }}</div>
+                        {% endif %}
+                        {% if form.numero_dossier.help_text %}
+                        <div class="form-text">{{ form.numero_dossier.help_text }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Champs spécifiques à l'administrateur -->
+            <div class="form-section role-specific-fields" id="admin-fields">
+                <div class="section-title">
+                    <i class="fas fa-user-shield me-2"></i>Informations spécifiques à l'administrateur
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.niveau_acces.id_for_label }}" class="form-label">
+                            {{ form.niveau_acces.label }} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.niveau_acces }}
+                        {% if form.niveau_acces.errors %}
+                        <div class="text-danger small">{{ form.niveau_acces.errors.0 }}</div>
+                        {% endif %}
+                        {% if form.niveau_acces.help_text %}
+                        <div class="form-text">{{ form.niveau_acces.help_text }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Boutons d'action -->
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary btn-custom me-3">
+                    <i class="fas fa-save me-2"></i>Créer l'utilisateur
+                </button>
+                <a href="{% url 'user_management' %}" class="btn btn-secondary btn-custom">
+                    <i class="fas fa-arrow-left me-2"></i>Retour à la gestion
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const roleSelect = document.getElementById('{{ form.role_autorise.id_for_label }}');
+        const medecinFields = document.getElementById('medecin-fields');
+        const patientFields = document.getElementById('patient-fields');
+        const adminFields = document.getElementById('admin-fields');
+
+        function toggleRoleFields() {
+            const selectedRole = roleSelect.value;
+
+            // Masquer tous les champs spécifiques
+            medecinFields.classList.remove('active');
+            patientFields.classList.remove('active');
+            adminFields.classList.remove('active');
+
+            // Afficher les champs correspondants au rôle sélectionné
+            if (selectedRole === 'medecin') {
+                medecinFields.classList.add('active');
+            } else if (selectedRole === 'patient') {
+                patientFields.classList.add('active');
+            } else if (selectedRole === 'admin') {
+                adminFields.classList.add('active');
+            }
+        }
+
+        // Écouter les changements de rôle
+        roleSelect.addEventListener('change', toggleRoleFields);
+
+        // Initialiser l'affichage
+        toggleRoleFields();
+    });
+</script>
+{% endblock %}

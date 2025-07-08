@@ -1,13 +1,16 @@
 from mozilla_django_oidc.auth import OIDCAuthenticationBackend
 from django.contrib.auth.models import User, Group
+from django.http import HttpRequest
+from django.utils import timezone
 import logging
+from .models import Utilisateur, AlerteSecurite, HistoriqueAuthentification
 
 logger = logging.getLogger(__name__)
 
 
 class KeycloakOIDCAuthenticationBackend(OIDCAuthenticationBackend):
     """
-    Backend d'authentification personnalisé pour Keycloak
+    Backend d'authentification personnalisé pour Keycloak avec contrôle de rôles
     """
     
     def create_user(self, claims):
@@ -41,6 +44,97 @@ class KeycloakOIDCAuthenticationBackend(OIDCAuthenticationBackend):
         self.assign_roles(user, claims)
         
         return user
+    
+    def authenticate(self, request, **kwargs):
+        """Authentification avec contrôle de rôles"""
+        # Récupérer le rôle tenté depuis la session ou les paramètres
+        role_tente = None
+        if hasattr(request, 'session'):
+            role_tente = request.session.get('role_tente')
+        if not role_tente and hasattr(request, 'GET'):
+            role_tente = request.GET.get('role')
+        
+        # Authentification normale via OIDC
+        user = super().authenticate(request, **kwargs)
+        
+        if user and role_tente:
+            # Vérifier si l'utilisateur est bloqué
+            if hasattr(user, 'est_bloque') and user.est_bloque:
+                logger.warning(f"Tentative de connexion d'un utilisateur bloqué: {user.email}")
+                self._enregistrer_tentative_incorrecte(user, role_tente, request, "Utilisateur bloqué")
+                return None
+            
+            # Vérifier le rôle autorisé
+            if not self._verifier_role_autorise(user, role_tente, request):
+                return None
+        
+        return user
+    
+    def _verifier_role_autorise(self, user, role_tente, request):
+        """Vérifie si l'utilisateur peut se connecter avec le rôle tenté"""
+        # Récupérer le rôle autorisé de l'utilisateur
+        role_autorise = getattr(user, 'role_autorise', None)
+        
+        if not role_autorise:
+            # Si aucun rôle autorisé n'est défini, autoriser (compatibilité)
+            logger.info(f"Aucun rôle autorisé défini pour {user.email}, autorisation accordée")
+            return True
+        
+        # Vérifier si le rôle tenté correspond au rôle autorisé
+        if role_tente.lower() == role_autorise.lower():
+            logger.info(f"Connexion autorisée pour {user.email} avec le rôle {role_tente}")
+            # Réinitialiser les tentatives incorrectes
+            if hasattr(user, 'tentatives_connexion_incorrectes'):
+                user.tentatives_connexion_incorrectes = 0
+                user.save()
+            return True
+        else:
+            # Rôle incorrect - bloquer l'utilisateur
+            logger.warning(f"Tentative de connexion avec rôle incorrect: {user.email} - Tenté: {role_tente}, Autorisé: {role_autorise}")
+            
+            # Enregistrer la tentative incorrecte
+            self._enregistrer_tentative_incorrecte(user, role_tente, request, f"Rôle incorrect: tenté {role_tente}, autorisé {role_autorise}")
+            
+            # Bloquer l'utilisateur
+            user.bloquer(f"Tentative de connexion avec rôle incorrect: {role_tente} au lieu de {role_autorise}")
+            
+            # Créer une alerte admin
+            AlerteSecurite.objects.create(
+                type_alerte='TENTATIVE_ROLE_INCORRECT',
+                utilisateur_concerne=user,
+                details=f"Tentative de connexion avec rôle incorrect: {role_tente} au lieu de {role_autorise}",
+                niveau_urgence='HAUTE',
+                adresse_ip=self._get_client_ip(request),
+                user_agent=request.META.get('HTTP_USER_AGENT', '')
+            )
+            
+            return False
+    
+    def _enregistrer_tentative_incorrecte(self, user, role_tente, request, raison):
+        """Enregistre une tentative de connexion incorrecte"""
+        # Incrémenter le compteur de tentatives
+        if hasattr(user, 'incrementer_tentative_incorrecte'):
+            user.incrementer_tentative_incorrecte()
+        
+        # Enregistrer dans l'historique
+        HistoriqueAuthentification.objects.create(
+            utilisateur=user,
+            type_auth='TENTATIVE_ROLE_INCORRECT',
+            succes=False,
+            adresse_ip=self._get_client_ip(request),
+            user_agent=request.META.get('HTTP_USER_AGENT', ''),
+            role_tente=role_tente,
+            role_autorise=getattr(user, 'role_autorise', 'Non défini')
+        )
+    
+    def _get_client_ip(self, request):
+        """Récupère l'adresse IP du client"""
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip
     
     def assign_roles(self, user, claims):
         """Assigne les rôles Keycloak aux groupes Django"""

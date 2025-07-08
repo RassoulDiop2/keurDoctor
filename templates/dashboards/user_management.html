@@ -6,11 +6,115 @@
 <div class="container mt-4">
     <h2><i class="fas fa-users-cog"></i> Gestion des utilisateurs</h2>
 
+    <!-- Utilisateurs en attente de rôle -->
+    <div class="card mt-4 border-warning">
+        <div class="card-header bg-warning text-dark">
+            <h4 class="mb-0"><i class="fas fa-user-clock me-2"></i> Utilisateurs en attente de rôle</h4>
+        </div>
+        <div class="card-body">
+            {% if en_attente %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Rôle demandé</th>
+                            <th>Date d'inscription</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for utilisateur in en_attente %}
+                        <tr>
+                            <td>{{ utilisateur.prenom }} {{ utilisateur.nom }}</td>
+                            <td>{{ utilisateur.email }}</td>
+                            <td>
+                                {% if utilisateur.role_demande %}
+                                <span class="badge bg-info">{{ utilisateur.get_role_demande_display }}</span>
+                                {% else %}
+                                <span class="text-muted">Non précisé</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ utilisateur.date_creation|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                <form method="post" action="{% url 'definir_role_utilisateur' utilisateur.id %}"
+                                    style="display:inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="role" value="{{ utilisateur.role_demande }}">
+                                    <button type="submit" class="btn btn-success btn-sm ms-1">
+                                        <i class="fas fa-check me-1"></i> Attribuer ce rôle
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center text-muted">
+                <i class="fas fa-user-check fa-2x mb-2"></i>
+                <p>Aucun utilisateur en attente de rôle</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Utilisateurs bloqués -->
+    <div class="card mt-4 border-danger">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0"><i class="fas fa-ban me-2"></i> Utilisateurs bloqués</h4>
+        </div>
+        <div class="card-body">
+            {% if bloques %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Raison du blocage</th>
+                            <th>Date de blocage</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for utilisateur in bloques %}
+                        <tr>
+                            <td>{{ utilisateur.prenom }} {{ utilisateur.nom }}</td>
+                            <td>{{ utilisateur.email }}</td>
+                            <td>{{ utilisateur.raison_blocage|truncatechars:50 }}</td>
+                            <td>{{ utilisateur.date_blocage|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                <form method="post" action="{% url 'debloquer_utilisateur' utilisateur.id %}"
+                                    style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="fas fa-unlock me-1"></i> Débloquer
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center text-muted">
+                <i class="fas fa-check-circle fa-2x mb-2"></i>
+                <p>Aucun utilisateur bloqué</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Tous les utilisateurs -->
     <div class="card mt-4">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
-                <h4 class="mb-0">Liste des utilisateurs</h4>
-                <a href="/admin/auth/user/add/" class="btn btn-sm btn-success">
+                <h4 class="mb-0">Liste de tous les utilisateurs</h4>
+                <a href="{% url 'create_user' %}" class="btn btn-sm btn-success">
                     <i class="fas fa-plus"></i> Ajouter un utilisateur
                 </a>
             </div>
@@ -21,7 +125,7 @@
                     <tr>
                         <th>Nom d'utilisateur</th>
                         <th>Email</th>
-                        <th>Rôle</th>
+                        <th>Rôle autorisé</th>
                         <th>Date d'inscription</th>
                         <th>Actions</th>
                     </tr>
@@ -32,15 +136,16 @@
                         <td>{{ user.username }}</td>
                         <td>{{ user.email }}</td>
                         <td>
-                            {% for group in user.groups.all %}
-                            <span class="badge bg-primary">{{ group.name }}</span>
-                            {% endfor %}
+                            {% if user.role_autorise %}
+                            <span class="badge bg-primary">{{ user.get_role_autorise_display }}</span>
+                            {% else %}
+                            <span class="text-muted">Non attribué</span>
+                            {% endif %}
                         </td>
-                        <td>{{ user.date_joined|date:"d/m/Y H:i" }}</td>
+                        <td>{{ user.date_creation|date:"d/m/Y H:i" }}</td>
                         <td>
-                            <a href="/admin/auth/user/{{ user.id }}/change/"
-                               class="btn btn-sm btn-outline-primary"
-                               title="Modifier">
+                            <a href="/admin/comptes/utilisateur/{{ user.id }}/change/"
+                                class="btn btn-sm btn-outline-primary" title="Modifier">
                                 <i class="fas fa-edit"></i>
                             </a>
                         </td>
