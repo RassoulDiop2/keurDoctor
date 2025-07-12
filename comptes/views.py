@@ -10,14 +10,23 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.utils.decorators import method_decorator
 import json
+<<<<<<< HEAD
 from .decorators import role_required, any_role_required, detecter_usurpation_role, verifier_elevation_privileges
 from .forms import InscriptionForm
 from .models import Utilisateur, Medecin, Patient, AlerteSecurite, HistoriqueAuthentification, LicenceAcceptation, AuditLog
+=======
+from .decorators import role_required, any_role_required
+from .forms import InscriptionForm, AdminCreateUserForm
+from .models import Utilisateur, Medecin, Patient, AlerteSecurite, HistoriqueAuthentification, Administrateur
+>>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
 import logging
 import requests
 import uuid
 from django.conf import settings
+<<<<<<< HEAD
 from django.utils import timezone
+=======
+>>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +45,7 @@ class HomeView(View):
         return render(request, 'home.html')
 
 
+<<<<<<< HEAD
 def licence_view(request):
     """Vue pour afficher et traiter l'acceptation de la licence"""
     if request.method == 'POST':
@@ -58,6 +68,8 @@ def licence_view(request):
     })
 
 
+=======
+>>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
 @require_http_methods(["POST"])
 @csrf_exempt
 def set_role_session(request):
@@ -524,11 +536,14 @@ def get_keycloak_admin_token(keycloak_url):
 
 def inscription_view(request):
     """Vue pour l'inscription des nouveaux utilisateurs"""
+<<<<<<< HEAD
     # Vérifier si la licence a été acceptée
     if not request.session.get('licence_accepted'):
         messages.warning(request, 'Vous devez d\'abord accepter la politique de confidentialité.')
         return redirect('licence')
     
+=======
+>>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
     if request.method == 'POST':
         form = InscriptionForm(request.POST)
         if form.is_valid():
@@ -553,6 +568,7 @@ def inscription_view(request):
                     role_demande=role   # Remplir le rôle souhaité
                 )
                 
+<<<<<<< HEAD
                 # Enregistrer l'acceptation de la licence
                 LicenceAcceptation.objects.create(
                     utilisateur=utilisateur,
@@ -562,11 +578,17 @@ def inscription_view(request):
                     user_agent=request.session.get('licence_user_agent', '')
                 )
                 
+=======
+>>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
                 # Créer une alerte pour l'admin
                 AlerteSecurite.objects.create(
                     type_alerte='NOUVEL_UTILISATEUR_EN_ATTENTE',
                     utilisateur_concerne=utilisateur,
+<<<<<<< HEAD
                     details=f"Nouvel utilisateur inscrit : {utilisateur.email}. Rôle à attribuer. Licence acceptée.",
+=======
+                    details=f"Nouvel utilisateur inscrit : {utilisateur.email}. Rôle à attribuer.",
+>>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
                     niveau_urgence='MOYENNE'
                 )
                 
@@ -580,6 +602,7 @@ def inscription_view(request):
                             numero_praticien=form.cleaned_data['numero_praticien']
                         )
                     elif role == 'patient':
+<<<<<<< HEAD
                         # Générer un numéro de dossier unique
                         numero_dossier = form.cleaned_data['numero_dossier']
                         if numero_dossier:
@@ -607,6 +630,14 @@ def inscription_view(request):
                     del request.session['licence_ip']
                     del request.session['licence_user_agent']
                     
+=======
+                        Patient.objects.create(
+                            utilisateur=utilisateur,
+                            date_naissance=form.cleaned_data['date_naissance'],
+                            numero_dossier=form.cleaned_data['numero_dossier']
+                        )
+                    
+>>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
                     messages.success(request, f'Inscription réussie ! Votre compte a été créé et est en attente de validation par un administrateur.')
                     return redirect('home')
                 else:
@@ -722,6 +753,7 @@ def synchroniser_utilisateur_keycloak(request, user_id):
     
     return redirect('gestion_securite')
 
+<<<<<<< HEAD
 # Vues de test pour la sécurité
 @login_required
 @detecter_usurpation_role
@@ -919,3 +951,162 @@ def simuler_acces_direct_url(request, url_cible):
     </body>
     </html>
     """)
+=======
+@role_required('admin')
+def create_user_view(request):
+    """Vue pour la création d'utilisateurs par l'administrateur"""
+    if request.method == 'POST':
+        form = AdminCreateUserForm(request.POST)
+        if form.is_valid():
+            try:
+                # Créer l'utilisateur
+                user = form.save(commit=False)
+                user.role_autorise = form.cleaned_data['role_autorise']
+                user.save()
+                
+                # Assigner le groupe correspondant
+                from django.contrib.auth.models import Group
+                group = Group.objects.get(name=form.cleaned_data['role_autorise'])
+                user.groups.add(group)
+                
+                # Créer le profil spécifique selon le rôle
+                role_autorise = form.cleaned_data['role_autorise']
+                
+                if role_autorise == 'medecin':
+                    Medecin.objects.create(
+                        utilisateur=user,
+                        specialite=form.cleaned_data['specialite'],
+                        numero_praticien=form.cleaned_data['numero_praticien']
+                    )
+                elif role_autorise == 'patient':
+                    Patient.objects.create(
+                        utilisateur=user,
+                        date_naissance=form.cleaned_data['date_naissance'],
+                        numero_dossier=form.cleaned_data['numero_dossier']
+                    )
+                elif role_autorise == 'admin':
+                    Administrateur.objects.create(
+                        utilisateur=user,
+                        niveau_acces=form.cleaned_data['niveau_acces']
+                    )
+                
+                # Créer l'utilisateur dans Keycloak avec le rôle
+                try:
+                    keycloak_success = create_keycloak_user_with_role(user, role_autorise, form.cleaned_data['password1'])
+                    if keycloak_success:
+                        messages.success(request, f"Utilisateur {user.email} créé avec succès dans Django et Keycloak.")
+                    else:
+                        messages.warning(request, f"Utilisateur {user.email} créé dans Django mais erreur lors de la création dans Keycloak.")
+                except Exception as e:
+                    logger.error(f"Erreur lors de la création Keycloak: {e}")
+                    messages.warning(request, f"Utilisateur {user.email} créé dans Django mais erreur lors de la création dans Keycloak.")
+                
+                # Créer une alerte de sécurité
+                AlerteSecurite.objects.create(
+                    type_alerte='CREATION_UTILISATEUR',
+                    utilisateur_concerne=user,
+                    details=f"Utilisateur créé par l'administrateur {request.user.email} avec le rôle {role_autorise}",
+                    niveau_urgence='BASSE',
+                    admin_qui_a_bloque=request.user
+                )
+                
+                return redirect('user_management')
+                
+            except Exception as e:
+                logger.error(f"Erreur lors de la création d'utilisateur: {e}")
+                messages.error(request, f"Erreur lors de la création de l'utilisateur: {e}")
+    else:
+        form = AdminCreateUserForm()
+    
+    return render(request, 'admin/create_user.html', {
+        'form': form,
+        'title': 'Créer un nouvel utilisateur'
+    })
+
+
+def create_keycloak_user_with_role(utilisateur, role, password):
+    """Crée un utilisateur dans Keycloak avec le rôle spécifié"""
+    try:
+        admin_token = get_keycloak_admin_token(settings.KEYCLOAK_SERVER_URL)
+        if not admin_token:
+            logger.error("Impossible d'obtenir le token admin Keycloak")
+            return False
+
+        # Création de l'utilisateur
+        user_data = {
+            "username": utilisateur.email,
+            "email": utilisateur.email,
+            "firstName": utilisateur.prenom,
+            "lastName": utilisateur.nom,
+            "enabled": True,
+            "emailVerified": True,
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": password,
+                    "temporary": False
+                }
+            ],
+            "attributes": {
+                "keycloak_id": [str(utilisateur.keycloak_id)],
+                "role": [role]
+            }
+        }
+        
+        headers = {
+            'Authorization': f'Bearer {admin_token}',
+            'Content-Type': 'application/json'
+        }
+        
+        # Créer l'utilisateur
+        url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users"
+        response = requests.post(url, json=user_data, headers=headers, timeout=10)
+        
+        if response.status_code != 201:
+            logger.error(f"Erreur création Keycloak: {response.status_code} - {response.text}")
+            return False
+
+        # Récupérer l'ID de l'utilisateur créé
+        search_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users?email={utilisateur.email}"
+        search_resp = requests.get(search_url, headers=headers)
+        
+        if search_resp.status_code != 200 or not search_resp.json():
+            logger.error("Utilisateur créé mais impossible de le retrouver pour l'affectation du rôle.")
+            return False
+            
+        user_id = search_resp.json()[0]['id']
+
+        # Attribuer le rôle à l'utilisateur
+        role_mapping_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/role-mappings/realm"
+        
+        # Récupérer l'ID du rôle
+        roles_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/roles"
+        roles_resp = requests.get(roles_url, headers=headers)
+        
+        if roles_resp.status_code == 200:
+            roles = roles_resp.json()
+            role_id = next((r['id'] for r in roles if r['name'] == role), None)
+            
+            if role_id:
+                role_payload = [{"id": role_id, "name": role}]
+                role_resp = requests.post(role_mapping_url, json=role_payload, headers=headers)
+                
+                if role_resp.status_code not in (204, 200):
+                    logger.error(f"Erreur lors de l'attribution du rôle: {role_resp.status_code} - {role_resp.text}")
+                    return False
+                else:
+                    logger.info(f"Rôle {role} attribué avec succès à l'utilisateur {utilisateur.email}")
+            else:
+                logger.error(f"Rôle {role} introuvable dans Keycloak.")
+                return False
+        else:
+            logger.error("Impossible de récupérer la liste des rôles Keycloak.")
+            return False
+
+        logger.info(f"Utilisateur {utilisateur.email} créé avec succès dans Keycloak avec le rôle {role}")
+        return True
+
+    except Exception as e:
+        logger.error(f"Erreur lors de la création Keycloak: {e}")
+        return False
+>>>>>>> ce737485fc5282521a7973d893496f32ae35fa49

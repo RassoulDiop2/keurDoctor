@@ -4987,6 +4987,7 @@ INFO 2025-07-08 01:54:04,229 views Utilisateur staff/admin détecté: None
 INFO 2025-07-08 01:54:04,230 basehttp "GET /redirection/ HTTP/1.1" 302 0
 INFO 2025-07-08 01:54:04,383 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
 INFO 2025-07-08 01:54:04,402 basehttp "GET /administration/ HTTP/1.1" 200 9722
+<<<<<<< HEAD
 INFO 2025-07-12 03:06:10,820 autoreload Watching for file changes with StatReloader
 INFO 2025-07-12 03:06:20,743 basehttp "GET / HTTP/1.1" 200 18950
 INFO 2025-07-12 03:06:34,326 basehttp "GET /inscription/ HTTP/1.1" 200 13147
@@ -5017,11 +5018,226 @@ INFO 2025-07-12 03:29:59,217 basehttp "POST /inscription/ HTTP/1.1" 302 0
 INFO 2025-07-12 03:29:59,232 basehttp "GET / HTTP/1.1" 200 18950
 INFO 2025-07-12 03:30:05,969 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
 ERROR 2025-07-12 03:30:28,717 log Internal Server Error: /oidc/callback/
+=======
+INFO 2025-07-08 03:07:20,584 autoreload Watching for file changes with StatReloader
+INFO 2025-07-08 03:07:49,284 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 03:07:57,620 basehttp "POST /api/set-role/ HTTP/1.1" 200 34
+INFO 2025-07-08 03:07:57,850 basehttp "GET /oidc/authenticate/?role=admin HTTP/1.1" 302 0
+INFO 2025-07-08 03:08:00,937 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 03:08:05,261 basehttp "POST /api/set-role/ HTTP/1.1" 200 34
+INFO 2025-07-08 03:08:05,556 basehttp "GET /oidc/authenticate/?role=admin HTTP/1.1" 302 0
+DEBUG 2025-07-08 03:08:12,304 auth_backends Claims complets pour None: {'sub': 'be373ef2-40cb-4c43-be10-c0a426fe5257', 'email_verified': True, 'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure'], 'name': 'Admin Système', 'preferred_username': 'admin', 'given_name': 'Admin', 'family_name': 'Système', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-08 03:08:12,305 auth_backends Rôles directs trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 03:08:12,305 auth_backends Rôles extraits pour None: ['offline_access', 'uma_authorization', 'admin', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 03:08:13,303 auth_backends Rôles assignés à None: ['admin']
+INFO 2025-07-08 03:08:13,309 auth_backends Groupes Django: ['admin']
+INFO 2025-07-08 03:08:13,311 auth_backends Staff: True, Superuser: True
+INFO 2025-07-08 03:08:13,313 auth_backends Connexion autorisée pour admin@keurdoctor.com avec le rôle admin
+INFO 2025-07-08 03:08:13,634 basehttp "GET /oidc/callback/?state=mhWBExzDY1C3h6Kr1QeFrQcKpvYnVkAG&session_state=bedd5902-cdcc-4e56-a10c-dc4b20e1bb5c&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=8edd8004-068f-4863-8ff5-329e0dd79538.bedd5902-cdcc-4e56-a10c-dc4b20e1bb5c.85979e28-8191-48de-ac78-77df9f1a8b3d HTTP/1.1" 302 0
+INFO 2025-07-08 03:08:13,928 views Utilisateur staff/admin détecté: None
+INFO 2025-07-08 03:08:13,930 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-08 03:08:14,100 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:08:14,120 basehttp "GET /administration/ HTTP/1.1" 200 9722
+INFO 2025-07-08 03:08:14,186 basehttp "GET /static/images/admin-bg.jpg HTTP/1.1" 304 0
+INFO 2025-07-08 03:08:35,609 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:08:35,798 basehttp "GET /administration/securite/ HTTP/1.1" 200 94241
+INFO 2025-07-08 03:08:41,528 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:08:41,548 basehttp "POST /administration/alerte-lue/89/ HTTP/1.1" 302 0
+INFO 2025-07-08 03:08:41,729 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:08:41,911 basehttp "GET /administration/securite/ HTTP/1.1" 200 93513
+INFO 2025-07-08 03:08:44,569 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:08:44,586 basehttp "POST /administration/alerte-lue/88/ HTTP/1.1" 302 0
+INFO 2025-07-08 03:08:44,730 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:08:44,881 basehttp "GET /administration/securite/ HTTP/1.1" 200 92785
+INFO 2025-07-08 03:09:04,024 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:09:04,122 basehttp "GET /administration/users/ HTTP/1.1" 200 12035
+WARNING 2025-07-08 03:09:11,319 log Not Found: /admin/auth/user/add/
+WARNING 2025-07-08 03:09:11,320 basehttp "GET /admin/auth/user/add/ HTTP/1.1" 404 7322
+INFO 2025-07-08 03:10:15,577 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\admin.py changed, reloading.
+INFO 2025-07-08 03:10:17,928 autoreload Watching for file changes with StatReloader
+INFO 2025-07-08 03:12:50,875 autoreload Watching for file changes with StatReloader
+INFO 2025-07-08 03:12:56,761 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 03:13:00,659 basehttp "POST /api/set-role/ HTTP/1.1" 200 34
+INFO 2025-07-08 03:13:00,953 basehttp "GET /oidc/authenticate/?role=admin HTTP/1.1" 302 0
+INFO 2025-07-08 03:13:09,191 basehttp "GET / HTTP/1.1" 302 0
+INFO 2025-07-08 03:13:09,394 views Utilisateur staff/admin détecté: None
+INFO 2025-07-08 03:13:09,399 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-08 03:13:09,626 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:13:09,658 basehttp "GET /administration/ HTTP/1.1" 200 9721
+INFO 2025-07-08 03:13:46,781 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:13:46,802 basehttp "GET /administration/users/ HTTP/1.1" 200 12035
+WARNING 2025-07-08 03:13:54,494 log Not Found: /admin/auth/user/add/
+WARNING 2025-07-08 03:13:54,500 basehttp "GET /admin/auth/user/add/ HTTP/1.1" 404 7584
+INFO 2025-07-08 03:15:31,934 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:15:32,248 basehttp "GET /administration/securite/ HTTP/1.1" 200 92785
+INFO 2025-07-08 03:16:14,218 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:16:14,238 basehttp "GET /administration/users/ HTTP/1.1" 200 12035
+WARNING 2025-07-08 03:17:03,999 log Not Found: /admin/auth/user/add/
+WARNING 2025-07-08 03:17:04,000 basehttp "GET /admin/auth/user/add/ HTTP/1.1" 404 7584
+INFO 2025-07-08 03:27:13,432 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\forms.py changed, reloading.
+INFO 2025-07-08 03:27:15,010 autoreload Watching for file changes with StatReloader
+INFO 2025-07-08 03:27:31,817 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\views.py changed, reloading.
+INFO 2025-07-08 03:27:32,916 autoreload Watching for file changes with StatReloader
+INFO 2025-07-08 03:27:41,610 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\urls.py changed, reloading.
+INFO 2025-07-08 03:27:44,236 autoreload Watching for file changes with StatReloader
+INFO 2025-07-08 03:28:49,569 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\models.py changed, reloading.
+INFO 2025-07-08 03:28:50,848 autoreload Watching for file changes with StatReloader
+INFO 2025-07-08 03:35:51,226 autoreload Watching for file changes with StatReloader
+INFO 2025-07-08 03:35:58,260 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 03:36:09,324 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-08 03:36:09,482 basehttp "GET / HTTP/1.1" 200 7009
+INFO 2025-07-08 03:36:28,612 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-08 03:36:28,636 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 03:36:50,233 basehttp "POST /api/set-role/ HTTP/1.1" 200 34
+INFO 2025-07-08 03:36:50,412 basehttp "GET /oidc/authenticate/?role=admin HTTP/1.1" 302 0
+INFO 2025-07-08 03:36:53,284 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 03:36:57,720 basehttp "POST /api/set-role/ HTTP/1.1" 200 34
+INFO 2025-07-08 03:36:57,892 basehttp "GET /oidc/authenticate/?role=admin HTTP/1.1" 302 0
+DEBUG 2025-07-08 03:37:02,868 auth_backends Claims complets pour None: {'sub': 'be373ef2-40cb-4c43-be10-c0a426fe5257', 'email_verified': True, 'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure'], 'name': 'Admin Système', 'preferred_username': 'admin', 'given_name': 'Admin', 'family_name': 'Système', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-08 03:37:02,869 auth_backends Rôles directs trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 03:37:02,869 auth_backends Rôles extraits pour None: ['uma_authorization', 'admin', 'offline_access', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 03:37:02,889 auth_backends Rôles assignés à None: ['admin']
+INFO 2025-07-08 03:37:02,894 auth_backends Groupes Django: ['admin']
+INFO 2025-07-08 03:37:02,894 auth_backends Staff: True, Superuser: True
+INFO 2025-07-08 03:37:02,895 auth_backends Connexion autorisée pour admin@keurdoctor.com avec le rôle admin
+INFO 2025-07-08 03:37:02,913 basehttp "GET /oidc/callback/?state=E7UZIamiaH0H5aIIUU6LNSUyh1c3aeCq&session_state=5c1a3a4b-f778-4836-bb1e-683d1a030ca7&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=310977cc-8578-4b85-8d31-6ae697c371a0.5c1a3a4b-f778-4836-bb1e-683d1a030ca7.85979e28-8191-48de-ac78-77df9f1a8b3d HTTP/1.1" 302 0
+INFO 2025-07-08 03:37:03,170 views Utilisateur staff/admin détecté: None
+INFO 2025-07-08 03:37:03,171 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-08 03:37:03,336 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:37:03,357 basehttp "GET /administration/ HTTP/1.1" 200 9721
+INFO 2025-07-08 03:37:12,191 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:37:12,208 basehttp "GET /administration/users/ HTTP/1.1" 200 12143
+INFO 2025-07-08 03:37:15,563 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:37:15,619 basehttp "GET /administration/users/create/ HTTP/1.1" 200 14498
+INFO 2025-07-08 03:37:36,320 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:37:36,326 basehttp "GET /administration/users/create/ HTTP/1.1" 200 14498
+INFO 2025-07-08 03:42:29,148 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+ERROR 2025-07-08 03:42:30,869 views Utilisateur Dr.Tafa@keurdoctor.com non trouvé dans Keycloak
+INFO 2025-07-08 03:42:30,886 basehttp "POST /administration/users/create/ HTTP/1.1" 302 0
+INFO 2025-07-08 03:42:31,052 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:42:31,060 basehttp "GET /administration/users/ HTTP/1.1" 200 12868
+INFO 2025-07-08 03:43:03,328 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 03:43:08,719 basehttp "POST /api/set-role/ HTTP/1.1" 200 36
+INFO 2025-07-08 03:43:08,985 basehttp "GET /oidc/authenticate/?role=medecin HTTP/1.1" 302 0
+INFO 2025-07-08 03:43:11,266 basehttp "GET / HTTP/1.1" 302 0
+INFO 2025-07-08 03:43:11,402 views Utilisateur staff/admin détecté: None
+INFO 2025-07-08 03:43:11,403 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-08 03:43:11,543 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:43:11,555 basehttp "GET /administration/ HTTP/1.1" 200 9722
+INFO 2025-07-08 03:43:16,270 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-08 03:43:16,330 basehttp "GET / HTTP/1.1" 200 6826
+INFO 2025-07-08 03:43:19,647 basehttp "POST /api/set-role/ HTTP/1.1" 200 36
+INFO 2025-07-08 03:43:19,816 basehttp "GET /oidc/authenticate/?role=medecin HTTP/1.1" 302 0
+DEBUG 2025-07-08 03:45:10,393 auth_backends Claims complets pour None: {'sub': '26e8fbb5-a3b4-43bb-b819-bb8b2010bc37', 'email_verified': True, 'roles': ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin'], 'name': 'Dr.Moustapha DIOP', 'preferred_username': 'mouharassoulmd@gmail.com', 'given_name': 'Dr.Moustapha', 'family_name': 'DIOP', 'email': 'mouharassoulmd@gmail.com'}
+DEBUG 2025-07-08 03:45:10,394 auth_backends Rôles directs trouvés: ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']
+INFO 2025-07-08 03:45:10,394 auth_backends Rôles extraits pour None: ['uma_authorization', 'medecin', 'offline_access', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 03:45:10,416 auth_backends Rôles assignés à None: ['medecin']
+INFO 2025-07-08 03:45:10,421 auth_backends Groupes Django: ['medecin']
+INFO 2025-07-08 03:45:10,421 auth_backends Staff: False, Superuser: False
+INFO 2025-07-08 03:45:10,421 auth_backends Connexion autorisée pour mouharassoulmd@gmail.com avec le rôle medecin
+INFO 2025-07-08 03:45:10,441 basehttp "GET /oidc/callback/?state=YZDnNT9jiUVTwCtzhPYifpcpWvoFDIzz&session_state=52cabd12-e212-45d5-81ea-6874806afa8c&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=bd3f1e89-dcfc-49c1-b98c-d9115bab5b8a.52cabd12-e212-45d5-81ea-6874806afa8c.85979e28-8191-48de-ac78-77df9f1a8b3d HTTP/1.1" 302 0
+INFO 2025-07-08 03:45:10,649 views Utilisateur: None, Groupes: ['medecin']
+INFO 2025-07-08 03:45:10,651 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-08 03:45:10,950 decorators Role check for user None: required_role='medecin', user_groups=['medecin'], allowed_groups=['medecin', 'médecins'], has_access=True
+INFO 2025-07-08 03:45:10,954 basehttp "GET /medecin/ HTTP/1.1" 200 8832
+INFO 2025-07-08 03:45:11,036 basehttp "GET /static/images/medecin.jpg HTTP/1.1" 304 0
+INFO 2025-07-08 03:45:19,178 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-08 03:45:19,235 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 03:45:32,211 basehttp "POST /api/set-role/ HTTP/1.1" 200 34
+INFO 2025-07-08 03:45:32,360 basehttp "GET /oidc/authenticate/?role=admin HTTP/1.1" 302 0
+DEBUG 2025-07-08 03:45:40,301 auth_backends Claims complets pour None: {'sub': 'be373ef2-40cb-4c43-be10-c0a426fe5257', 'email_verified': True, 'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure'], 'name': 'Admin Système', 'preferred_username': 'admin', 'given_name': 'Admin', 'family_name': 'Système', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-08 03:45:40,302 auth_backends Rôles directs trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 03:45:40,302 auth_backends Rôles extraits pour None: ['uma_authorization', 'admin', 'offline_access', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 03:45:40,327 auth_backends Rôles assignés à None: ['admin']
+INFO 2025-07-08 03:45:40,331 auth_backends Groupes Django: ['admin']
+INFO 2025-07-08 03:45:40,331 auth_backends Staff: True, Superuser: True
+INFO 2025-07-08 03:45:40,331 auth_backends Connexion autorisée pour admin@keurdoctor.com avec le rôle admin
+INFO 2025-07-08 03:45:40,353 basehttp "GET /oidc/callback/?state=x0rfeHJ2c3X99GBk1PSxMy9j0NDe9pkx&session_state=2812b661-b4ce-4107-82aa-6b54caf73b46&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=889d1948-08b4-4e1c-9d5e-682ccdc017bb.2812b661-b4ce-4107-82aa-6b54caf73b46.85979e28-8191-48de-ac78-77df9f1a8b3d HTTP/1.1" 302 0
+INFO 2025-07-08 03:45:40,501 views Utilisateur staff/admin détecté: None
+INFO 2025-07-08 03:45:40,503 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-08 03:45:40,769 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:45:40,779 basehttp "GET /administration/ HTTP/1.1" 200 9722
+INFO 2025-07-08 03:45:43,403 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:45:43,549 basehttp "GET /administration/securite/ HTTP/1.1" 200 93572
+INFO 2025-07-08 03:46:07,909 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:46:07,929 basehttp "POST /administration/alerte-lue/90/ HTTP/1.1" 302 0
+INFO 2025-07-08 03:46:08,230 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 03:46:08,417 basehttp "GET /administration/securite/ HTTP/1.1" 200 92844
+INFO 2025-07-08 03:46:20,473 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-08 03:46:20,525 basehttp "GET / HTTP/1.1" 200 6757
+INFO 2025-07-08 03:46:27,116 basehttp "POST /api/set-role/ HTTP/1.1" 200 36
+INFO 2025-07-08 03:46:27,351 basehttp "GET /oidc/authenticate/?role=medecin HTTP/1.1" 302 0
+INFO 2025-07-08 03:48:31,529 basehttp "GET /profil/ HTTP/1.1" 302 0
+INFO 2025-07-08 03:48:31,803 basehttp "GET /oidc/authenticate/?next=/profil/ HTTP/1.1" 302 0
+DEBUG 2025-07-08 03:48:36,564 auth_backends Claims complets pour None: {'sub': 'be373ef2-40cb-4c43-be10-c0a426fe5257', 'email_verified': True, 'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure'], 'name': 'Admin Système', 'preferred_username': 'admin', 'given_name': 'Admin', 'family_name': 'Système', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-08 03:48:36,565 auth_backends Rôles directs trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 03:48:36,565 auth_backends Rôles extraits pour None: ['uma_authorization', 'admin', 'offline_access', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 03:48:36,586 auth_backends Rôles assignés à None: ['admin']
+INFO 2025-07-08 03:48:36,591 auth_backends Groupes Django: ['admin']
+INFO 2025-07-08 03:48:36,591 auth_backends Staff: True, Superuser: True
+WARNING 2025-07-08 03:48:36,591 auth_backends Tentative de connexion avec rôle incorrect: admin@keurdoctor.com - Tenté: medecin, Autorisé: admin
+INFO 2025-07-08 03:48:36,618 basehttp "GET /oidc/callback/?state=RBwjkgOX4wdImSj8iTFBwjFnUyi4sZhD&session_state=d2f85c76-8ba7-4324-a4a6-8fb126ed3c85&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=6b616c6d-3331-4b98-a887-763b83ec0a06.d2f85c76-8ba7-4324-a4a6-8fb126ed3c85.85979e28-8191-48de-ac78-77df9f1a8b3d HTTP/1.1" 302 0
+INFO 2025-07-08 03:48:36,758 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 03:48:42,040 basehttp "POST /api/set-role/ HTTP/1.1" 200 34
+INFO 2025-07-08 03:48:42,191 basehttp "GET /oidc/authenticate/?role=admin HTTP/1.1" 302 0
+DEBUG 2025-07-08 03:48:42,448 auth_backends Claims complets pour None: {'sub': 'be373ef2-40cb-4c43-be10-c0a426fe5257', 'email_verified': True, 'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure'], 'name': 'Admin Système', 'preferred_username': 'admin', 'given_name': 'Admin', 'family_name': 'Système', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-08 03:48:42,451 auth_backends Rôles directs trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 03:48:42,452 auth_backends Rôles extraits pour None: ['uma_authorization', 'admin', 'offline_access', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 03:48:42,477 auth_backends Rôles assignés à None: ['admin']
+INFO 2025-07-08 03:48:42,482 auth_backends Groupes Django: ['admin']
+INFO 2025-07-08 03:48:42,482 auth_backends Staff: True, Superuser: True
+WARNING 2025-07-08 03:48:42,483 auth_backends Tentative de connexion d'un utilisateur bloqué: admin@keurdoctor.com
+INFO 2025-07-08 03:48:42,494 basehttp "GET /oidc/callback/?state=TmhHmyTjb34KNvznWYOzOZN4P7Ts66yF&session_state=d2f85c76-8ba7-4324-a4a6-8fb126ed3c85&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=c38cce35-ca53-456e-aca0-9892bb64a0f0.d2f85c76-8ba7-4324-a4a6-8fb126ed3c85.85979e28-8191-48de-ac78-77df9f1a8b3d HTTP/1.1" 302 0
+INFO 2025-07-08 03:48:42,629 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 03:48:46,189 basehttp "POST /api/set-role/ HTTP/1.1" 200 34
+INFO 2025-07-08 03:48:46,344 basehttp "GET /oidc/authenticate/?role=admin HTTP/1.1" 302 0
+DEBUG 2025-07-08 03:48:46,632 auth_backends Claims complets pour None: {'sub': 'be373ef2-40cb-4c43-be10-c0a426fe5257', 'email_verified': True, 'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure'], 'name': 'Admin Système', 'preferred_username': 'admin', 'given_name': 'Admin', 'family_name': 'Système', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-08 03:48:46,633 auth_backends Rôles directs trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 03:48:46,634 auth_backends Rôles extraits pour None: ['uma_authorization', 'admin', 'offline_access', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 03:48:46,660 auth_backends Rôles assignés à None: ['admin']
+INFO 2025-07-08 03:48:46,665 auth_backends Groupes Django: ['admin']
+INFO 2025-07-08 03:48:46,666 auth_backends Staff: True, Superuser: True
+WARNING 2025-07-08 03:48:46,666 auth_backends Tentative de connexion d'un utilisateur bloqué: admin@keurdoctor.com
+INFO 2025-07-08 03:48:46,684 basehttp "GET /oidc/callback/?state=Km3VHVkf56nCcfd6Y1KDFo5nKZBSH9Yn&session_state=d2f85c76-8ba7-4324-a4a6-8fb126ed3c85&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=91236181-abf0-4345-a39c-e738962c2a46.d2f85c76-8ba7-4324-a4a6-8fb126ed3c85.85979e28-8191-48de-ac78-77df9f1a8b3d HTTP/1.1" 302 0
+INFO 2025-07-08 03:48:46,907 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 03:52:49,170 basehttp "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-07-08 03:52:49,438 basehttp "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4221
+INFO 2025-07-08 03:52:49,910 basehttp - Broken pipe from ('127.0.0.1', 56039)
+INFO 2025-07-08 03:53:13,769 basehttp "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2025-07-08 03:53:14,033 basehttp "GET /admin/ HTTP/1.1" 200 14698
+INFO 2025-07-08 03:53:19,709 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 23094
+INFO 2025-07-08 03:53:20,040 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-08 03:53:20,050 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2025-07-08 03:53:20,074 basehttp "GET /static/admin/img/icon-no.svg HTTP/1.1" 200 560
+INFO 2025-07-08 03:53:20,135 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+ERROR 2025-07-08 03:54:15,717 log Internal Server Error: /admin/comptes/utilisateur/10/change/
+Traceback (most recent call last):
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\options.py", line 840, in get_form
+    return modelform_factory(self.model, **defaults)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\forms\models.py", line 654, in modelform_factory
+    return type(form)(class_name, (form,), form_class_attrs)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\forms\models.py", line 312, in __new__
+    fields = fields_for_model(
+        opts.model,
+    ...<11 lines>...
+        form_declared_fields=new_class.declared_fields,
+    )
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\forms\models.py", line 207, in fields_for_model
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: 'date_creation' cannot be specified for Utilisateur model form as it is a non-editable field
+
+During handling of the above exception, another exception occurred:
+
+>>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
 Traceback (most recent call last):
   File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
     response = get_response(request)
   File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+<<<<<<< HEAD
   File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\views\generic\base.py", line 105, in view
     return self.dispatch(request, *args, **kwargs)
            ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -5325,12 +5541,70 @@ Traceback (most recent call last):
 django.db.utils.IntegrityError: ERREUR:  une valeur NULL viole la contrainte NOT NULL de la colonne « donnees_consultees » dans la relation « comptes_auditlog »
 DETAIL:  La ligne en échec contient (1, LECTURE_DONNEES, Accès à /redirection/, 2025-07-12 04:54:44.861099+00, 127.0.0.1, Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/201001..., /redirection/, null, FAIBLE, choglw9n57eyl9gqo4yq3pfqerenvl38, f, 34).
 
+=======
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\options.py", line 719, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\utils\decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\utils\decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\sites.py", line 246, in inner
+    return view(request, *args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\options.py", line 1987, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\utils\decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\utils\decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\options.py", line 1840, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\options.py", line 1878, in _changeform_view
+    ModelForm = self.get_form(
+        request, obj, change=not add, fields=flatten_fieldsets(fieldsets)
+    )
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\auth\admin.py", line 98, in get_form
+    return super().get_form(request, obj, **defaults)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\options.py", line 842, in get_form
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: 'date_creation' cannot be specified for Utilisateur model form as it is a non-editable field. Check fields/fieldsets/exclude attributes of class UtilisateurAdmin.
+ERROR 2025-07-08 03:54:15,737 basehttp "GET /admin/comptes/utilisateur/10/change/ HTTP/1.1" 500 169257
+INFO 2025-07-08 03:54:23,137 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 23094
+ERROR 2025-07-08 03:54:26,372 log Internal Server Error: /admin/comptes/utilisateur/10/change/
+Traceback (most recent call last):
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\options.py", line 840, in get_form
+    return modelform_factory(self.model, **defaults)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\forms\models.py", line 654, in modelform_factory
+    return type(form)(class_name, (form,), form_class_attrs)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\forms\models.py", line 312, in __new__
+    fields = fields_for_model(
+        opts.model,
+    ...<11 lines>...
+        form_declared_fields=new_class.declared_fields,
+    )
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\forms\models.py", line 207, in fields_for_model
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: 'date_creation' cannot be specified for Utilisateur model form as it is a non-editable field
+>>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
 
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
   File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
     response = get_response(request)
+<<<<<<< HEAD
   File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\utils\deprecation.py", line 119, in __call__
     response = self.process_request(request)
   File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\middleware.py", line 24, in process_request
@@ -5438,12 +5712,71 @@ Traceback (most recent call last):
 django.db.utils.IntegrityError: ERREUR:  une valeur NULL viole la contrainte NOT NULL de la colonne « donnees_consultees » dans la relation « comptes_auditlog »
 DETAIL:  La ligne en échec contient (2, LECTURE_DONNEES, Accès à /oidc/callback/, 2025-07-12 04:55:02.675431+00, 127.0.0.1, Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/201001..., /oidc/callback/, null, FAIBLE, choglw9n57eyl9gqo4yq3pfqerenvl38, f, 34).
 
+=======
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\options.py", line 719, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\utils\decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\utils\decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\sites.py", line 246, in inner
+    return view(request, *args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\options.py", line 1987, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\utils\decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\utils\decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\options.py", line 1840, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\options.py", line 1878, in _changeform_view
+    ModelForm = self.get_form(
+        request, obj, change=not add, fields=flatten_fieldsets(fieldsets)
+    )
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\auth\admin.py", line 98, in get_form
+    return super().get_form(request, obj, **defaults)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\options.py", line 842, in get_form
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: 'date_creation' cannot be specified for Utilisateur model form as it is a non-editable field. Check fields/fieldsets/exclude attributes of class UtilisateurAdmin.
+ERROR 2025-07-08 03:54:26,389 basehttp "GET /admin/comptes/utilisateur/10/change/ HTTP/1.1" 500 169257
+ERROR 2025-07-08 03:54:35,572 log Internal Server Error: /admin/comptes/utilisateur/10/change/
+Traceback (most recent call last):
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\options.py", line 840, in get_form
+    return modelform_factory(self.model, **defaults)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\forms\models.py", line 654, in modelform_factory
+    return type(form)(class_name, (form,), form_class_attrs)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\forms\models.py", line 312, in __new__
+    fields = fields_for_model(
+        opts.model,
+    ...<11 lines>...
+        form_declared_fields=new_class.declared_fields,
+    )
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\forms\models.py", line 207, in fields_for_model
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: 'date_creation' cannot be specified for Utilisateur model form as it is a non-editable field
+>>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
 
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
   File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
     response = get_response(request)
+<<<<<<< HEAD
   File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\utils\deprecation.py", line 119, in __call__
     response = self.process_request(request)
   File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\middleware.py", line 24, in process_request
@@ -5795,3 +6128,336 @@ INFO 2025-07-12 06:29:00,015 basehttp "GET /logout/ HTTP/1.1" 302 0
 INFO 2025-07-12 06:29:00,188 basehttp "GET / HTTP/1.1" 200 18946
 INFO 2025-07-12 06:31:56,079 autoreload Watching for file changes with StatReloader
 INFO 2025-07-12 06:32:08,234 basehttp "GET / HTTP/1.1" 200 18929
+=======
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\options.py", line 719, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\utils\decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\utils\decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\sites.py", line 246, in inner
+    return view(request, *args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\options.py", line 1987, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\utils\decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\utils\decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\options.py", line 1840, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\options.py", line 1878, in _changeform_view
+    ModelForm = self.get_form(
+        request, obj, change=not add, fields=flatten_fieldsets(fieldsets)
+    )
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\auth\admin.py", line 98, in get_form
+    return super().get_form(request, obj, **defaults)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\admin\options.py", line 842, in get_form
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: 'date_creation' cannot be specified for Utilisateur model form as it is a non-editable field. Check fields/fieldsets/exclude attributes of class UtilisateurAdmin.
+ERROR 2025-07-08 03:54:35,587 basehttp "GET /admin/comptes/utilisateur/10/change/ HTTP/1.1" 500 169257
+INFO 2025-07-08 03:55:12,508 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\admin.py changed, reloading.
+INFO 2025-07-08 03:55:16,052 autoreload Watching for file changes with StatReloader
+INFO 2025-07-08 03:56:31,073 basehttp "GET /admin/comptes/utilisateur/10/change/ HTTP/1.1" 200 32903
+INFO 2025-07-08 03:56:31,390 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-08 03:56:31,405 basehttp "GET /static/admin/js/SelectBox.js HTTP/1.1" 200 4530
+INFO 2025-07-08 03:56:31,430 basehttp "GET /static/admin/js/SelectFilter2.js HTTP/1.1" 200 15845
+INFO 2025-07-08 03:56:31,490 basehttp "GET /static/admin/img/selector-icons.svg HTTP/1.1" 200 3291
+INFO 2025-07-08 03:57:19,407 basehttp "POST /admin/comptes/utilisateur/10/change/ HTTP/1.1" 302 0
+INFO 2025-07-08 03:57:19,601 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 23347
+INFO 2025-07-08 03:57:19,845 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-08 03:57:33,498 basehttp "GET /admin/comptes/utilisateur/27/change/ HTTP/1.1" 200 32768
+INFO 2025-07-08 03:57:33,701 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-08 04:00:08,178 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 23094
+INFO 2025-07-08 04:00:42,646 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 04:00:48,573 basehttp "POST /api/set-role/ HTTP/1.1" 200 34
+INFO 2025-07-08 04:00:48,830 basehttp "GET /oidc/authenticate/?role=admin HTTP/1.1" 302 0
+INFO 2025-07-08 04:00:51,174 basehttp "GET / HTTP/1.1" 302 0
+INFO 2025-07-08 04:00:51,309 views Utilisateur staff/admin détecté: None
+INFO 2025-07-08 04:00:51,311 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:00:51,446 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:00:51,460 basehttp "GET /administration/ HTTP/1.1" 200 9722
+INFO 2025-07-08 04:00:56,629 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:00:56,807 basehttp "GET /administration/securite/ HTTP/1.1" 200 95081
+INFO 2025-07-08 04:01:06,767 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:01:06,787 basehttp "POST /administration/alerte-lue/91/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:01:07,086 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:01:07,251 basehttp "GET /administration/securite/ HTTP/1.1" 200 94353
+INFO 2025-07-08 04:01:09,161 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:01:09,177 basehttp "POST /administration/alerte-lue/93/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:01:09,357 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:01:09,544 basehttp "GET /administration/securite/ HTTP/1.1" 200 93625
+INFO 2025-07-08 04:01:10,701 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:01:10,720 basehttp "POST /administration/alerte-lue/92/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:01:10,928 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:01:11,106 basehttp "GET /administration/securite/ HTTP/1.1" 200 92897
+INFO 2025-07-08 04:01:15,524 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:01:15,593 basehttp "GET / HTTP/1.1" 200 7261
+INFO 2025-07-08 04:01:24,852 basehttp "POST /api/set-role/ HTTP/1.1" 200 34
+INFO 2025-07-08 04:01:25,011 basehttp "GET /oidc/authenticate/?role=admin HTTP/1.1" 302 0
+DEBUG 2025-07-08 04:01:29,684 auth_backends Claims complets pour None: {'sub': 'be373ef2-40cb-4c43-be10-c0a426fe5257', 'email_verified': True, 'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure'], 'name': 'Admin Système', 'preferred_username': 'admin', 'given_name': 'Admin', 'family_name': 'Système', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-08 04:01:29,686 auth_backends Rôles directs trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 04:01:29,686 auth_backends Rôles extraits pour None: ['uma_authorization', 'offline_access', 'admin', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 04:01:29,712 auth_backends Rôles assignés à None: ['admin']
+INFO 2025-07-08 04:01:29,716 auth_backends Groupes Django: ['admin']
+INFO 2025-07-08 04:01:29,717 auth_backends Staff: True, Superuser: True
+INFO 2025-07-08 04:01:29,717 auth_backends Connexion autorisée pour admin@keurdoctor.com avec le rôle admin
+INFO 2025-07-08 04:01:29,733 basehttp "GET /oidc/callback/?state=2rossvBIdmvC3fm476lZEZ1hd1ahT0Yl&session_state=42ae8d39-8d33-48ec-b92c-ad4d42fa18e7&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=867b32eb-ffb8-48b8-beaf-0979295dee0b.42ae8d39-8d33-48ec-b92c-ad4d42fa18e7.85979e28-8191-48de-ac78-77df9f1a8b3d HTTP/1.1" 302 0
+INFO 2025-07-08 04:01:29,897 views Utilisateur staff/admin détecté: None
+INFO 2025-07-08 04:01:29,898 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:01:30,164 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:01:30,176 basehttp "GET /administration/ HTTP/1.1" 200 9721
+INFO 2025-07-08 04:01:36,981 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:01:36,993 basehttp "GET /administration/users/ HTTP/1.1" 200 12868
+INFO 2025-07-08 04:01:44,051 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:01:44,105 basehttp "GET /administration/users/create/ HTTP/1.1" 200 14498
+INFO 2025-07-08 04:05:57,237 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\views.py changed, reloading.
+INFO 2025-07-08 04:06:00,264 autoreload Watching for file changes with StatReloader
+INFO 2025-07-08 04:08:31,212 autoreload Watching for file changes with StatReloader
+INFO 2025-07-08 04:08:36,021 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 04:08:41,136 basehttp "POST /api/set-role/ HTTP/1.1" 200 34
+INFO 2025-07-08 04:08:41,287 basehttp "GET /oidc/authenticate/?role=admin HTTP/1.1" 302 0
+INFO 2025-07-08 04:08:44,059 basehttp "GET / HTTP/1.1" 302 0
+INFO 2025-07-08 04:08:44,197 views Utilisateur staff/admin détecté: None
+INFO 2025-07-08 04:08:44,198 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:08:44,334 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:08:44,351 basehttp "GET /administration/ HTTP/1.1" 200 9721
+INFO 2025-07-08 04:08:52,685 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:08:52,700 basehttp "GET /administration/users/ HTTP/1.1" 200 12868
+INFO 2025-07-08 04:09:01,892 basehttp "GET /admin/comptes/utilisateur/27/change/ HTTP/1.1" 200 32768
+INFO 2025-07-08 04:09:02,185 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-08 04:09:19,897 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:09:19,927 basehttp "GET /administration/users/create/ HTTP/1.1" 200 14498
+INFO 2025-07-08 04:14:01,902 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:14:02,036 basehttp "POST /administration/users/create/ HTTP/1.1" 200 14776
+INFO 2025-07-08 04:14:50,695 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:14:50,704 basehttp "GET /administration/users/ HTTP/1.1" 200 12868
+INFO 2025-07-08 04:15:09,665 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:15:09,678 basehttp "GET /administration/users/ HTTP/1.1" 200 12868
+INFO 2025-07-08 04:15:15,101 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:15:15,116 basehttp "GET /administration/users/ HTTP/1.1" 200 12868
+INFO 2025-07-08 04:15:21,602 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:15:21,683 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 04:15:25,115 basehttp "POST /api/set-role/ HTTP/1.1" 200 34
+INFO 2025-07-08 04:15:25,270 basehttp "GET /oidc/authenticate/?role=admin HTTP/1.1" 302 0
+DEBUG 2025-07-08 04:15:29,255 auth_backends Claims complets pour None: {'sub': 'be373ef2-40cb-4c43-be10-c0a426fe5257', 'email_verified': True, 'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure'], 'name': 'Admin Système', 'preferred_username': 'admin', 'given_name': 'Admin', 'family_name': 'Système', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-08 04:15:29,258 auth_backends Rôles directs trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 04:15:29,262 auth_backends Rôles extraits pour None: ['default-roles-keurdoctorsecure', 'uma_authorization', 'offline_access', 'admin']
+INFO 2025-07-08 04:15:29,299 auth_backends Rôles assignés à None: ['admin']
+INFO 2025-07-08 04:15:29,304 auth_backends Groupes Django: ['admin']
+INFO 2025-07-08 04:15:29,306 auth_backends Staff: True, Superuser: True
+INFO 2025-07-08 04:15:29,306 auth_backends Connexion autorisée pour admin@keurdoctor.com avec le rôle admin
+INFO 2025-07-08 04:15:29,320 basehttp "GET /oidc/callback/?state=y0UKnXgdUJFGzuQv0Kp5pCCozYQLueW1&session_state=c2e44b72-a87c-43ca-b80b-09644bb9f69b&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=deca874d-8e44-4157-9133-bde7d0a9c587.c2e44b72-a87c-43ca-b80b-09644bb9f69b.85979e28-8191-48de-ac78-77df9f1a8b3d HTTP/1.1" 302 0
+INFO 2025-07-08 04:15:29,454 views Utilisateur staff/admin détecté: None
+INFO 2025-07-08 04:15:29,456 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:15:29,765 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:15:29,778 basehttp "GET /administration/ HTTP/1.1" 200 9721
+INFO 2025-07-08 04:15:33,012 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:15:33,026 basehttp "GET /administration/users/ HTTP/1.1" 200 12868
+INFO 2025-07-08 04:16:16,531 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:16:16,628 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 04:16:22,131 basehttp "POST /api/set-role/ HTTP/1.1" 200 36
+INFO 2025-07-08 04:16:22,280 basehttp "GET /oidc/authenticate/?role=medecin HTTP/1.1" 302 0
+INFO 2025-07-08 04:17:08,859 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:17:09,029 basehttp "GET /admin/login/?next=/admin/comptes/utilisateur/ HTTP/1.1" 200 4261
+INFO 2025-07-08 04:17:14,255 basehttp "POST /admin/login/?next=/admin/comptes/utilisateur/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:17:14,426 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 23094
+INFO 2025-07-08 04:17:14,618 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-08 04:17:25,769 basehttp "POST /api/set-role/ HTTP/1.1" 200 34
+INFO 2025-07-08 04:17:25,912 basehttp "GET /oidc/authenticate/?role=admin HTTP/1.1" 302 0
+DEBUG 2025-07-08 04:17:30,626 auth_backends Claims complets pour None: {'sub': 'be373ef2-40cb-4c43-be10-c0a426fe5257', 'email_verified': True, 'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure'], 'name': 'Admin Système', 'preferred_username': 'admin', 'given_name': 'Admin', 'family_name': 'Système', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-08 04:17:30,627 auth_backends Rôles directs trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 04:17:30,628 auth_backends Rôles extraits pour None: ['default-roles-keurdoctorsecure', 'uma_authorization', 'offline_access', 'admin']
+INFO 2025-07-08 04:17:30,650 auth_backends Rôles assignés à None: ['admin']
+INFO 2025-07-08 04:17:30,655 auth_backends Groupes Django: ['admin']
+INFO 2025-07-08 04:17:30,655 auth_backends Staff: True, Superuser: True
+INFO 2025-07-08 04:17:30,655 auth_backends Connexion autorisée pour admin@keurdoctor.com avec le rôle admin
+INFO 2025-07-08 04:17:30,665 basehttp "GET /oidc/callback/?state=jMFTP9jlDlSnYMcSMMsXwAOaOYud0Y2d&session_state=a43162af-6f60-4473-8927-f6a27da7bc68&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=dabd2a7e-11c7-4fe5-923d-bddde7222f82.a43162af-6f60-4473-8927-f6a27da7bc68.85979e28-8191-48de-ac78-77df9f1a8b3d HTTP/1.1" 302 0
+INFO 2025-07-08 04:17:30,821 views Utilisateur staff/admin détecté: None
+INFO 2025-07-08 04:17:30,822 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:17:30,959 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:17:30,971 basehttp "GET /administration/ HTTP/1.1" 200 9721
+DEBUG 2025-07-08 04:17:31,695 auth_backends Claims complets pour None: {'sub': 'be373ef2-40cb-4c43-be10-c0a426fe5257', 'email_verified': True, 'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure'], 'name': 'Admin Système', 'preferred_username': 'admin', 'given_name': 'Admin', 'family_name': 'Système', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-08 04:17:31,695 auth_backends Rôles directs trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 04:17:31,696 auth_backends Rôles extraits pour None: ['default-roles-keurdoctorsecure', 'uma_authorization', 'offline_access', 'admin']
+INFO 2025-07-08 04:17:31,723 auth_backends Rôles assignés à None: ['admin']
+INFO 2025-07-08 04:17:31,728 auth_backends Groupes Django: ['admin']
+INFO 2025-07-08 04:17:31,728 auth_backends Staff: True, Superuser: True
+INFO 2025-07-08 04:17:31,729 auth_backends Connexion autorisée pour admin@keurdoctor.com avec le rôle admin
+INFO 2025-07-08 04:17:31,738 basehttp "GET /oidc/callback/?state=Qb85Lps5TfbPAL8cUZCztx6OybL2TtdC&session_state=a43162af-6f60-4473-8927-f6a27da7bc68&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=e6792100-4a19-445d-aef0-956aac64a025.a43162af-6f60-4473-8927-f6a27da7bc68.85979e28-8191-48de-ac78-77df9f1a8b3d HTTP/1.1" 302 0
+INFO 2025-07-08 04:17:31,894 views Utilisateur staff/admin détecté: None
+INFO 2025-07-08 04:17:31,896 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:17:32,023 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:17:32,033 basehttp "GET /administration/ HTTP/1.1" 200 9721
+INFO 2025-07-08 04:17:40,883 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:17:40,902 basehttp "GET /administration/users/ HTTP/1.1" 200 12868
+INFO 2025-07-08 04:17:44,912 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:17:44,922 basehttp "GET /administration/users/create/ HTTP/1.1" 200 14498
+INFO 2025-07-08 04:19:15,063 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:19:16,843 views Rôle medecin attribué avec succès à l'utilisateur DrTaf@keurdoctor.com
+INFO 2025-07-08 04:19:16,844 views Utilisateur DrTaf@keurdoctor.com créé avec succès dans Keycloak avec le rôle medecin
+INFO 2025-07-08 04:19:16,857 basehttp "POST /administration/users/create/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:19:17,018 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:19:17,026 basehttp "GET /administration/users/ HTTP/1.1" 200 13591
+INFO 2025-07-08 04:19:22,468 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:19:22,475 basehttp "GET /administration/users/create/ HTTP/1.1" 200 14874
+INFO 2025-07-08 04:20:22,298 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 04:20:26,671 basehttp "POST /api/set-role/ HTTP/1.1" 200 36
+INFO 2025-07-08 04:20:26,871 basehttp "GET /oidc/authenticate/?role=medecin HTTP/1.1" 302 0
+INFO 2025-07-08 04:20:29,796 basehttp "GET / HTTP/1.1" 302 0
+INFO 2025-07-08 04:20:29,922 views Utilisateur staff/admin détecté: None
+INFO 2025-07-08 04:20:29,924 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:20:30,067 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:20:30,093 basehttp "GET /administration/ HTTP/1.1" 200 9722
+INFO 2025-07-08 04:20:42,031 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:20:42,113 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 04:20:54,831 basehttp "POST /api/set-role/ HTTP/1.1" 200 36
+INFO 2025-07-08 04:20:54,992 basehttp "GET /oidc/authenticate/?role=medecin HTTP/1.1" 302 0
+DEBUG 2025-07-08 04:21:59,324 auth_backends Claims complets pour None: {'sub': 'b0172bcd-ed2f-45e7-856d-6cc0bf25c84e', 'email_verified': True, 'roles': ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin'], 'name': 'Dr Tafa DIOP', 'preferred_username': 'drtaf@keurdoctor.com', 'given_name': 'Dr Tafa', 'family_name': 'DIOP', 'email': 'drtaf@keurdoctor.com'}
+DEBUG 2025-07-08 04:21:59,325 auth_backends Rôles directs trouvés: ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']
+INFO 2025-07-08 04:21:59,325 auth_backends Rôles extraits pour None: ['default-roles-keurdoctorsecure', 'uma_authorization', 'offline_access', 'medecin']
+INFO 2025-07-08 04:21:59,348 auth_backends Rôles assignés à None: ['medecin']
+INFO 2025-07-08 04:21:59,352 auth_backends Groupes Django: ['medecin']
+INFO 2025-07-08 04:21:59,353 auth_backends Staff: False, Superuser: False
+INFO 2025-07-08 04:21:59,354 auth_backends Connexion autorisée pour drtaf@keurdoctor.com avec le rôle medecin
+INFO 2025-07-08 04:21:59,372 basehttp "GET /oidc/callback/?state=fbbSmGLeiGMwkjee8uf7fsR373KCqSOK&session_state=7a365ca2-333c-49fa-9978-017601a04fb2&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=4e6da5ad-7990-4c85-86c4-0ba114ec5a8b.7a365ca2-333c-49fa-9978-017601a04fb2.85979e28-8191-48de-ac78-77df9f1a8b3d HTTP/1.1" 302 0
+INFO 2025-07-08 04:21:59,522 views Utilisateur: None, Groupes: ['medecin']
+INFO 2025-07-08 04:21:59,523 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:21:59,672 decorators Role check for user None: required_role='medecin', user_groups=['medecin'], allowed_groups=['medecin', 'médecins'], has_access=True
+INFO 2025-07-08 04:21:59,675 basehttp "GET /medecin/ HTTP/1.1" 200 8823
+INFO 2025-07-08 04:22:22,656 decorators Role check for user None: required_role='admin', user_groups=['medecin'], allowed_groups=['admin', 'administrateurs'], has_access=False
+WARNING 2025-07-08 04:22:22,660 decorators Access denied for user None to role admin
+WARNING 2025-07-08 04:22:22,665 log Forbidden (Permission denied): /administration/users/create/
+Traceback (most recent call last):
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\decorators.py", line 41, in wrapper
+    raise PermissionDenied(f"Accès refusé. Rôle requis: {role}")
+django.core.exceptions.PermissionDenied: Accès refusé. Rôle requis: admin
+WARNING 2025-07-08 04:22:22,696 basehttp "GET /administration/users/create/ HTTP/1.1" 403 135
+INFO 2025-07-08 04:22:26,230 decorators Role check for user None: required_role='admin', user_groups=['medecin'], allowed_groups=['admin', 'administrateurs'], has_access=False
+WARNING 2025-07-08 04:22:26,230 decorators Access denied for user None to role admin
+WARNING 2025-07-08 04:22:26,231 log Forbidden (Permission denied): /administration/users/create/
+Traceback (most recent call last):
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\decorators.py", line 41, in wrapper
+    raise PermissionDenied(f"Accès refusé. Rôle requis: {role}")
+django.core.exceptions.PermissionDenied: Accès refusé. Rôle requis: admin
+WARNING 2025-07-08 04:22:26,233 basehttp "GET /administration/users/create/ HTTP/1.1" 403 135
+INFO 2025-07-08 04:22:36,717 decorators Role check for user None: required_role='admin', user_groups=['medecin'], allowed_groups=['admin', 'administrateurs'], has_access=False
+WARNING 2025-07-08 04:22:36,718 decorators Access denied for user None to role admin
+WARNING 2025-07-08 04:22:36,720 log Forbidden (Permission denied): /administration/users/create/
+Traceback (most recent call last):
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\decorators.py", line 41, in wrapper
+    raise PermissionDenied(f"Accès refusé. Rôle requis: {role}")
+django.core.exceptions.PermissionDenied: Accès refusé. Rôle requis: admin
+WARNING 2025-07-08 04:22:36,723 basehttp "GET /administration/users/create/ HTTP/1.1" 403 135
+INFO 2025-07-08 04:22:44,169 decorators Role check for user None: required_role='admin', user_groups=['medecin'], allowed_groups=['admin', 'administrateurs'], has_access=False
+WARNING 2025-07-08 04:22:44,172 decorators Access denied for user None to role admin
+WARNING 2025-07-08 04:22:44,173 log Forbidden (Permission denied): /administration/users/
+Traceback (most recent call last):
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\decorators.py", line 41, in wrapper
+    raise PermissionDenied(f"Accès refusé. Rôle requis: {role}")
+django.core.exceptions.PermissionDenied: Accès refusé. Rôle requis: admin
+WARNING 2025-07-08 04:22:44,175 basehttp "GET /administration/users/ HTTP/1.1" 403 135
+INFO 2025-07-08 04:25:01,166 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 04:25:20,354 basehttp "POST /api/set-role/ HTTP/1.1" 200 34
+INFO 2025-07-08 04:25:20,501 basehttp "GET /oidc/authenticate/?role=admin HTTP/1.1" 302 0
+INFO 2025-07-08 04:25:23,325 basehttp "GET / HTTP/1.1" 302 0
+INFO 2025-07-08 04:25:23,584 views Utilisateur: None, Groupes: ['medecin']
+INFO 2025-07-08 04:25:23,586 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:25:23,741 decorators Role check for user None: required_role='medecin', user_groups=['medecin'], allowed_groups=['medecin', 'médecins'], has_access=True
+INFO 2025-07-08 04:25:23,743 basehttp "GET /medecin/ HTTP/1.1" 200 8823
+INFO 2025-07-08 04:25:29,330 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:25:29,423 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 04:25:33,917 basehttp "POST /api/set-role/ HTTP/1.1" 200 34
+INFO 2025-07-08 04:25:34,074 basehttp "GET /oidc/authenticate/?role=admin HTTP/1.1" 302 0
+DEBUG 2025-07-08 04:25:38,577 auth_backends Claims complets pour None: {'sub': 'be373ef2-40cb-4c43-be10-c0a426fe5257', 'email_verified': True, 'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure'], 'name': 'Admin Système', 'preferred_username': 'admin', 'given_name': 'Admin', 'family_name': 'Système', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-08 04:25:38,579 auth_backends Rôles directs trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 04:25:38,581 auth_backends Rôles extraits pour None: ['default-roles-keurdoctorsecure', 'uma_authorization', 'offline_access', 'admin']
+INFO 2025-07-08 04:25:38,607 auth_backends Rôles assignés à None: ['admin']
+INFO 2025-07-08 04:25:38,612 auth_backends Groupes Django: ['admin']
+INFO 2025-07-08 04:25:38,613 auth_backends Staff: True, Superuser: True
+INFO 2025-07-08 04:25:38,613 auth_backends Connexion autorisée pour admin@keurdoctor.com avec le rôle admin
+INFO 2025-07-08 04:25:38,630 basehttp "GET /oidc/callback/?state=lBVlVJswWBo8vjpDcZ57TW78Z4EzSVmQ&session_state=095d1c41-1cd7-4cf3-ae2f-8648f5233e6c&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=88524abe-4ea0-483a-96d0-2eb28c059cd1.095d1c41-1cd7-4cf3-ae2f-8648f5233e6c.85979e28-8191-48de-ac78-77df9f1a8b3d HTTP/1.1" 302 0
+INFO 2025-07-08 04:25:38,765 views Utilisateur staff/admin détecté: None
+INFO 2025-07-08 04:25:38,768 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:25:38,921 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:25:38,936 basehttp "GET /administration/ HTTP/1.1" 200 9722
+INFO 2025-07-08 04:25:42,388 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:25:42,540 basehttp "GET /administration/securite/ HTTP/1.1" 200 93682
+INFO 2025-07-08 04:26:22,688 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:26:22,706 basehttp "POST /administration/alerte-lue/94/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:26:22,981 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:26:23,143 basehttp "GET /administration/securite/ HTTP/1.1" 200 92954
+INFO 2025-07-08 04:30:45,550 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:30:45,621 basehttp "GET / HTTP/1.1" 200 6757
+INFO 2025-07-08 04:31:35,235 basehttp "POST /api/set-role/ HTTP/1.1" 200 34
+INFO 2025-07-08 04:31:35,491 basehttp "GET /oidc/authenticate/?role=admin HTTP/1.1" 302 0
+DEBUG 2025-07-08 04:31:45,963 auth_backends Claims complets pour None: {'sub': 'be373ef2-40cb-4c43-be10-c0a426fe5257', 'email_verified': True, 'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure'], 'name': 'Admin Système', 'preferred_username': 'admin', 'given_name': 'Admin', 'family_name': 'Système', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-08 04:31:45,963 auth_backends Rôles directs trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 04:31:45,964 auth_backends Rôles extraits pour None: ['default-roles-keurdoctorsecure', 'uma_authorization', 'offline_access', 'admin']
+INFO 2025-07-08 04:31:45,987 auth_backends Rôles assignés à None: ['admin']
+INFO 2025-07-08 04:31:45,992 auth_backends Groupes Django: ['admin']
+INFO 2025-07-08 04:31:45,993 auth_backends Staff: True, Superuser: True
+INFO 2025-07-08 04:31:45,993 auth_backends Connexion autorisée pour admin@keurdoctor.com avec le rôle admin
+INFO 2025-07-08 04:31:46,014 basehttp "GET /oidc/callback/?state=txViKE9AFZNZfS4hbrrVYFTCyuBcHhpx&session_state=04f478fe-d471-4ac5-85a9-4f9e5160af92&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=741e5288-3c0d-4ec7-a169-c04aa64ed445.04f478fe-d471-4ac5-85a9-4f9e5160af92.85979e28-8191-48de-ac78-77df9f1a8b3d HTTP/1.1" 302 0
+INFO 2025-07-08 04:31:46,179 views Utilisateur staff/admin détecté: None
+INFO 2025-07-08 04:31:46,181 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:31:46,459 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:31:46,472 basehttp "GET /administration/ HTTP/1.1" 200 9721
+INFO 2025-07-08 04:31:48,852 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:31:49,008 basehttp "GET /administration/securite/ HTTP/1.1" 200 92954
+INFO 2025-07-08 04:32:41,207 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:32:41,262 basehttp "GET / HTTP/1.1" 200 6479
+INFO 2025-07-08 04:32:53,088 basehttp "POST /api/set-role/ HTTP/1.1" 200 34
+INFO 2025-07-08 04:32:53,231 basehttp "GET /oidc/authenticate/?role=admin HTTP/1.1" 302 0
+DEBUG 2025-07-08 04:51:06,326 auth_backends Claims complets pour None: {'sub': 'be373ef2-40cb-4c43-be10-c0a426fe5257', 'email_verified': True, 'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure'], 'name': 'Admin Système', 'preferred_username': 'admin', 'given_name': 'Admin', 'family_name': 'Système', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-08 04:51:06,337 auth_backends Rôles directs trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-08 04:51:06,338 auth_backends Rôles extraits pour None: ['default-roles-keurdoctorsecure', 'uma_authorization', 'offline_access', 'admin']
+INFO 2025-07-08 04:51:06,364 auth_backends Rôles assignés à None: ['admin']
+INFO 2025-07-08 04:51:06,374 auth_backends Groupes Django: ['admin']
+INFO 2025-07-08 04:51:06,375 auth_backends Staff: True, Superuser: True
+INFO 2025-07-08 04:51:06,375 auth_backends Connexion autorisée pour admin@keurdoctor.com avec le rôle admin
+INFO 2025-07-08 04:51:06,398 basehttp "GET /oidc/callback/?state=92rb9UC2GYsh3rVIzRS5NmmsqXJQunFZ&session_state=038a4b82-0b8f-4e45-bee9-004c2d813f22&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=c76b7e05-edfe-4b64-9af4-bb7e6ab59c96.038a4b82-0b8f-4e45-bee9-004c2d813f22.85979e28-8191-48de-ac78-77df9f1a8b3d HTTP/1.1" 302 0
+INFO 2025-07-08 04:51:06,710 views Utilisateur staff/admin détecté: None
+INFO 2025-07-08 04:51:06,715 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:51:06,975 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:51:07,000 basehttp "GET /administration/ HTTP/1.1" 200 9721
+INFO 2025-07-08 04:51:11,261 decorators Role check for user None: required_role='admin', user_groups=['admin'], allowed_groups=['admin', 'administrateurs'], has_access=True
+INFO 2025-07-08 04:51:11,487 basehttp "GET /administration/securite/ HTTP/1.1" 200 92954
+INFO 2025-07-08 04:51:33,738 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-08 04:51:33,793 basehttp "GET / HTTP/1.1" 200 6479
+>>>>>>> ce737485fc5282521a7973d893496f32ae35fa49

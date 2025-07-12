@@ -18,6 +18,10 @@ urlpatterns = [
     # Dashboards par rôle
     path('administration/', views.admin_dashboard, name='admin_dashboard'),
     path('administration/users/', user_management, name='user_management'),
+<<<<<<< HEAD
+=======
+    path('administration/users/create/', views.create_user_view, name='create_user'),
+>>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
     path('administration/securite/', views.gestion_securite, name='gestion_securite'),
     path('medecin/', views.medecin_dashboard, name='medecin_dashboard'),
     path('patient/', views.patient_dashboard, name='patient_dashboard'),

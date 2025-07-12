@@ -176,6 +176,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 # ==================== CUSTOM USER MODEL ====================
+<<<<<<< HEAD
 AUTH_USER_MODEL = 'comptes.Utilisateur'
 
 # ==================== CHIFFREMENT ET SÉCURITÉ ====================
@@ -204,3 +205,6 @@ LOGIN_TIMEOUT = 300  # 5 minutes
 # Audit et journalisation
 AUDIT_LOG_ENABLED = True
 SENSITIVE_FIELDS = ['numero_dossier', 'numero_praticien', 'specialite', 'date_naissance']
+=======
+AUTH_USER_MODEL = 'comptes.Utilisateur'
+>>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
