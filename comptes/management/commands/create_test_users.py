@@ -1,6 +1,9 @@
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User, Group
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.db import transaction
+
+User = get_user_model()
 
 
 class Command(BaseCommand):
@@ -76,22 +79,23 @@ class Command(BaseCommand):
         with transaction.atomic():
             for user_data in test_users:
                 username = user_data['username']
+                email = user_data['email']
                 group_name = user_data['group']
                 
-                # Vérifier si l'utilisateur existe
-                user_exists = User.objects.filter(username=username).exists()
+                # Vérifier si l'utilisateur existe (par email)
+                user_exists = User.objects.filter(email=email).exists()
                 
                 if user_exists and not options['force']:
                     self.stdout.write(
-                        self.style.WARNING(f"Utilisateur '{username}' existe déjà. Utilisez --force pour le recréer.")
+                        self.style.WARNING(f"Utilisateur '{email}' existe déjà. Utilisez --force pour le recréer.")
                     )
                     continue
                 
                 # Supprimer l'utilisateur existant si --force
                 if user_exists and options['force']:
-                    User.objects.filter(username=username).delete()
+                    User.objects.filter(email=email).delete()
                     updated_count += 1
-                    self.stdout.write(f"Utilisateur '{username}' supprimé et sera recréé.")
+                    self.stdout.write(f"Utilisateur '{email}' supprimé et sera recréé.")
                 
                 # Créer l'utilisateur
                 user = User.objects.create_user(
@@ -115,7 +119,7 @@ class Command(BaseCommand):
                 
                 self.stdout.write(
                     self.style.SUCCESS(
-                        f"✅ Utilisateur '{username}' créé avec le rôle '{group_name}'"
+                        f"✅ Utilisateur '{email}' créé avec le rôle '{group_name}'"
                     )
                 )
 

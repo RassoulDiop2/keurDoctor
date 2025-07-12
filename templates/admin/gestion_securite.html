@@ -1,0 +1,401 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">
+                <i class="fas fa-shield-alt me-2"></i>
+                Gestion de la Sécurité
+            </h1>
+        </div>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-ban me-2"></i>
+                        Utilisateurs Bloqués
+                    </h5>
+                    <h2>{{ utilisateurs_bloques.count }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-dark">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Alertes Non Lues
+                    </h5>
+                    <h2>{{ alertes|length }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-history me-2"></i>
+                        Tentatives Récentes
+                    </h5>
+                    <h2>{{ historique_recent|length }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-check-circle me-2"></i>
+                        Système Sécurisé
+                    </h5>
+                    <h2>Actif</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Utilisateurs Bloqués -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-ban me-2"></i>
+                        Utilisateurs Bloqués
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if utilisateurs_bloques %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Utilisateur</th>
+                                    <th>Email</th>
+                                    <th>Raison du Blocage</th>
+                                    <th>Date de Blocage</th>
+                                    <th>Bloqué par</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for utilisateur in utilisateurs_bloques %}
+                                <tr>
+                                    <td>{{ utilisateur.prenom }} {{ utilisateur.nom }}</td>
+                                    <td>{{ utilisateur.email }}</td>
+                                    <td>
+                                        <span class="badge bg-danger">{{ utilisateur.raison_blocage|truncatechars:50
+                                            }}</span>
+                                    </td>
+                                    <td>{{ utilisateur.date_blocage|date:"d/m/Y H:i" }}</td>
+                                    <td>
+                                        {% if utilisateur.bloque_par_admin %}
+                                        {{ utilisateur.bloque_par_admin.email }}
+                                        {% else %}
+                                        <span class="text-muted">Système</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <form method="post" action="{% url 'debloquer_utilisateur' utilisateur.id %}"
+                                            class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-success btn-sm"
+                                                onclick="return confirm('Êtes-vous sûr de vouloir débloquer cet utilisateur ?')">
+                                                <i class="fas fa-unlock me-1"></i>
+                                                Débloquer
+                                            </button>
+                                        </form>
+                                        {% if utilisateur.role_autorise %}
+                                        <form method="post"
+                                            action="{% url 'synchroniser_utilisateur_keycloak' utilisateur.id %}"
+                                            class="d-inline ms-1">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-info btn-sm"
+                                                onclick="return confirm('Synchroniser cet utilisateur avec Keycloak ?')">
+                                                <i class="fas fa-sync-alt me-1"></i> Sync
+                                            </button>
+                                        </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center text-muted">
+                        <i class="fas fa-check-circle fa-3x mb-3"></i>
+                        <p>Aucun utilisateur bloqué</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alertes de Sécurité -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-bell me-2"></i>
+                        Alertes de Sécurité
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if alertes %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Utilisateur</th>
+                                    <th>Détails</th>
+                                    <th>Date</th>
+                                    <th>Urgence</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for alerte in alertes %}
+                                <tr class="{% if not alerte.est_lue %}table-warning{% endif %}">
+                                    <td>
+                                        <span
+                                            class="badge bg-{% if alerte.type_alerte == 'TENTATIVE_ROLE_INCORRECT' %}danger{% elif alerte.type_alerte == 'BLOQUAGE_UTILISATEUR' %}warning{% else %}info{% endif %}">
+                                            {{ alerte.get_type_alerte_display }}
+                                        </span>
+                                    </td>
+                                    <td>{{ alerte.utilisateur_concerne.email }}</td>
+                                    <td>{{ alerte.details|truncatechars:100 }}</td>
+                                    <td>{{ alerte.date_creation|date:"d/m/Y H:i" }}</td>
+                                    <td>
+                                        <span
+                                            class="badge bg-{% if alerte.niveau_urgence == 'CRITIQUE' %}danger{% elif alerte.niveau_urgence == 'HAUTE' %}warning{% elif alerte.niveau_urgence == 'MOYENNE' %}info{% else %}secondary{% endif %}">
+                                            {{ alerte.get_niveau_urgence_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if alerte.est_lue %}
+                                        <span class="badge bg-success">Lue</span>
+                                        {% else %}
+                                        <span class="badge bg-warning">Non lue</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if not alerte.est_lue %}
+                                        <form method="post" action="{% url 'marquer_alerte_lue' alerte.id %}"
+                                            class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-check me-1"></i>
+                                                Marquer lue
+                                            </button>
+                                        </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center text-muted">
+                        <i class="fas fa-shield-alt fa-3x mb-3"></i>
+                        <p>Aucune alerte de sécurité</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Historique d'Authentification -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-history me-2"></i>
+                        Historique des Tentatives d'Authentification
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if historique_recent %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Utilisateur</th>
+                                    <th>Type</th>
+                                    <th>Rôle Tenté</th>
+                                    <th>Rôle Autorisé</th>
+                                    <th>IP</th>
+                                    <th>Date</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tentative in historique_recent %}
+                                <tr>
+                                    <td>{{ tentative.utilisateur.email }}</td>
+                                    <td>{{ tentative.get_type_auth_display }}</td>
+                                    <td>{{ tentative.role_tente|default:"-" }}</td>
+                                    <td>{{ tentative.role_autorise|default:"-" }}</td>
+                                    <td><code>{{ tentative.adresse_ip }}</code></td>
+                                    <td>{{ tentative.date_heure_acces|date:"d/m/Y H:i" }}</td>
+                                    <td>
+                                        {% if tentative.succes %}
+                                        <span class="badge bg-success">Succès</span>
+                                        {% else %}
+                                        <span class="badge bg-danger">Échec</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center text-muted">
+                        <i class="fas fa-history fa-3x mb-3"></i>
+                        <p>Aucune tentative d'authentification récente</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Utilisateurs en attente de rôle -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user-clock me-2"></i>
+                        Utilisateurs en attente de rôle
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if utilisateurs_en_attente %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Email</th>
+                                    <th>Rôle demandé</th>
+                                    <th>Date d'inscription</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for utilisateur in utilisateurs_en_attente %}
+                                <tr>
+                                    <td>{{ utilisateur.prenom }} {{ utilisateur.nom }}</td>
+                                    <td>{{ utilisateur.email }}</td>
+                                    <td>
+                                        {% if utilisateur.role_demande %}
+                                        <span class="badge bg-info">{{ utilisateur.get_role_demande_display }}</span>
+                                        {% else %}
+                                        <span class="text-muted">Non précisé</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ utilisateur.date_creation|date:"d/m/Y H:i" }}</td>
+                                    <td>
+                                        <a href="/admin/comptes/utilisateur/{{ utilisateur.id }}/change/"
+                                            class="btn btn-primary btn-sm">
+                                            <i class="fas fa-user-edit me-1"></i> Attribuer un rôle
+                                        </a>
+                                        {% if utilisateur.role_demande %}
+                                        <form method="post" action="{% url 'definir_role_utilisateur' utilisateur.id %}"
+                                            style="display:inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="role" value="{{ utilisateur.role_demande }}">
+                                            <button type="submit" class="btn btn-success btn-sm ms-1">
+                                                <i class="fas fa-check me-1"></i> Attribuer ce rôle
+                                            </button>
+                                        </form>
+                                        {% endif %}
+                                        {% if utilisateur.role_autorise %}
+                                        <form method="post"
+                                            action="{% url 'synchroniser_utilisateur_keycloak' utilisateur.id %}"
+                                            style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-info btn-sm ms-1"
+                                                onclick="return confirm('Synchroniser cet utilisateur avec Keycloak ?')">
+                                                <i class="fas fa-sync-alt me-1"></i> Sync Keycloak
+                                            </button>
+                                        </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center text-muted">
+                        <i class="fas fa-user-check fa-3x mb-3"></i>
+                        <p>Aucun utilisateur en attente de rôle</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour définir le rôle d'un utilisateur -->
+<div class="modal fade" id="definirRoleModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Définir le Rôle Autorisé</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="definirRoleForm" method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Rôle autorisé</label>
+                        <select class="form-select" id="role" name="role" required>
+                            <option value="">Aucun rôle spécifique</option>
+                            <option value="admin">Administrateur</option>
+                            <option value="medecin">Médecin</option>
+                            <option value="patient">Patient</option>
+                        </select>
+                        <div class="form-text">
+                            Définissez le rôle autorisé pour cet utilisateur. Une tentative de connexion avec un autre
+                            rôle entraînera le blocage.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Définir le rôle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function definirRole(utilisateurId) {
+        const form = document.getElementById('definirRoleForm');
+        form.action = `/admin/definir-role/${utilisateurId}/`;
+
+        const modal = new bootstrap.Modal(document.getElementById('definirRoleModal'));
+        modal.show();
+    }
+</script>
+{% endblock %}

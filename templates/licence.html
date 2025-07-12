@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block title %}Politique de Confidentialité - Keur Doctor{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">
+                        <i class="fas fa-shield-alt me-2"></i>
+                        Politique de Confidentialité et Conditions d'Utilisation
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Important :</strong> Veuillez lire attentivement cette politique avant de continuer
+                        votre inscription.
+                    </div>
+
+                    <div class="licence-content"
+                        style="max-height: 400px; overflow-y: auto; border: 1px solid #dee2e6; padding: 20px; margin-bottom: 20px;">
+                        <h3>Politique de Confidentialité - Keur Doctor</h3>
+
+                        <h4>1. Collecte des Données</h4>
+                        <p>Keur Doctor collecte les informations suivantes :</p>
+                        <ul>
+                            <li>Informations d'identification (nom, prénom, email)</li>
+                            <li>Données médicales (pour les patients)</li>
+                            <li>Informations professionnelles (pour les médecins)</li>
+                            <li>Données de connexion et d'utilisation</li>
+                        </ul>
+
+                        <h4>2. Utilisation des Données</h4>
+                        <p>Vos données sont utilisées pour :</p>
+                        <ul>
+                            <li>Fournir des services médicaux sécurisés</li>
+                            <li>Améliorer la qualité des soins</li>
+                            <li>Assurer la sécurité de la plateforme</li>
+                            <li>Respecter les obligations légales</li>
+                        </ul>
+
+                        <h4>3. Protection des Données</h4>
+                        <p>Nous mettons en œuvre des mesures de sécurité strictes :</p>
+                        <ul>
+                            <li>Chiffrement des données sensibles</li>
+                            <li>Accès restreint aux données médicales</li>
+                            <li>Audit régulier des accès</li>
+                            <li>Conformité aux normes de santé</li>
+                        </ul>
+
+                        <h4>4. Droits des Utilisateurs</h4>
+                        <p>Vous avez le droit de :</p>
+                        <ul>
+                            <li>Accéder à vos données personnelles</li>
+                            <li>Rectifier les informations inexactes</li>
+                            <li>Demander la suppression de vos données</li>
+                            <li>Retirer votre consentement</li>
+                        </ul>
+
+                        <h4>5. Sanctions</h4>
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Attention :</strong> Toute violation de cette politique entraînera le blocage
+                            immédiat de votre compte. Seul un administrateur peut débloquer un compte suspendu.
+                        </div>
+
+                        <h4>6. Contact</h4>
+                        <p>Pour toute question concernant cette politique :</p>
+                        <ul>
+                            <li>Email : privacy@keurdoctor.com</li>
+                            <li>Téléphone : +221 XX XXX XX XX</li>
+                            <li>Adresse : [Adresse de l'entreprise]</li>
+                        </ul>
+
+                        <p class="text-muted mt-4">
+                            <small>Dernière mise à jour : {{ "now"|date:"d/m/Y" }}</small>
+                        </p>
+                    </div>
+
+                    <form method="post" id="licenceForm">
+                        {% csrf_token %}
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="acceptLicence" name="accept_licence"
+                                required>
+                            <label class="form-check-label" for="acceptLicence">
+                                <strong>J'accepte la politique de confidentialité et les conditions
+                                    d'utilisation</strong>
+                            </label>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="confirmAge" name="confirm_age" required>
+                            <label class="form-check-label" for="confirmAge">
+                                <strong>Je confirme avoir l'âge légal pour utiliser cette plateforme (18 ans
+                                    minimum)</strong>
+                            </label>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'home' %}" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-times me-1"></i> Annuler
+                            </a>
+                            <button type="submit" class="btn btn-primary" id="submitBtn" disabled>
+                                <i class="fas fa-check me-1"></i> J'accepte et continue
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const acceptLicence = document.getElementById('acceptLicence');
+        const confirmAge = document.getElementById('confirmAge');
+        const submitBtn = document.getElementById('submitBtn');
+
+        function checkForm() {
+            if (acceptLicence.checked && confirmAge.checked) {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('btn-secondary');
+                submitBtn.classList.add('btn-primary');
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.classList.remove('btn-primary');
+                submitBtn.classList.add('btn-secondary');
+            }
+        }
+
+        acceptLicence.addEventListener('change', checkForm);
+        confirmAge.addEventListener('change', checkForm);
+
+        // Vérification initiale
+        checkForm();
+    });
+</script>
+{% endblock %}

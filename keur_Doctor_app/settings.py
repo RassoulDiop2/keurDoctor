@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-0_p^430zgi-da9$d-k13a7#6+m^=k6yl7nlc597kz^kpiddk79'
 
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -26,6 +26,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'comptes.middleware.SecurityMiddleware',
+    'comptes.middleware.AuditMiddleware',
 ]
 
 ROOT_URLCONF = 'keur_Doctor_app.urls'
@@ -47,10 +49,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'keur_Doctor_app.wsgi.application'
 
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'KeurDoctorBD',
+        'USER': 'postgres',
+        'PASSWORD':'Diop2222',
+        'HOST':'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -66,7 +73,10 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ==================== KEYCLOAK/OIDC CONFIGURATION ====================
@@ -78,7 +88,7 @@ BASE_OIDC_URL = f"{KEYCLOAK_SERVER_URL}/realms/{OIDC_REALM}"
 
 # Client Configuration
 OIDC_RP_CLIENT_ID = "django-KDclient"
-OIDC_RP_CLIENT_SECRET = "68Az7iaJfiJ7Xb04hdtbiLE7vnitC9BB"
+OIDC_RP_CLIENT_SECRET = "MVb0XaJBRpqUHu62EgyAYWZvHjDGEb0N"
 
 # Endpoints
 OIDC_OP_AUTHORIZATION_ENDPOINT = f"{BASE_OIDC_URL}/protocol/openid-connect/auth"
@@ -165,5 +175,32 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-# ==================== CUSTOM USER MODEL (OPTIONAL) ====================
-# AUTH_USER_MODEL = 'comptes.CustomUser'
+# ==================== CUSTOM USER MODEL ====================
+AUTH_USER_MODEL = 'comptes.Utilisateur'
+
+# ==================== CHIFFREMENT ET SÉCURITÉ ====================
+
+# Clé de chiffrement pour les données sensibles
+ENCRYPTION_KEY = b'your-encryption-key-here'  # À changer en production
+
+# Configuration de sécurité renforcée
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Configuration des sessions sécurisées
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SECURE = False  # True en production avec HTTPS
+CSRF_COOKIE_SECURE = False  # True en production avec HTTPS
+CSRF_COOKIE_HTTPONLY = True
+
+# Limitation des tentatives de connexion
+MAX_LOGIN_ATTEMPTS = 3
+LOGIN_TIMEOUT = 300  # 5 minutes
+
+# Audit et journalisation
+AUDIT_LOG_ENABLED = True
+SENSITIVE_FIELDS = ['numero_dossier', 'numero_praticien', 'specialite', 'date_naissance']

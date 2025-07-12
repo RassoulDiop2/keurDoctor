@@ -1,0 +1,12 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="128" rx="32" fill="#1976d2"/>
+  <text x="32" y="78" font-family="Poppins, Arial, sans-serif" font-size="56" font-weight="bold" fill="#fff">K</text>
+  <text x="68" y="78" font-family="Poppins, Arial, sans-serif" font-size="56" font-weight="bold" fill="#43cea2">D</text>
+  <!-- Stéthoscope stylisé -->
+  <path d="M44 90 Q48 110 64 110 Q80 110 84 90" stroke="#43cea2" stroke-width="5" fill="none"/>
+  <circle cx="44" cy="90" r="6" fill="#fff" stroke="#43cea2" stroke-width="3"/>
+  <circle cx="84" cy="90" r="6" fill="#fff" stroke="#43cea2" stroke-width="3"/>
+  <circle cx="64" cy="110" r="7" fill="#fff" stroke="#1976d2" stroke-width="3"/>
+  <!-- Texte Keur Doctor -->
+  <text x="64" y="124" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-size="18" font-weight="bold" fill="#fff">Keur Doctor</text>
+</svg>

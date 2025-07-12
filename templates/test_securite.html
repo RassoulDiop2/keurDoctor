@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+
+{% block title %}Tests de Sécurité - Keur Doctor{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center mb-4">
+                <i class="fas fa-shield-alt text-primary"></i>
+                Tests de Sécurité
+            </h1>
+
+            <div class="alert alert-info">
+                <h5><i class="fas fa-info-circle"></i> Instructions</h5>
+                <p>Cette page permet de tester les mécanismes de sécurité de Keur Doctor.
+                    Connectez-vous avec différents comptes et testez les accès aux différentes sections.</p>
+            </div>
+
+            {% if user.is_authenticated %}
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5><i class="fas fa-user"></i> Utilisateur Connecté</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>Nom:</strong> {{ user.prenom }} {{ user.nom }}</p>
+                    <p><strong>Rôle autorisé:</strong>
+                        <span
+                            class="badge bg-{% if user.role_autorise == 'admin' %}danger{% elif user.role_autorise == 'medecin' %}warning{% else %}success{% endif %}">
+                            {{ user.role_autorise|default:"Non défini" }}
+                        </span>
+                    </p>
+                    <p><strong>Statut:</strong>
+                        {% if user.est_bloque %}
+                        <span class="badge bg-danger">Bloqué</span>
+                        {% else %}
+                        <span class="badge bg-success">Actif</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h5><i class="fas fa-user-md"></i> Test Accès Médecin</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Testez l'accès aux données médecin</p>
+                            <a href="{% url 'test_acces_medecin' %}" class="btn btn-success">
+                                <i class="fas fa-stethoscope"></i> Tester Accès Médecin
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-danger text-white">
+                            <h5><i class="fas fa-cog"></i> Test Accès Admin</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Testez l'accès aux données admin</p>
+                            <a href="{% url 'test_acces_admin' %}" class="btn btn-danger">
+                                <i class="fas fa-user-shield"></i> Tester Accès Admin
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-info text-white">
+                            <h5><i class="fas fa-user-injured"></i> Test Accès Patient</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Testez l'accès aux données patient</p>
+                            <a href="{% url 'test_acces_patient' %}" class="btn btn-info">
+                                <i class="fas fa-heartbeat"></i> Tester Accès Patient
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nouvelles cartes pour les tests d'usurpation -->
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-warning text-dark">
+                            <h5><i class="fas fa-user-secret"></i> Test d'Usurpation</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Simulez une usurpation de rôle</p>
+                            <div class="btn-group-vertical w-100">
+                                <a href="{% url 'simuler_usurpation_role' 'medecin' %}" class="btn btn-warning mb-2">
+                                    <i class="fas fa-user-md"></i> Se faire passer pour Médecin
+                                </a>
+                                <a href="{% url 'simuler_usurpation_role' 'admin' %}" class="btn btn-danger mb-2">
+                                    <i class="fas fa-user-shield"></i> Se faire passer pour Admin
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-danger text-white">
+                            <h5><i class="fas fa-arrow-up"></i> Test d'Élévation</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Simulez une élévation de privilèges</p>
+                            <a href="{% url 'simuler_elevation_privileges' %}" class="btn btn-danger">
+                                <i class="fas fa-arrow-up"></i> Élever mes Privilèges
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-dark text-white">
+                            <h5><i class="fas fa-external-link-alt"></i> Test d'Accès Direct</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Simulez un accès direct à une URL</p>
+                            <div class="btn-group-vertical w-100">
+                                <a href="{% url 'simuler_acces_direct_url' 'medecin' %}" class="btn btn-dark mb-2">
+                                    <i class="fas fa-user-md"></i> Accès direct Médecin
+                                </a>
+                                <a href="{% url 'simuler_acces_direct_url' 'admin' %}" class="btn btn-dark mb-2">
+                                    <i class="fas fa-user-shield"></i> Accès direct Admin
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <div class="card">
+                    <div class="card-header bg-warning text-dark">
+                        <h5><i class="fas fa-clipboard-list"></i> Comptes de Test</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Rôle</th>
+                                        <th>Email</th>
+                                        <th>Mot de passe</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="badge bg-success">Patient</span></td>
+                                        <td>patient.test@keurdoctor.com</td>
+                                        <td>Patient123!</td>
+                                        <td>Utilisateur normal</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge bg-warning">Médecin</span></td>
+                                        <td>medecin.test@keurdoctor.com</td>
+                                        <td>Medecin123!</td>
+                                        <td>Utilisateur normal</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge bg-danger">Admin</span></td>
+                                        <td>admin.test@keurdoctor.com</td>
+                                        <td>Admin123!</td>
+                                        <td>Utilisateur normal</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge bg-secondary">Patient</span></td>
+                                        <td>patient.malveillant@keurdoctor.com</td>
+                                        <td>Hack123!</td>
+                                        <td>Utilisateur pour test d'intrusion</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% else %}
+            <div class="alert alert-warning">
+                <h5><i class="fas fa-exclamation-triangle"></i> Non connecté</h5>
+                <p>Vous devez être connecté pour tester les mécanismes de sécurité.</p>
+                <a href="{% url 'oidc_authentication_init' %}" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Se connecter
+                </a>
+            </div>
+            {% endif %}
+
+            <div class="mt-4">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h5><i class="fas fa-tasks"></i> Scénarios de Test</h5>
+                    </div>
+                    <div class="card-body">
+                        <ol>
+                            <li><strong>Test Patient → Médecin :</strong> Connectez-vous avec
+                                patient.test@keurdoctor.com et essayez d'accéder aux données médecin</li>
+                            <li><strong>Test Patient → Admin :</strong> Connectez-vous avec patient.test@keurdoctor.com
+                                et essayez d'accéder aux données admin</li>
+                            <li><strong>Test Médecin → Médecin :</strong> Connectez-vous avec
+                                medecin.test@keurdoctor.com et accédez aux données médecin</li>
+                            <li><strong>Test Médecin → Admin :</strong> Connectez-vous avec medecin.test@keurdoctor.com
+                                et essayez d'accéder aux données admin</li>
+                            <li><strong>Test Admin → Admin :</strong> Connectez-vous avec admin.test@keurdoctor.com et
+                                accédez aux données admin</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
