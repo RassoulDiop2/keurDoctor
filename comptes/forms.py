@@ -40,11 +40,7 @@ class InscriptionForm(UserCreationForm):
         max_length=50,
         required=False,
         label='Numéro de dossier',
-<<<<<<< HEAD
         help_text='Champ optionnel pour les patients. Laissez vide pour génération automatique.'
-=======
-        help_text='Champ obligatoire pour les patients'
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
     )
     
     class Meta:
@@ -71,11 +67,7 @@ class InscriptionForm(UserCreationForm):
         elif role == 'patient':
             if not cleaned_data.get('date_naissance'):
                 raise forms.ValidationError("La date de naissance est obligatoire pour les patients.")
-<<<<<<< HEAD
             # Le numéro de dossier est maintenant optionnel
-=======
-            if not cleaned_data.get('numero_dossier'):
-                raise forms.ValidationError("Le numéro de dossier est obligatoire pour les patients.")
         
         return cleaned_data
 
@@ -171,6 +163,5 @@ class AdminCreateUserForm(UserCreationForm):
         elif role_autorise == 'admin':
             if not cleaned_data.get('niveau_acces'):
                 raise forms.ValidationError("Le niveau d'accès est obligatoire pour les administrateurs.")
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
         
         return cleaned_data 

@@ -176,7 +176,6 @@ AUTHENTICATION_BACKENDS = (
 )
 
 # ==================== CUSTOM USER MODEL ====================
-<<<<<<< HEAD
 AUTH_USER_MODEL = 'comptes.Utilisateur'
 
 # ==================== CHIFFREMENT ET SÉCURITÉ ====================
@@ -205,6 +204,16 @@ LOGIN_TIMEOUT = 300  # 5 minutes
 # Audit et journalisation
 AUDIT_LOG_ENABLED = True
 SENSITIVE_FIELDS = ['numero_dossier', 'numero_praticien', 'specialite', 'date_naissance']
-=======
-AUTH_USER_MODEL = 'comptes.Utilisateur'
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'bobcodeur@gmail.com'
+EMAIL_HOST_PASSWORD = 'ecap nxab bcrb edwt'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+

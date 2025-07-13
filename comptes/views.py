@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse, HttpResponseForbidden, HttpResponse
@@ -10,23 +11,14 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.utils.decorators import method_decorator
 import json
-<<<<<<< HEAD
 from .decorators import role_required, any_role_required, detecter_usurpation_role, verifier_elevation_privileges
-from .forms import InscriptionForm
-from .models import Utilisateur, Medecin, Patient, AlerteSecurite, HistoriqueAuthentification, LicenceAcceptation, AuditLog
-=======
-from .decorators import role_required, any_role_required
 from .forms import InscriptionForm, AdminCreateUserForm
-from .models import Utilisateur, Medecin, Patient, AlerteSecurite, HistoriqueAuthentification, Administrateur
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
+from .models import Utilisateur, Medecin, Patient, AlerteSecurite, HistoriqueAuthentification, LicenceAcceptation, AuditLog, Administrateur
 import logging
 import requests
 import uuid
 from django.conf import settings
-<<<<<<< HEAD
 from django.utils import timezone
-=======
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +37,6 @@ class HomeView(View):
         return render(request, 'home.html')
 
 
-<<<<<<< HEAD
 def licence_view(request):
     """Vue pour afficher et traiter l'acceptation de la licence"""
     if request.method == 'POST':
@@ -66,10 +57,6 @@ def licence_view(request):
     return render(request, 'licence.html', {
         'title': 'Politique de Confidentialité'
     })
-
-
-=======
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
 @require_http_methods(["POST"])
 @csrf_exempt
 def set_role_session(request):
@@ -536,14 +523,10 @@ def get_keycloak_admin_token(keycloak_url):
 
 def inscription_view(request):
     """Vue pour l'inscription des nouveaux utilisateurs"""
-<<<<<<< HEAD
     # Vérifier si la licence a été acceptée
     if not request.session.get('licence_accepted'):
         messages.warning(request, 'Vous devez d\'abord accepter la politique de confidentialité.')
         return redirect('licence')
-    
-=======
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
     if request.method == 'POST':
         form = InscriptionForm(request.POST)
         if form.is_valid():
@@ -568,7 +551,6 @@ def inscription_view(request):
                     role_demande=role   # Remplir le rôle souhaité
                 )
                 
-<<<<<<< HEAD
                 # Enregistrer l'acceptation de la licence
                 LicenceAcceptation.objects.create(
                     utilisateur=utilisateur,
@@ -578,17 +560,11 @@ def inscription_view(request):
                     user_agent=request.session.get('licence_user_agent', '')
                 )
                 
-=======
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
                 # Créer une alerte pour l'admin
                 AlerteSecurite.objects.create(
                     type_alerte='NOUVEL_UTILISATEUR_EN_ATTENTE',
                     utilisateur_concerne=utilisateur,
-<<<<<<< HEAD
                     details=f"Nouvel utilisateur inscrit : {utilisateur.email}. Rôle à attribuer. Licence acceptée.",
-=======
-                    details=f"Nouvel utilisateur inscrit : {utilisateur.email}. Rôle à attribuer.",
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
                     niveau_urgence='MOYENNE'
                 )
                 
@@ -602,7 +578,6 @@ def inscription_view(request):
                             numero_praticien=form.cleaned_data['numero_praticien']
                         )
                     elif role == 'patient':
-<<<<<<< HEAD
                         # Générer un numéro de dossier unique
                         numero_dossier = form.cleaned_data['numero_dossier']
                         if numero_dossier:
@@ -629,15 +604,6 @@ def inscription_view(request):
                     del request.session['licence_accepted']
                     del request.session['licence_ip']
                     del request.session['licence_user_agent']
-                    
-=======
-                        Patient.objects.create(
-                            utilisateur=utilisateur,
-                            date_naissance=form.cleaned_data['date_naissance'],
-                            numero_dossier=form.cleaned_data['numero_dossier']
-                        )
-                    
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
                     messages.success(request, f'Inscription réussie ! Votre compte a été créé et est en attente de validation par un administrateur.')
                     return redirect('home')
                 else:
@@ -753,7 +719,6 @@ def synchroniser_utilisateur_keycloak(request, user_id):
     
     return redirect('gestion_securite')
 
-<<<<<<< HEAD
 # Vues de test pour la sécurité
 @login_required
 @detecter_usurpation_role
@@ -951,7 +916,6 @@ def simuler_acces_direct_url(request, url_cible):
     </body>
     </html>
     """)
-=======
 @role_required('admin')
 def create_user_view(request):
     """Vue pour la création d'utilisateurs par l'administrateur"""
@@ -994,6 +958,7 @@ def create_user_view(request):
                 try:
                     keycloak_success = create_keycloak_user_with_role(user, role_autorise, form.cleaned_data['password1'])
                     if keycloak_success:
+                        send_mail("Creation de Compte", f"Bonjour {user.prenom} {user.nom} Votre compte {role_autorise} a ete creer avec succes.\n Vous pouvez vous connectez sur ce lien: http://localhost:8080/realms/KeurDoctorSecure/protocol/openid-connect/auth?client_id=django-KDclient&redirect_uri=http://localhost:8000&response_type=code.\n Email: {user.email} \n Mot de pass { form.cleaned_data['password1']}  ", "bobcodeur@gmail.com", [user.email])
                         messages.success(request, f"Utilisateur {user.email} créé avec succès dans Django et Keycloak.")
                     else:
                         messages.warning(request, f"Utilisateur {user.email} créé dans Django mais erreur lors de la création dans Keycloak.")
@@ -1109,4 +1074,5 @@ def create_keycloak_user_with_role(utilisateur, role, password):
     except Exception as e:
         logger.error(f"Erreur lors de la création Keycloak: {e}")
         return False
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
+
+

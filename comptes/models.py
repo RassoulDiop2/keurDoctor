@@ -1,5 +1,4 @@
 from django.db import models
-<<<<<<< HEAD
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils import timezone
 from django.core.exceptions import ValidationError
@@ -12,14 +11,6 @@ import logging
 
 # Configuration du logger
 logger = logging.getLogger(__name__)
-
-=======
-from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.base_user import BaseUserManager
-import uuid
-from django.utils import timezone
-
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
 
 class UtilisateurManager(BaseUserManager):
     use_in_migrations = True
@@ -165,10 +156,7 @@ class AlerteSecurite(models.Model):
         TENTATIVE_ROLE_INCORRECT = 'TENTATIVE_ROLE_INCORRECT', 'Tentative de connexion avec un rôle incorrect'
         BLOQUAGE_UTILISATEUR = 'BLOQUAGE_UTILISATEUR', 'Utilisateur bloqué'
         DEBLOQUAGE_UTILISATEUR = 'DEBLOQUAGE_UTILISATEUR', 'Utilisateur débloqué'
-<<<<<<< HEAD
-=======
         CREATION_UTILISATEUR = 'CREATION_UTILISATEUR', 'Création d\'utilisateur par l\'administrateur'
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
         TENTATIVE_ACCES_NON_AUTORISE = 'TENTATIVE_ACCES_NON_AUTORISE', 'Tentative d\'accès non autorisé'
         VIOLATION_SECURITE = 'VIOLATION_SECURITE', 'Violation de sécurité'
     
@@ -251,7 +239,6 @@ class HistoriqueJournalisation(models.Model):
         return f"{self.type_evenement} - {self.action}"
 
 
-<<<<<<< HEAD
 class LicenceAcceptation(models.Model):
     """Modèle pour tracer l'acceptation des licences et politiques"""
     utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE, related_name='licences_acceptees')
@@ -276,10 +263,6 @@ class LicenceAcceptation(models.Model):
     
     def __str__(self):
         return f"{self.utilisateur.email} - {self.type_licence} v{self.version}"
-
-
-=======
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
 class Medecin(models.Model):
     utilisateur = models.OneToOneField(Utilisateur, on_delete=models.CASCADE, primary_key=True)
     specialite = models.CharField(max_length=100)
@@ -357,7 +340,6 @@ class DossierMedical(models.Model):
     def __str__(self):
         return f"Dossier de {self.patient} (Créé le {self.date_creation})"
 
-<<<<<<< HEAD
 
 class EncryptionManager:
     """Gestionnaire de chiffrement pour les données sensibles"""
@@ -523,5 +505,4 @@ class AuditLog(models.Model):
             'acces_multiples': acces_multiples,
         }
 
-=======
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
+

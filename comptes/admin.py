@@ -1,10 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.urls import reverse
-<<<<<<< HEAD
-=======
 from django.contrib.auth.admin import UserAdmin
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
 from .models import (Utilisateur,
                      Medecin,
                      Patient,
@@ -13,10 +10,9 @@ from .models import (Utilisateur,
                      DossierMedical,
                      HistoriqueAuthentification,
                      HistoriqueJournalisation,
-<<<<<<< HEAD
-                     LicenceAcceptation)
-=======
+                     LicenceAcceptation,
                      AlerteSecurite)
+from django.utils import timezone
 
 class UtilisateurAdmin(UserAdmin):
     """Configuration admin personnalisée pour le modèle Utilisateur"""
@@ -98,7 +94,6 @@ class AlerteSecuriteAdmin(admin.ModelAdmin):
         updated = queryset.update(est_lue=True)
         self.message_user(request, f'{updated} alerte(s) marquée(s) comme lue(s).')
     marquer_comme_lue.short_description = "Marquer les alertes sélectionnées comme lues"
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
 
 class CustomAdminSite(admin.AdminSite):
     site_header = 'Administration de KeurDoctor'
@@ -121,26 +116,6 @@ class CustomAdminSite(admin.AdminSite):
             extra_context = {}
         extra_context['liens_rapides'] = [
             {
-<<<<<<< HEAD
-                'url': '/admin/users/',
-                'label': 'Gestion des utilisateurs personnalisée',
-                'icon': 'fas fa-users',
-                'target': '_blank',
-            },
-            {
-                'url': '/admin/securite/',
-                'label': 'Gestion de la sécurité personnalisée',
-                'icon': 'fas fa-shield-alt',
-                'target': '_blank',
-            },
-        ]
-        extra_context['liens_rapides_html'] = format_html(
-            '<div style="margin: 1em 0; padding: 1em; background: #f8f9fa; border-radius: 8px;">'
-            '<h4>Liens rapides</h4>'
-            '<ul style="list-style:none; padding-left:0;">'
-            '<li><a href="/admin/users/" target="_blank"><i class="fas fa-users"></i> Gestion des utilisateurs personnalisée</a></li>'
-            '<li><a href="/admin/securite/" target="_blank"><i class="fas fa-shield-alt"></i> Gestion de la sécurité personnalisée</a></li>'
-=======
                 'url': '/administration/',
                 'label': 'Dashboard Administrateur',
                 'icon': 'fas fa-tachometer-alt',
@@ -166,7 +141,6 @@ class CustomAdminSite(admin.AdminSite):
             '<li><a href="/administration/" target="_blank"><i class="fas fa-tachometer-alt"></i> Dashboard Administrateur</a></li>'
             '<li><a href="/administration/securite/" target="_blank"><i class="fas fa-shield-alt"></i> Gestion de la Sécurité</a></li>'
             '<li><a href="/administration/users/" target="_blank"><i class="fas fa-users"></i> Gestion des Utilisateurs</a></li>'
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
             '</ul>'
             '</div>'
         )
@@ -175,17 +149,6 @@ class CustomAdminSite(admin.AdminSite):
 # Remplacer l'admin par défaut par le custom
 admin.site = CustomAdminSite()
 
-<<<<<<< HEAD
-admin.site.register(Utilisateur)
-admin.site.register(Medecin)
-admin.site.register(Patient)
-admin.site.register(Administrateur)
-admin.site.register(RendezVous)
-admin.site.register(DossierMedical)
-admin.site.register(HistoriqueAuthentification)
-admin.site.register(HistoriqueJournalisation)
-admin.site.register(LicenceAcceptation)
-=======
 # Enregistrer les modèles avec leurs configurations personnalisées
 admin.site.register(Utilisateur, UtilisateurAdmin)
 admin.site.register(Medecin, MedecinAdmin)
@@ -195,6 +158,8 @@ admin.site.register(RendezVous, RendezVousAdmin)
 admin.site.register(DossierMedical, DossierMedicalAdmin)
 admin.site.register(HistoriqueAuthentification, HistoriqueAuthentificationAdmin)
 admin.site.register(HistoriqueJournalisation, HistoriqueJournalisationAdmin)
+admin.site.register(LicenceAcceptation)
 admin.site.register(AlerteSecurite, AlerteSecuriteAdmin)
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
+
+
 

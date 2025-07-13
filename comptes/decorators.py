@@ -209,6 +209,6 @@ def verifier_elevation_privileges(view_func):
             )
             
             return HttpResponseForbidden(f"❌ Accès refusé: Vous n'avez pas les privilèges requis ({niveau_requis})")
-        
-        return view_func(request, *args, **kwargs)
-    return wrapper
+            
+            return view_func(request, *args, **kwargs)
+        return wrapper

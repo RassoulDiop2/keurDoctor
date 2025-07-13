@@ -18,10 +18,7 @@ urlpatterns = [
     # Dashboards par rôle
     path('administration/', views.admin_dashboard, name='admin_dashboard'),
     path('administration/users/', user_management, name='user_management'),
-<<<<<<< HEAD
-=======
     path('administration/users/create/', views.create_user_view, name='create_user'),
->>>>>>> ce737485fc5282521a7973d893496f32ae35fa49
     path('administration/securite/', views.gestion_securite, name='gestion_securite'),
     path('medecin/', views.medecin_dashboard, name='medecin_dashboard'),
     path('patient/', views.patient_dashboard, name='patient_dashboard'),
@@ -53,4 +50,6 @@ urlpatterns = [
     path('test/usurpation/<str:role_cible>/', views.simuler_usurpation_role, name='simuler_usurpation_role'),
     path('test/elevation/', views.simuler_elevation_privileges, name='simuler_elevation_privileges'),
     path('test/acces-direct/<str:url_cible>/', views.simuler_acces_direct_url, name='simuler_acces_direct_url'),
+
+
 ]
