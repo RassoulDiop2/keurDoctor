@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from comptes.views import user_management
+from .views import api_rfid_auth, enregistrer_rfid_view, enregistrer_rfid_admin_view, rfid_wait_view
 
 urlpatterns = [
     # Page d'accueil
@@ -36,6 +37,7 @@ urlpatterns = [
     # API
     path('api/user-info/', views.user_info, name='user_info'),
     path('api/set-role/', views.set_role_session, name='set_role_session'),
+    path('api/rfid-auth/', api_rfid_auth, name='api_rfid_auth'),
     
     # Déconnexion personnalisée
     path('logout/', views.custom_logout, name='custom_logout'),
@@ -50,6 +52,11 @@ urlpatterns = [
     path('test/usurpation/<str:role_cible>/', views.simuler_usurpation_role, name='simuler_usurpation_role'),
     path('test/elevation/', views.simuler_elevation_privileges, name='simuler_elevation_privileges'),
     path('test/acces-direct/<str:url_cible>/', views.simuler_acces_direct_url, name='simuler_acces_direct_url'),
+
+    # RFID
+    path('rfid/enregistrer/', enregistrer_rfid_view, name='enregistrer_rfid'),
+    path('rfid/enregistrer/<int:user_id>/', enregistrer_rfid_admin_view, name='enregistrer_rfid_admin'),
+    path('rfid/attente/', rfid_wait_view, name='rfid_wait'),
 
 
 ]

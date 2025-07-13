@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Validation RFID{% endblock %}
+{% block content %}
+<div class="container mt-5 text-center">
+    <h2>Validation RFID</h2>
+    <p class="lead">Présentez votre carte RFID devant le lecteur pour finaliser l'authentification.</p>
+    <div id="rfid-status" class="alert alert-info">En attente de la lecture de la carte...</div>
+    <div id="rfid-timeout" class="alert alert-warning mt-3" style="display:none;"></div>
+    <a href="{% url 'rfid_wait' %}" id="retry-link" class="btn btn-secondary mt-3" style="display:none;">Recommencer</a>
+</div>
+<script>
+    const userEmail = "{{ user_email }}";
+    let polling = true;
+    let elapsed = 0;
+    const timeoutSeconds = 120; // 2 minutes
+    async function pollRFID() {
+        if (!polling) return;
+        try {
+            const response = await fetch("{% url 'api_rfid_auth' %}", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: userEmail, card_uid: null })
+            });
+            const data = await response.json();
+            if (data.success) {
+                document.getElementById('rfid-status').className = 'alert alert-success';
+                document.getElementById('rfid-status').innerText = 'Carte RFID reconnue ! Redirection...';
+                polling = false;
+                setTimeout(() => { window.location.href = '/redirection/'; }, 1000);
+                return;
+            } else if (data.message === 'Carte RFID non reconnue ou non active.') {
+                document.getElementById('rfid-status').className = 'alert alert-danger';
+                document.getElementById('rfid-status').innerText = data.message;
+            } else {
+                document.getElementById('rfid-status').className = 'alert alert-info';
+                document.getElementById('rfid-status').innerText = 'En attente de la lecture de la carte...';
+            }
+        } catch (e) {
+            document.getElementById('rfid-status').className = 'alert alert-warning';
+            document.getElementById('rfid-status').innerText = 'Erreur de connexion au serveur.';
+        }
+        elapsed += 2;
+        if (elapsed >= timeoutSeconds) {
+            polling = false;
+            document.getElementById('rfid-timeout').style.display = '';
+            document.getElementById('rfid-timeout').innerText = 'Temps écoulé. Veuillez réessayer.';
+            document.getElementById('retry-link').style.display = '';
+            document.getElementById('rfid-status').style.display = 'none';
+            return;
+        }
+        if (polling) setTimeout(pollRFID, 2000);
+    }
+    pollRFID();
+</script>
+{% endblock %}

@@ -12,8 +12,8 @@ from django.views.decorators.http import require_http_methods
 from django.utils.decorators import method_decorator
 import json
 from .decorators import role_required, any_role_required, detecter_usurpation_role, verifier_elevation_privileges
-from .forms import InscriptionForm, AdminCreateUserForm
-from .models import Utilisateur, Medecin, Patient, AlerteSecurite, HistoriqueAuthentification, LicenceAcceptation, AuditLog, Administrateur
+from .forms import InscriptionForm, AdminCreateUserForm, RFIDCardRegisterForm
+from .models import Utilisateur, Medecin, Patient, AlerteSecurite, HistoriqueAuthentification, LicenceAcceptation, AuditLog, Administrateur, RFIDCard
 import logging
 import requests
 import uuid
@@ -1074,5 +1074,100 @@ def create_keycloak_user_with_role(utilisateur, role, password):
     except Exception as e:
         logger.error(f"Erreur lors de la création Keycloak: {e}")
         return False
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def api_rfid_auth(request):
+    """
+    API pour valider une authentification RFID (utilisée par le Raspberry Pi ou le polling web).
+    Reçoit : email, card_uid
+    Vérifie que la carte est bien liée à l'utilisateur (admin ou patient, actif).
+    Sécurise le polling : seul l'utilisateur de la session peut valider sa carte.
+    Nettoie la session après succès.
+    """
+    try:
+        data = json.loads(request.body)
+        email = data.get('email')
+        card_uid = data.get('card_uid')
+        # Sécurité : vérifier que l'email correspond à la session
+        session_email = request.session.get('rfid_auth_email')
+        if not session_email or email != session_email:
+            return JsonResponse({'success': False, 'message': 'Session non valide ou email non autorisé.'}, status=403)
+        if not email:
+            return JsonResponse({'success': False, 'message': 'Paramètres manquants.'}, status=400)
+        try:
+            utilisateur = Utilisateur.objects.get(email=email)
+        except Utilisateur.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Utilisateur non trouvé.'}, status=404)
+        if utilisateur.role_autorise not in ['admin', 'patient']:
+            return JsonResponse({'success': False, 'message': 'Rôle non autorisé pour RFID.'}, status=403)
+        # Si card_uid est null (polling), ne rien valider, juste attendre
+        if not card_uid:
+            return JsonResponse({'success': False, 'message': 'En attente de la lecture de la carte.'}, status=200)
+        try:
+            rfid_card = RFIDCard.objects.get(utilisateur=utilisateur, card_uid=card_uid, actif=True)
+        except RFIDCard.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Carte RFID non reconnue ou non active.'}, status=401)
+        # Authentification RFID réussie : nettoyer la session
+        if 'rfid_auth_email' in request.session:
+            del request.session['rfid_auth_email']
+        return JsonResponse({'success': True, 'message': 'Authentification RFID réussie.'})
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'message': 'Données JSON invalides.'}, status=400)
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': f'Erreur technique : {str(e)}'}, status=500)
+
+@login_required
+def enregistrer_rfid_view(request):
+    """Vue pour qu'un utilisateur admin/patient enregistre sa propre carte RFID."""
+    if request.user.role_autorise not in ['admin', 'patient']:
+        messages.error(request, "Seuls les admins et patients peuvent enregistrer une carte RFID.")
+        return redirect('home')
+    if request.method == 'POST':
+        form = RFIDCardRegisterForm(request.POST, user=request.user)
+        if form.is_valid():
+            card_uid = form.cleaned_data['card_uid']
+            if RFIDCard.objects.filter(card_uid=card_uid).exists():
+                messages.error(request, "Cette carte RFID est déjà enregistrée.")
+            else:
+                RFIDCard.objects.create(utilisateur=request.user, card_uid=card_uid)
+                messages.success(request, "Carte RFID enregistrée avec succès.")
+                return redirect('enregistrer_rfid')
+    else:
+        form = RFIDCardRegisterForm(user=request.user)
+    cartes = RFIDCard.objects.filter(utilisateur=request.user)
+    return render(request, 'rfid/enregistrer_rfid.html', {'form': form, 'cartes': cartes, 'user_target': request.user})
+
+@login_required
+def enregistrer_rfid_admin_view(request, user_id):
+    """Vue pour qu'un admin enregistre une carte RFID pour n'importe quel utilisateur."""
+    if request.user.role_autorise != 'admin':
+        messages.error(request, "Accès réservé aux administrateurs.")
+        return redirect('home')
+    user_target = get_object_or_404(Utilisateur, id=user_id, role_autorise__in=['admin', 'patient'])
+    if request.method == 'POST':
+        form = RFIDCardRegisterForm(request.POST, user=request.user)
+        if form.is_valid():
+            card_uid = form.cleaned_data['card_uid']
+            if RFIDCard.objects.filter(card_uid=card_uid).exists():
+                messages.error(request, "Cette carte RFID est déjà enregistrée.")
+            else:
+                RFIDCard.objects.create(utilisateur=user_target, card_uid=card_uid)
+                messages.success(request, f"Carte RFID enregistrée pour {user_target.email}.")
+                return redirect('enregistrer_rfid_admin', user_id=user_target.id)
+    else:
+        form = RFIDCardRegisterForm(user=request.user, initial={'utilisateur': user_target})
+    cartes = RFIDCard.objects.filter(utilisateur=user_target)
+    return render(request, 'rfid/enregistrer_rfid.html', {'form': form, 'cartes': cartes, 'user_target': user_target})
+
+@login_required
+def rfid_wait_view(request):
+    """Page d'attente RFID après OTP. Stocke l'email en session et affiche la page d'attente."""
+    if request.user.role_autorise not in ['admin', 'patient']:
+        messages.error(request, "Seuls les admins et patients peuvent utiliser la double authentification RFID.")
+        return redirect('home')
+    # Stocker l'email en session pour le polling
+    request.session['rfid_auth_email'] = request.user.email
+    return render(request, 'rfid/wait_rfid.html', {'user_email': request.user.email})
 
 

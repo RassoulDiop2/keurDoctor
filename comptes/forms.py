@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Utilisateur, Medecin, Patient
+from .models import Utilisateur, Medecin, Patient, RFIDCard
 
 class InscriptionForm(UserCreationForm):
     ROLE_CHOICES = [
@@ -165,3 +165,18 @@ class AdminCreateUserForm(UserCreationForm):
                 raise forms.ValidationError("Le niveau d'accès est obligatoire pour les administrateurs.")
         
         return cleaned_data 
+
+
+class RFIDCardRegisterForm(forms.ModelForm):
+    utilisateur = forms.ModelChoiceField(queryset=Utilisateur.objects.filter(role_autorise__in=['admin', 'patient']), required=False, label="Utilisateur (pour les admins)")
+    card_uid = forms.CharField(max_length=64, label="UID de la carte RFID")
+
+    class Meta:
+        model = RFIDCard
+        fields = ['utilisateur', 'card_uid']
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        if not user or user.role_autorise != 'admin':
+            self.fields.pop('utilisateur') 

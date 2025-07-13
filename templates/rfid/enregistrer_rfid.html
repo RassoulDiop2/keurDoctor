@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Enregistrement Carte RFID{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Enregistrer une carte RFID {% if user_target != user %}pour {{ user_target.email }}{% endif %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Enregistrer la carte</button>
+    </form>
+    <hr>
+    <h4>Cartes RFID déjà enregistrées :</h4>
+    <ul>
+        {% for carte in cartes %}
+        <li>{{ carte.card_uid }} {% if carte.actif %}<span class="badge bg-success">Active</span>{% else %}<span
+                class="badge bg-secondary">Inactive</span>{% endif %}</li>
+        {% empty %}
+        <li>Aucune carte enregistrée.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

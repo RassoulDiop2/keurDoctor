@@ -506,3 +506,19 @@ class AuditLog(models.Model):
         }
 
 
+class RFIDCard(models.Model):
+    """Carte RFID liée à un utilisateur pour l'authentification forte."""
+    utilisateur = models.ForeignKey('Utilisateur', on_delete=models.CASCADE, related_name='rfid_cards')
+    card_uid = models.CharField(max_length=64, unique=True, help_text="Identifiant unique de la carte RFID")
+    date_enregistrement = models.DateTimeField(auto_now_add=True)
+    actif = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Carte RFID utilisateur"
+        verbose_name_plural = "Cartes RFID utilisateurs"
+        ordering = ['-date_enregistrement']
+
+    def __str__(self):
+        return f"{self.card_uid} ({self.utilisateur.email})"
+
+

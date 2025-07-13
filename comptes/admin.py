@@ -162,4 +162,3 @@ admin.site.register(LicenceAcceptation)
 admin.site.register(AlerteSecurite, AlerteSecuriteAdmin)
 
 
-
