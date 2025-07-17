@@ -641,3 +641,4 @@ INFO 2025-07-17 02:06:57,531 basehttp "GET /administration/scan-rfid/ HTTP/1.1" 
 INFO 2025-07-17 02:12:17,718 basehttp "GET /administration/scan-rfid/ HTTP/1.1" 200 213
 INFO 2025-07-17 02:12:39,486 basehttp "GET /administration/users/create/ HTTP/1.1" 200 18975
 INFO 2025-07-17 02:12:56,445 basehttp "GET /administration/scan-rfid/ HTTP/1.1" 200 213
+INFO 2025-07-17 03:25:22,840 autoreload Watching for file changes with StatReloader
