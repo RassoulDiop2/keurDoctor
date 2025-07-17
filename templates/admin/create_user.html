@@ -251,6 +251,51 @@
                 </div>
             </div>
 
+            <!-- Champs RFID -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-id-card me-2"></i>Cartes RFID (Optionnel)
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.rfid_uid.id_for_label }}" class="form-label">
+                            {{ form.rfid_uid.label }}
+                        </label>
+                        <div class="input-group">
+                            {{ form.rfid_uid }}
+                            <button type="button" class="btn btn-outline-primary scan-rfid-btn"
+                                data-field="{{ form.rfid_uid.id_for_label }}">
+                                <i class="fas fa-qrcode me-1"></i>Scanner
+                            </button>
+                        </div>
+                        {% if form.rfid_uid.errors %}
+                        <div class="text-danger small">{{ form.rfid_uid.errors.0 }}</div>
+                        {% endif %}
+                        {% if form.rfid_uid.help_text %}
+                        <div class="form-text">{{ form.rfid_uid.help_text }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.badge_bleu_uid.id_for_label }}" class="form-label">
+                            {{ form.badge_bleu_uid.label }}
+                        </label>
+                        <div class="input-group">
+                            {{ form.badge_bleu_uid }}
+                            <button type="button" class="btn btn-outline-primary scan-rfid-btn"
+                                data-field="{{ form.badge_bleu_uid.id_for_label }}">
+                                <i class="fas fa-qrcode me-1"></i>Scanner
+                            </button>
+                        </div>
+                        {% if form.badge_bleu_uid.errors %}
+                        <div class="text-danger small">{{ form.badge_bleu_uid.errors.0 }}</div>
+                        {% endif %}
+                        {% if form.badge_bleu_uid.help_text %}
+                        <div class="form-text">{{ form.badge_bleu_uid.help_text }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
             <!-- Boutons d'action -->
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-primary btn-custom me-3">
@@ -294,6 +339,54 @@
 
         // Initialiser l'affichage
         toggleRoleFields();
+
+        // Gestion des boutons de scan RFID
+        document.querySelectorAll('.scan-rfid-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const fieldName = btn.getAttribute('data-field');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>En attente...';
+
+                fetch('/administration/scan-rfid/')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById(fieldName).value = data.uid;
+                            btn.innerHTML = '<i class="fas fa-check me-1"></i>Scanné';
+                            btn.classList.remove('btn-outline-primary');
+                            btn.classList.add('btn-success');
+                            setTimeout(() => {
+                                btn.innerHTML = '<i class="fas fa-qrcode me-1"></i>Scanner';
+                                btn.classList.remove('btn-success');
+                                btn.classList.add('btn-outline-primary');
+                            }, 2000);
+                        } else {
+                            btn.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i>Erreur';
+                            btn.classList.remove('btn-outline-primary');
+                            btn.classList.add('btn-danger');
+                            alert('Erreur : ' + data.error);
+                            setTimeout(() => {
+                                btn.innerHTML = '<i class="fas fa-qrcode me-1"></i>Scanner';
+                                btn.classList.remove('btn-danger');
+                                btn.classList.add('btn-outline-primary');
+                            }, 3000);
+                        }
+                        btn.disabled = false;
+                    })
+                    .catch(err => {
+                        btn.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i>Erreur';
+                        btn.classList.remove('btn-outline-primary');
+                        btn.classList.add('btn-danger');
+                        alert('Erreur de communication avec Arduino');
+                        setTimeout(() => {
+                            btn.innerHTML = '<i class="fas fa-qrcode me-1"></i>Scanner';
+                            btn.classList.remove('btn-danger');
+                            btn.classList.add('btn-outline-primary');
+                        }, 3000);
+                        btn.disabled = false;
+                    });
+            });
+        });
     });
 </script>
 {% endblock %}

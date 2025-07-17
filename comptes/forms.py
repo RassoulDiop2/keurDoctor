@@ -43,6 +43,20 @@ class InscriptionForm(UserCreationForm):
         help_text='Champ optionnel pour les patients. Laissez vide pour génération automatique.'
     )
     
+    # Nouveaux champs RFID
+    rfid_uid = forms.CharField(
+        max_length=64,
+        required=False,
+        label='UID Carte RFID',
+        help_text='Scannez la carte RFID pour l\'identification'
+    )
+    badge_bleu_uid = forms.CharField(
+        max_length=64,
+        required=False,
+        label='UID Badge Bleu',
+        help_text='Scannez le badge bleu pour le contrôle de session'
+    )
+    
     class Meta:
         model = Utilisateur
         fields = ('email', 'prenom', 'nom', 'password1', 'password2', 'role')
@@ -82,10 +96,8 @@ class AdminCreateUserForm(UserCreationForm):
     
     role_autorise = forms.ChoiceField(
         choices=ROLE_CHOICES,
-        label='Rôle à attribuer',
-        widget=forms.Select(attrs={'class': 'form-select'}),
-        required=True,
-        help_text='Sélectionnez le rôle à attribuer à cet utilisateur'
+        label='Rôle autorisé',
+        required=True
     )
     
     # Champs spécifiques au médecin
@@ -93,14 +105,12 @@ class AdminCreateUserForm(UserCreationForm):
         max_length=100,
         required=False,
         label='Spécialité',
-        widget=forms.TextInput(attrs={'class': 'form-control'}),
         help_text='Champ obligatoire pour les médecins'
     )
     numero_praticien = forms.CharField(
         max_length=50,
         required=False,
         label='Numéro de praticien',
-        widget=forms.TextInput(attrs={'class': 'form-control'}),
         help_text='Champ obligatoire pour les médecins'
     )
     
@@ -108,24 +118,38 @@ class AdminCreateUserForm(UserCreationForm):
     date_naissance = forms.DateField(
         required=False,
         label='Date de naissance',
-        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+        widget=forms.DateInput(attrs={'type': 'date'}),
         help_text='Champ obligatoire pour les patients'
     )
     numero_dossier = forms.CharField(
         max_length=50,
         required=False,
         label='Numéro de dossier',
-        widget=forms.TextInput(attrs={'class': 'form-control'}),
-        help_text='Champ obligatoire pour les patients'
+        help_text='Champ optionnel pour les patients. Laissez vide pour génération automatique.'
     )
     
-    # Champs spécifiques à l'administrateur
+    # Champs spécifiques à l'admin
     niveau_acces = forms.IntegerField(
+        min_value=1,
+        max_value=10,
+        initial=1,
         required=False,
         label='Niveau d\'accès',
-        widget=forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': '10'}),
-        help_text='Niveau d\'accès pour les administrateurs (1-10)',
-        initial=1
+        help_text='Niveau d\'accès pour les administrateurs'
+    )
+    
+    # Champs RFID
+    rfid_uid = forms.CharField(
+        max_length=64,
+        required=False,
+        label='UID Carte RFID',
+        help_text='Scannez la carte RFID pour l\'identification'
+    )
+    badge_bleu_uid = forms.CharField(
+        max_length=64,
+        required=False,
+        label='UID Badge Bleu',
+        help_text='Scannez le badge bleu pour le contrôle de session'
     )
     
     class Meta:
@@ -150,6 +174,7 @@ class AdminCreateUserForm(UserCreationForm):
         cleaned_data = super().clean()
         role_autorise = cleaned_data.get('role_autorise')
         
+        # Validation selon le rôle
         if role_autorise == 'medecin':
             if not cleaned_data.get('specialite'):
                 raise forms.ValidationError("La spécialité est obligatoire pour les médecins.")
@@ -158,13 +183,8 @@ class AdminCreateUserForm(UserCreationForm):
         elif role_autorise == 'patient':
             if not cleaned_data.get('date_naissance'):
                 raise forms.ValidationError("La date de naissance est obligatoire pour les patients.")
-            if not cleaned_data.get('numero_dossier'):
-                raise forms.ValidationError("Le numéro de dossier est obligatoire pour les patients.")
-        elif role_autorise == 'admin':
-            if not cleaned_data.get('niveau_acces'):
-                raise forms.ValidationError("Le niveau d'accès est obligatoire pour les administrateurs.")
         
-        return cleaned_data 
+        return cleaned_data
 
 
 class RFIDCardRegisterForm(forms.ModelForm):

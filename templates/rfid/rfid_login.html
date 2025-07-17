@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+
+{% block title %}Connexion RFID - KeurDoctor{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-id-card me-2"></i>
+                        Connexion par Carte RFID
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="rfid-reader-status">
+                            <i class="fas fa-circle text-muted" id="status-indicator"></i>
+                            <span id="status-text">En attente de carte RFID...</span>
+                        </div>
+
+                        <div class="mt-3">
+                            <div class="rfid-animation">
+                                <i class="fas fa-id-card fa-3x text-primary" id="card-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Présentez votre carte RFID sur le lecteur pour vous connecter
+                    </div>
+
+                    <div id="auth-result" class="mt-3" style="display: none;">
+                        <!-- Les résultats d'authentification s'afficheront ici -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .rfid-reader-status {
+        font-size: 1.1em;
+        margin-bottom: 1rem;
+    }
+
+    .rfid-animation {
+        transition: all 0.3s ease;
+    }
+
+    .rfid-animation.scanning {
+        animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .status-success {
+        color: #28a745 !important;
+    }
+
+    .status-error {
+        color: #dc3545 !important;
+    }
+
+    .status-scanning {
+        color: #007bff !important;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const statusIndicator = document.getElementById('status-indicator');
+        const statusText = document.getElementById('status-text');
+        const cardIcon = document.getElementById('card-icon');
+        const authResult = document.getElementById('auth-result');
+
+        // Fonction pour mettre à jour le statut
+        function updateStatus(status, message) {
+            statusIndicator.className = 'fas fa-circle ' + status;
+            statusText.textContent = message;
+        }
+
+        // Fonction pour simuler la lecture RFID (en production, ceci viendrait d'Arduino)
+        function simulateRFIDReading() {
+            updateStatus('status-scanning', 'Lecture de la carte...');
+            cardIcon.parentElement.classList.add('scanning');
+
+            // Simuler un délai de lecture
+            setTimeout(() => {
+                cardIcon.parentElement.classList.remove('scanning');
+
+                // Simuler une authentification (en production, ceci serait une vraie carte)
+                const testCardUID = '1234567890abcdef';
+                authenticateWithRFID(testCardUID);
+            }, 2000);
+        }
+
+        // Fonction d'authentification RFID
+        function authenticateWithRFID(cardUID) {
+            fetch('/rfid/authenticate/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    card_uid: cardUID
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateStatus('status-success', 'Authentification réussie !');
+                        showAuthResult('success', data.message, data.user);
+
+                        // Redirection après 2 secondes
+                        setTimeout(() => {
+                            window.location.href = '/dashboard/';
+                        }, 2000);
+                    } else {
+                        updateStatus('status-error', 'Échec de l\'authentification');
+                        showAuthResult('error', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    updateStatus('status-error', 'Erreur de connexion');
+                    showAuthResult('error', 'Erreur de communication avec le serveur');
+                });
+        }
+
+        // Fonction pour afficher le résultat d'authentification
+        function showAuthResult(type, message, user = null) {
+            authResult.style.display = 'block';
+
+            if (type === 'success') {
+                authResult.className = 'alert alert-success mt-3';
+                authResult.innerHTML = `
+                <i class="fas fa-check-circle me-2"></i>
+                <strong>Authentification réussie !</strong><br>
+                <small>${message}</small>
+                ${user ? `<br><small>Utilisateur: ${user.prenom} ${user.nom} (${user.role})</small>` : ''}
+            `;
+            } else {
+                authResult.className = 'alert alert-danger mt-3';
+                authResult.innerHTML = `
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>Échec d'authentification</strong><br>
+                <small>${message}</small>
+            `;
+            }
+        }
+
+        // Fonction pour récupérer le cookie CSRF
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Démarrer la simulation de lecture RFID
+        // En production, ceci serait remplacé par une vraie communication avec Arduino
+        setTimeout(simulateRFIDReading, 3000);
+
+        // Permettre de relancer la lecture en cliquant sur l'icône
+        cardIcon.addEventListener('click', function () {
+            if (!cardIcon.parentElement.classList.contains('scanning')) {
+                simulateRFIDReading();
+            }
+        });
+    });
+</script>
+{% endblock %}

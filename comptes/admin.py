@@ -13,6 +13,7 @@ from .models import (Utilisateur,
                      LicenceAcceptation,
                      AlerteSecurite)
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 
 class UtilisateurAdmin(UserAdmin):
     """Configuration admin personnalisée pour le modèle Utilisateur"""
@@ -148,6 +149,33 @@ class CustomAdminSite(admin.AdminSite):
 
 # Remplacer l'admin par défaut par le custom
 admin.site = CustomAdminSite()
+
+class RFIDScanWidget(admin.widgets.AdminTextInputWidget):
+    class Media:
+        js = ('js/rfid_scan.js',)
+
+    def render(self, name, value, attrs=None, renderer=None):
+        html = super().render(name, value, attrs, renderer)
+        scan_btn = f'<button type="button" class="button scan-rfid-btn" data-field="{name}">Scanner</button>'
+        return mark_safe(html + scan_btn)
+
+@admin.register(Patient)
+class PatientAdmin(admin.ModelAdmin):
+    list_display = ('utilisateur', 'numero_dossier')
+    fields = ('utilisateur', 'date_naissance', 'numero_dossier', 'rfid_uid', 'badge_bleu_uid')
+    formfield_overrides = {
+        Patient._meta.get_field('rfid_uid'): {'widget': RFIDScanWidget},
+        Patient._meta.get_field('badge_bleu_uid'): {'widget': RFIDScanWidget},
+    }
+
+@admin.register(Medecin)
+class MedecinAdmin(admin.ModelAdmin):
+    list_display = ('utilisateur', 'specialite', 'numero_praticien')
+    fields = ('utilisateur', 'specialite', 'numero_praticien', 'rfid_uid', 'badge_bleu_uid')
+    formfield_overrides = {
+        Medecin._meta.get_field('rfid_uid'): {'widget': RFIDScanWidget},
+        Medecin._meta.get_field('badge_bleu_uid'): {'widget': RFIDScanWidget},
+    }
 
 # Enregistrer les modèles avec leurs configurations personnalisées
 admin.site.register(Utilisateur, UtilisateurAdmin)

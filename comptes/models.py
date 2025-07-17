@@ -263,10 +263,64 @@ class LicenceAcceptation(models.Model):
     
     def __str__(self):
         return f"{self.utilisateur.email} - {self.type_licence} v{self.version}"
+
+# --- Début du déplacement ---
+class EncryptionManager:
+    """Gestionnaire de chiffrement pour les données sensibles"""
+    @staticmethod
+    def get_encryption_key():
+        key = getattr(settings, 'ENCRYPTION_KEY', None)
+        if not key:
+            key = Fernet.generate_key()
+        return key
+    @staticmethod
+    def encrypt_data(data):
+        if not data:
+            return data
+        try:
+            key = EncryptionManager.get_encryption_key()
+            f = Fernet(key)
+            encrypted_data = f.encrypt(data.encode())
+            return base64.b64encode(encrypted_data).decode()
+        except Exception as e:
+            return data
+    @staticmethod
+    def decrypt_data(encrypted_data):
+        if not encrypted_data:
+            return encrypted_data
+        try:
+            key = EncryptionManager.get_encryption_key()
+            f = Fernet(key)
+            decoded_data = base64.b64decode(encrypted_data.encode())
+            decrypted_data = f.decrypt(decoded_data)
+            return decrypted_data.decode()
+        except Exception as e:
+            return encrypted_data
+
+class EncryptedTextField(models.TextField):
+    """Champ de texte chiffré automatiquement"""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+    def get_prep_value(self, value):
+        if value:
+            return EncryptionManager.encrypt_data(value)
+        return value
+    def from_db_value(self, value, expression, connection):
+        if value:
+            return EncryptionManager.decrypt_data(value)
+        return value
+    def to_python(self, value):
+        if isinstance(value, str):
+            return value
+        return str(value) if value is not None else None
+# --- Fin du déplacement ---
+
 class Medecin(models.Model):
     utilisateur = models.OneToOneField(Utilisateur, on_delete=models.CASCADE, primary_key=True)
     specialite = models.CharField(max_length=100)
     numero_praticien = models.CharField(max_length=50, unique=True)
+    rfid_uid = EncryptedTextField(unique=True, blank=True, null=True, help_text="UID carte RFID (visible admin uniquement)")
+    badge_bleu_uid = EncryptedTextField(unique=True, blank=True, null=True, help_text="UID badge bleu (visible admin uniquement)")
 
     class Meta:
         verbose_name = "Médecin"
@@ -280,6 +334,8 @@ class Patient(models.Model):
     utilisateur = models.OneToOneField(Utilisateur, on_delete=models.CASCADE, primary_key=True)
     date_naissance = models.DateField()
     numero_dossier = models.CharField(max_length=50, unique=True)
+    rfid_uid = EncryptedTextField(unique=True, blank=True, null=True, help_text="UID carte RFID (visible admin uniquement)")
+    badge_bleu_uid = EncryptedTextField(unique=True, blank=True, null=True, help_text="UID badge bleu (visible admin uniquement)")
 
     class Meta:
         verbose_name = "Patient"
@@ -339,74 +395,6 @@ class DossierMedical(models.Model):
 
     def __str__(self):
         return f"Dossier de {self.patient} (Créé le {self.date_creation})"
-
-
-class EncryptionManager:
-    """Gestionnaire de chiffrement pour les données sensibles"""
-    
-    @staticmethod
-    def get_encryption_key():
-        """Récupère ou génère la clé de chiffrement"""
-        key = getattr(settings, 'ENCRYPTION_KEY', None)
-        if not key:
-            # Générer une nouvelle clé si elle n'existe pas
-            key = Fernet.generate_key()
-            # En production, stocker cette clé de manière sécurisée
-        return key
-    
-    @staticmethod
-    def encrypt_data(data):
-        """Chiffre les données sensibles"""
-        if not data:
-            return data
-        try:
-            key = EncryptionManager.get_encryption_key()
-            f = Fernet(key)
-            encrypted_data = f.encrypt(data.encode())
-            return base64.b64encode(encrypted_data).decode()
-        except Exception as e:
-            # En cas d'erreur, retourner les données non chiffrées
-            return data
-    
-    @staticmethod
-    def decrypt_data(encrypted_data):
-        """Déchiffre les données sensibles"""
-        if not encrypted_data:
-            return encrypted_data
-        try:
-            key = EncryptionManager.get_encryption_key()
-            f = Fernet(key)
-            decoded_data = base64.b64decode(encrypted_data.encode())
-            decrypted_data = f.decrypt(decoded_data)
-            return decrypted_data.decode()
-        except Exception as e:
-            # En cas d'erreur, retourner les données telles quelles
-            return encrypted_data
-
-
-class EncryptedTextField(models.TextField):
-    """Champ de texte chiffré automatiquement"""
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-    
-    def get_prep_value(self, value):
-        """Chiffre la valeur avant sauvegarde"""
-        if value:
-            return EncryptionManager.encrypt_data(value)
-        return value
-    
-    def from_db_value(self, value, expression, connection):
-        """Déchiffre la valeur depuis la base de données"""
-        if value:
-            return EncryptionManager.decrypt_data(value)
-        return value
-    
-    def to_python(self, value):
-        """Conversion Python"""
-        if isinstance(value, str):
-            return value
-        return str(value) if value is not None else None
 
 
 class AuditLog(models.Model):

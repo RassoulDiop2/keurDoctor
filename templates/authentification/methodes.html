@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% block title %}Méthodes d'Authentification - KeurDoctor{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center mb-5">
+                <i class="fas fa-shield-alt me-3"></i>
+                Méthodes d'Authentification
+            </h1>
+
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>KeurDoctor</strong> propose plusieurs méthodes d'authentification sécurisées adaptées à chaque
+                type d'utilisateur.
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Authentification Standard -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-key me-2"></i>
+                        Authentification Standard
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Pour tous les utilisateurs</h5>
+                    <p class="card-text">
+                        Méthode d'authentification classique via Keycloak avec :
+                    </p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>Nom d'utilisateur / Email</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Mot de passe sécurisé</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Authentification OIDC</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Gestion des rôles</li>
+                    </ul>
+                    <div class="mt-3">
+                        <a href="{% url 'oidc_authentication_init' %}" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            Se connecter
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Authentification RFID + OTP -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow border-success">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-id-card me-2"></i>
+                        RFID + OTP
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Exclusivement pour les patients</h5>
+                    <p class="card-text">
+                        Authentification à deux facteurs avec :
+                    </p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>Carte RFID personnelle</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Code OTP à 6 chiffres</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Double sécurité</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Accès rapide au dashboard</li>
+                    </ul>
+                    <div class="mt-3">
+                        <a href="{% url 'patient_rfid_login' %}" class="btn btn-success">
+                            <i class="fas fa-id-card me-2"></i>
+                            Connexion RFID
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comparaison détaillée -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-table me-2"></i>
+                        Comparaison des Méthodes
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Caractéristique</th>
+                                    <th>Authentification Standard</th>
+                                    <th>RFID + OTP</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Utilisateurs</strong></td>
+                                    <td>Tous (Admin, Médecin, Patient)</td>
+                                    <td>Patients uniquement</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Facteurs d'authentification</strong></td>
+                                    <td>2 (Email + Mot de passe)</td>
+                                    <td>2 (RFID + OTP)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Sécurité</strong></td>
+                                    <td>Élevée (OIDC + Keycloak)</td>
+                                    <td>Très élevée (Double authentification)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Facilité d'utilisation</strong></td>
+                                    <td>Standard</td>
+                                    <td>Rapide (après configuration)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Configuration requise</strong></td>
+                                    <td>Aucune</td>
+                                    <td>Carte RFID enregistrée</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Accès au dashboard</strong></td>
+                                    <td>Redirection selon le rôle</td>
+                                    <td>Accès direct patient</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions pour RFID -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Comment utiliser l'authentification RFID ?
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-list-ol me-2"></i>Étapes d'authentification</h5>
+                            <ol class="list-group list-group-numbered">
+                                <li class="list-group-item">Accédez à la page de connexion RFID</li>
+                                <li class="list-group-item">Entrez votre adresse email patient</li>
+                                <li class="list-group-item">Saisissez l'UID de votre carte RFID</li>
+                                <li class="list-group-item">Validez votre carte RFID</li>
+                                <li class="list-group-item">Entrez votre code OTP (123456 pour les tests)</li>
+                                <li class="list-group-item">Accédez directement à votre dashboard patient</li>
+                            </ol>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-exclamation-triangle me-2"></i>Important</h5>
+                            <div class="alert alert-warning">
+                                <ul class="mb-0">
+                                    <li>Cette méthode est <strong>exclusivement réservée aux patients</strong></li>
+                                    <li>Vous devez avoir une <strong>carte RFID enregistrée</strong></li>
+                                    <li>Le code OTP de test est <strong>123456</strong></li>
+                                    <li>En production, le code OTP serait envoyé par SMS</li>
+                                </ul>
+                            </div>
+
+                            <h5><i class="fas fa-cog me-2"></i>Configuration RFID</h5>
+                            <p>Pour enregistrer votre carte RFID :</p>
+                            <a href="{% url 'enregistrer_rfid' %}" class="btn btn-outline-primary">
+                                <i class="fas fa-plus me-2"></i>
+                                Enregistrer une carte RFID
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <a href="{% url 'home' %}" class="btn btn-secondary me-3">
+                <i class="fas fa-home me-2"></i>
+                Retour à l'accueil
+            </a>
+            <a href="{% url 'patient_rfid_login' %}" class="btn btn-success me-3">
+                <i class="fas fa-id-card me-2"></i>
+                Essayer RFID + OTP
+            </a>
+            <a href="{% url 'oidc_authentication_init' %}" class="btn btn-primary">
+                <i class="fas fa-key me-2"></i>
+                Connexion standard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

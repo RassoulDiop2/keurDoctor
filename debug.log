@@ -269,3 +269,375 @@ INFO 2025-07-13 01:51:25,810 basehttp "GET /medecin/ HTTP/1.1" 200 8829
 INFO 2025-07-13 01:51:25,898 basehttp "GET /static/images/medecin.jpg HTTP/1.1" 200 273925
 INFO 2025-07-13 01:51:32,731 basehttp "GET /logout/ HTTP/1.1" 302 0
 INFO 2025-07-13 01:51:32,789 basehttp "GET / HTTP/1.1" 200 18731
+INFO 2025-07-13 03:53:28,490 autoreload Watching for file changes with StatReloader
+INFO 2025-07-13 03:53:33,480 basehttp "GET / HTTP/1.1" 200 18731
+ERROR 2025-07-13 03:53:34,005 models Erreur lors du logging d'audit: Cannot assign "<SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x000001D612140CD0>>": "AuditLog.utilisateur" must be a "Utilisateur" instance.
+WARNING 2025-07-13 03:53:34,098 log Not Found: /favicon.ico
+INFO 2025-07-13 03:53:34,517 basehttp - Broken pipe from ('127.0.0.1', 54610)
+INFO 2025-07-13 03:53:36,517 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+DEBUG 2025-07-13 03:54:15,788 auth_backends Claims complets pour None: {'sub': 'cf3cb08d-9f85-48bd-8445-3ea2aa47ce18', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Moustapha DIOP', 'preferred_username': 'adminmoustaf', 'given_name': 'Moustapha', 'family_name': 'DIOP', 'email': 'moustaf@keurdoctor.com'}
+DEBUG 2025-07-13 03:54:15,788 auth_backends Rôles realm trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-13 03:54:15,789 auth_backends Rôles extraits pour None: ['admin', 'uma_authorization', 'default-roles-keurdoctorsecure', 'offline_access']
+INFO 2025-07-13 03:54:15,828 auth_backends Rôles assignés à None: ['admin']
+INFO 2025-07-13 03:54:15,833 auth_backends Groupes Django: ['admin']
+INFO 2025-07-13 03:54:15,834 auth_backends Staff: True, Superuser: True
+INFO 2025-07-13 03:54:15,864 basehttp "GET /oidc/callback/?state=kSLPhPAQceLAFBxDTidv9JC6xaNyYbUo&session_state=80a606c2-6dbf-43ba-85c7-4d5ed330592f&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=36e9e10f-4099-499f-9e2a-649fb909c0bf.80a606c2-6dbf-43ba-85c7-4d5ed330592f.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-13 03:54:16,178 views Utilisateur staff/admin détecté: None
+INFO 2025-07-13 03:54:16,179 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-13 03:54:16,509 basehttp "GET /administration/ HTTP/1.1" 200 10019
+INFO 2025-07-13 03:54:22,152 basehttp "GET /administration/securite/ HTTP/1.1" 200 52796
+INFO 2025-07-13 03:54:34,180 basehttp "POST /administration/alerte-lue/268/ HTTP/1.1" 302 0
+INFO 2025-07-13 03:54:34,516 basehttp "GET /administration/securite/ HTTP/1.1" 200 52067
+INFO 2025-07-13 03:54:36,105 basehttp "POST /administration/alerte-lue/231/ HTTP/1.1" 302 0
+INFO 2025-07-13 03:54:36,449 basehttp "GET /administration/securite/ HTTP/1.1" 200 51338
+INFO 2025-07-13 03:54:38,126 basehttp "POST /administration/alerte-lue/230/ HTTP/1.1" 302 0
+INFO 2025-07-13 03:54:38,450 basehttp "GET /administration/securite/ HTTP/1.1" 200 50609
+INFO 2025-07-13 03:54:42,857 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-13 03:54:42,983 basehttp "GET / HTTP/1.1" 200 18731
+INFO 2025-07-14 22:30:54,437 autoreload Watching for file changes with StatReloader
+INFO 2025-07-14 22:33:58,043 basehttp "GET / HTTP/1.1" 200 18926
+ERROR 2025-07-14 22:33:58,975 models Erreur lors du logging d'audit: Cannot assign "<SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x0000017F07A74550>>": "AuditLog.utilisateur" must be a "Utilisateur" instance.
+WARNING 2025-07-14 22:33:59,026 log Not Found: /favicon.ico
+INFO 2025-07-14 22:33:59,027 basehttp - Broken pipe from ('127.0.0.1', 58527)
+INFO 2025-07-14 22:34:06,099 basehttp "GET /patient/rfid/login/ HTTP/1.1" 200 8611
+INFO 2025-07-14 22:35:29,286 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-14 22:35:34,582 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-14 22:35:59,436 basehttp "GET /licence/ HTTP/1.1" 200 8657
+INFO 2025-07-14 22:36:07,417 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-15 02:14:11,232 autoreload Watching for file changes with StatReloader
+INFO 2025-07-16 02:18:49,895 autoreload Watching for file changes with StatReloader
+INFO 2025-07-16 02:18:56,541 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-16 02:19:05,334 basehttp "GET /patient/rfid/login/ HTTP/1.1" 200 7054
+INFO 2025-07-16 02:19:42,867 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+DEBUG 2025-07-16 02:21:18,641 auth_backends Claims complets pour None: {'sub': 'cf3cb08d-9f85-48bd-8445-3ea2aa47ce18', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Moustapha DIOP', 'preferred_username': 'adminmoustaf', 'given_name': 'Moustapha', 'family_name': 'DIOP', 'email': 'moustaf@keurdoctor.com'}
+DEBUG 2025-07-16 02:21:18,647 auth_backends Rôles realm trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-16 02:21:18,648 auth_backends Rôles extraits pour None: ['uma_authorization', 'default-roles-keurdoctorsecure', 'admin', 'offline_access']
+INFO 2025-07-16 02:21:18,699 auth_backends Rôles assignés à None: ['admin']
+INFO 2025-07-16 02:21:18,713 auth_backends Groupes Django: ['admin']
+INFO 2025-07-16 02:21:18,728 auth_backends Staff: True, Superuser: True
+INFO 2025-07-16 02:21:18,759 basehttp "GET /oidc/callback/?state=RizsEEEdLwAynvNc31MxFLGAHHxOrtNd&session_state=64cbf460-467f-4915-945b-31597fbbaecb&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=3d99b445-a9ca-497f-9481-1dbcb630d4e9.64cbf460-467f-4915-945b-31597fbbaecb.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-16 02:21:18,997 views Utilisateur staff/admin détecté: None
+INFO 2025-07-16 02:21:19,000 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-16 02:21:19,301 basehttp "GET /administration/ HTTP/1.1" 200 9731
+INFO 2025-07-16 02:21:19,442 basehttp "GET /static/images/admin-bg.jpg HTTP/1.1" 304 0
+INFO 2025-07-16 02:21:26,390 basehttp "GET /administration/users/ HTTP/1.1" 200 11589
+INFO 2025-07-16 02:21:36,199 views Rôle patient ajouté à l'utilisateur ameth@keurdoctor.com
+INFO 2025-07-16 02:21:36,266 views Synchronisation Keycloak réussie pour ameth@keurdoctor.com - Rôle: patient
+INFO 2025-07-16 02:21:36,281 basehttp "POST /administration/definir-role/122/ HTTP/1.1" 302 0
+INFO 2025-07-16 02:21:36,682 basehttp "GET /administration/securite/ HTTP/1.1" 200 50434
+INFO 2025-07-16 02:22:08,399 views Synchronisation Keycloak réussie pour ameth@keurdoctor.com - Rôle: patient
+INFO 2025-07-16 02:22:08,417 basehttp "POST /administration/definir-role/122/ HTTP/1.1" 302 0
+INFO 2025-07-16 02:22:08,761 basehttp "GET /administration/securite/ HTTP/1.1" 200 52536
+INFO 2025-07-16 02:22:16,524 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-16 02:22:16,797 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-16 02:22:19,897 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+DEBUG 2025-07-16 02:24:20,954 auth_backends Claims complets pour None: {'sub': 'aab358a5-aa77-450b-b26c-b427a04de9eb', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']}, 'name': 'Dr.Rassoul DIOP', 'preferred_username': 'rassoulmouhamd2@gmail.com', 'given_name': 'Dr.Rassoul', 'family_name': 'DIOP', 'email': 'rassoulmouhamd2@gmail.com'}
+DEBUG 2025-07-16 02:24:20,955 auth_backends Rôles realm trouvés: ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']
+INFO 2025-07-16 02:24:20,955 auth_backends Rôles extraits pour None: ['uma_authorization', 'default-roles-keurdoctorsecure', 'medecin', 'offline_access']
+INFO 2025-07-16 02:24:20,982 auth_backends Rôles assignés à None: ['medecin']
+INFO 2025-07-16 02:24:20,989 auth_backends Groupes Django: ['medecin']
+INFO 2025-07-16 02:24:20,989 auth_backends Staff: False, Superuser: False
+INFO 2025-07-16 02:24:21,008 basehttp "GET /oidc/callback/?state=uyMCwrXXs3TNkZn0mqKMRAcPCohlifaw&session_state=24956a96-341f-42b3-869e-c812199e387b&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=2158031b-12c5-44a8-ab80-4baf3d0deb56.24956a96-341f-42b3-869e-c812199e387b.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-16 02:24:21,350 views Utilisateur: None, Groupes: ['medecin']
+INFO 2025-07-16 02:24:21,354 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-16 02:24:21,637 basehttp "GET /medecin/ HTTP/1.1" 200 8831
+INFO 2025-07-16 02:24:21,741 basehttp "GET /static/images/medecin.jpg HTTP/1.1" 304 0
+INFO 2025-07-16 02:24:45,293 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-16 02:24:45,442 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-16 03:04:59,412 basehttp "GET /patient/rfid/login/ HTTP/1.1" 200 7932
+INFO 2025-07-16 03:05:15,166 basehttp "GET /licence/ HTTP/1.1" 200 8657
+INFO 2025-07-16 05:19:51,547 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\models.py changed, reloading.
+INFO 2025-07-16 05:20:01,841 autoreload Watching for file changes with StatReloader
+INFO 2025-07-16 05:22:38,185 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\models.py changed, reloading.
+INFO 2025-07-16 05:22:43,106 autoreload Watching for file changes with StatReloader
+INFO 2025-07-16 05:33:32,857 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\admin.py changed, reloading.
+INFO 2025-07-16 05:33:38,340 autoreload Watching for file changes with StatReloader
+INFO 2025-07-16 05:35:00,949 autoreload Watching for file changes with StatReloader
+INFO 2025-07-16 05:36:17,390 autoreload Watching for file changes with StatReloader
+INFO 2025-07-16 06:06:59,362 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\models.py changed, reloading.
+INFO 2025-07-16 06:07:02,159 autoreload Watching for file changes with StatReloader
+INFO 2025-07-16 06:07:10,065 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\models.py changed, reloading.
+INFO 2025-07-16 06:07:16,639 autoreload Watching for file changes with StatReloader
+INFO 2025-07-16 06:19:15,412 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\models.py changed, reloading.
+INFO 2025-07-16 06:19:26,594 autoreload Watching for file changes with StatReloader
+INFO 2025-07-16 06:20:21,210 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\models.py changed, reloading.
+INFO 2025-07-16 06:20:27,216 autoreload Watching for file changes with StatReloader
+INFO 2025-07-16 06:21:50,973 autoreload Watching for file changes with StatReloader
+INFO 2025-07-16 06:21:56,700 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-16 06:22:02,138 basehttp "GET /patient/rfid/login/ HTTP/1.1" 200 7054
+INFO 2025-07-16 06:22:16,049 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+DEBUG 2025-07-16 06:22:48,043 auth_backends Claims complets pour None: {'sub': 'cf3cb08d-9f85-48bd-8445-3ea2aa47ce18', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Moustapha DIOP', 'preferred_username': 'adminmoustaf', 'given_name': 'Moustapha', 'family_name': 'DIOP', 'email': 'moustaf@keurdoctor.com'}
+DEBUG 2025-07-16 06:22:48,044 auth_backends Rôles realm trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-16 06:22:48,047 auth_backends Rôles extraits pour None: ['uma_authorization', 'default-roles-keurdoctorsecure', 'admin', 'offline_access']
+INFO 2025-07-16 06:22:48,145 auth_backends Rôles assignés à None: ['admin']
+INFO 2025-07-16 06:22:48,154 auth_backends Groupes Django: ['admin']
+INFO 2025-07-16 06:22:48,196 auth_backends Staff: True, Superuser: True
+INFO 2025-07-16 06:22:48,266 basehttp "GET /oidc/callback/?state=Ap5X0ZzevSCMdHU2bGvhQOOmHLQOoqDF&session_state=3ee5bc6a-0fae-4ce3-8e9a-12a7ff20c525&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=96ec6b4c-de91-4ea8-8566-9b2140ebe5fc.3ee5bc6a-0fae-4ce3-8e9a-12a7ff20c525.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-16 06:22:48,796 views Utilisateur staff/admin détecté: None
+INFO 2025-07-16 06:22:48,798 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-16 06:22:49,320 basehttp "GET /administration/ HTTP/1.1" 200 9723
+INFO 2025-07-16 06:22:56,170 basehttp "GET /administration/securite/ HTTP/1.1" 200 52536
+INFO 2025-07-16 06:23:02,823 basehttp "POST /administration/alerte-lue/269/ HTTP/1.1" 302 0
+INFO 2025-07-16 06:23:03,431 basehttp - Broken pipe from ('127.0.0.1', 51435)
+INFO 2025-07-16 06:23:03,936 basehttp "POST /administration/alerte-lue/270/ HTTP/1.1" 302 0
+INFO 2025-07-16 06:23:04,761 basehttp "GET /administration/securite/ HTTP/1.1" 200 51078
+INFO 2025-07-16 06:23:15,897 basehttp "GET /administration/users/ HTTP/1.1" 200 10010
+INFO 2025-07-16 06:23:19,693 basehttp "GET /administration/users/create/ HTTP/1.1" 200 15075
+INFO 2025-07-16 06:23:48,224 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-16 06:23:48,546 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-16 22:35:06,817 autoreload Watching for file changes with StatReloader
+INFO 2025-07-16 22:35:17,596 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-16 22:35:22,748 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+DEBUG 2025-07-16 22:36:13,394 auth_backends Claims complets pour None: {'sub': 'cf3cb08d-9f85-48bd-8445-3ea2aa47ce18', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Moustapha DIOP', 'preferred_username': 'adminmoustaf', 'given_name': 'Moustapha', 'family_name': 'DIOP', 'email': 'moustaf@keurdoctor.com'}
+DEBUG 2025-07-16 22:36:13,396 auth_backends Rôles realm trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-16 22:36:13,397 auth_backends Rôles extraits pour None: ['offline_access', 'uma_authorization', 'admin', 'default-roles-keurdoctorsecure']
+INFO 2025-07-16 22:36:13,447 auth_backends Rôles assignés à None: ['admin']
+INFO 2025-07-16 22:36:13,459 auth_backends Groupes Django: ['admin']
+INFO 2025-07-16 22:36:13,461 auth_backends Staff: True, Superuser: True
+INFO 2025-07-16 22:36:13,493 basehttp "GET /oidc/callback/?state=aLA3PujfUymDeOOH9Fo20SsmAm688QYW&session_state=b0a68787-4e8e-43d6-a010-acf0fe077201&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=b99dd6de-7c6c-451c-8263-22392d06dbdb.b0a68787-4e8e-43d6-a010-acf0fe077201.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-16 22:36:13,876 views Utilisateur staff/admin détecté: None
+INFO 2025-07-16 22:36:13,880 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-16 22:36:14,158 basehttp "GET /administration/ HTTP/1.1" 200 9435
+WARNING 2025-07-16 22:36:15,999 log Not Found: /favicon.ico
+INFO 2025-07-16 22:36:16,072 basehttp - Broken pipe from ('127.0.0.1', 55319)
+INFO 2025-07-16 22:36:18,229 basehttp "GET /administration/users/ HTTP/1.1" 200 10010
+INFO 2025-07-16 22:36:21,344 basehttp "GET /administration/users/create/ HTTP/1.1" 200 14498
+WARNING 2025-07-16 22:36:22,008 log Not Found: /favicon.ico
+INFO 2025-07-16 22:36:22,015 basehttp - Broken pipe from ('127.0.0.1', 55430)
+INFO 2025-07-16 22:36:31,704 basehttp "GET / HTTP/1.1" 302 0
+INFO 2025-07-16 22:36:32,015 basehttp - Broken pipe from ('127.0.0.1', 55463)
+INFO 2025-07-16 22:36:38,021 basehttp "GET /administration/users/ HTTP/1.1" 200 10010
+INFO 2025-07-16 22:36:58,521 basehttp "GET /profil/ HTTP/1.1" 200 7018
+INFO 2025-07-16 22:37:01,523 views Utilisateur staff/admin détecté: None
+INFO 2025-07-16 22:37:01,551 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-16 22:37:01,869 basehttp "GET /administration/ HTTP/1.1" 200 9435
+INFO 2025-07-16 22:37:04,904 basehttp "GET /admin/ HTTP/1.1" 200 15227
+INFO 2025-07-16 22:37:05,289 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2025-07-16 22:37:05,310 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2025-07-16 22:37:05,782 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2808
+INFO 2025-07-16 22:37:05,789 basehttp "GET /static/admin/css/base.css HTTP/1.1" 200 22120
+INFO 2025-07-16 22:37:05,822 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2025-07-16 22:37:05,867 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 200 16565
+INFO 2025-07-16 22:37:05,876 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+INFO 2025-07-16 22:37:05,944 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2025-07-16 22:37:05,944 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2025-07-16 22:37:05,945 basehttp "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 200 392
+INFO 2025-07-16 22:37:11,832 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 21073
+INFO 2025-07-16 22:37:11,939 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+INFO 2025-07-16 22:37:11,958 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+INFO 2025-07-16 22:37:11,962 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+INFO 2025-07-16 22:37:11,975 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2025-07-16 22:37:11,977 basehttp "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2025-07-16 22:37:11,995 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2025-07-16 22:37:12,052 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2025-07-16 22:37:12,076 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2025-07-16 22:37:12,096 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2025-07-16 22:37:12,111 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+INFO 2025-07-16 22:37:12,331 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-16 22:37:12,342 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2025-07-16 22:37:12,344 basehttp "GET /static/admin/img/icon-no.svg HTTP/1.1" 200 560
+INFO 2025-07-16 22:37:12,345 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+INFO 2025-07-16 22:37:12,446 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2025-07-16 22:37:12,450 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2025-07-16 22:37:12,450 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+INFO 2025-07-16 22:38:05,920 basehttp "POST /admin/comptes/utilisateur/ HTTP/1.1" 200 14932
+INFO 2025-07-16 22:38:06,113 basehttp "GET /static/admin/js/cancel.js HTTP/1.1" 200 884
+INFO 2025-07-16 22:38:11,086 basehttp "POST /admin/comptes/utilisateur/ HTTP/1.1" 302 0
+INFO 2025-07-16 22:38:11,376 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 17133
+INFO 2025-07-16 22:38:11,722 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-16 22:39:24,733 basehttp "GET /administration/users/ HTTP/1.1" 200 5622
+INFO 2025-07-16 22:39:38,319 basehttp "GET /administration/users/create/ HTTP/1.1" 200 14498
+INFO 2025-07-16 22:39:43,084 basehttp "GET /profil/ HTTP/1.1" 200 7018
+INFO 2025-07-16 22:39:50,021 views Utilisateur staff/admin détecté: None
+INFO 2025-07-16 22:39:50,022 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-16 22:39:50,179 basehttp "GET /administration/ HTTP/1.1" 200 9435
+INFO 2025-07-16 22:39:52,299 basehttp "GET /administration/users/ HTTP/1.1" 200 5622
+INFO 2025-07-16 22:39:53,952 basehttp "GET /administration/users/create/ HTTP/1.1" 200 14498
+INFO 2025-07-16 22:41:16,163 views Rôle patient attribué avec succès à l'utilisateur mouharassoulmd@gmail.com
+INFO 2025-07-16 22:41:16,163 views Utilisateur mouharassoulmd@gmail.com créé avec succès dans Keycloak avec le rôle patient
+INFO 2025-07-16 22:41:19,748 basehttp "POST /administration/users/create/ HTTP/1.1" 302 0
+INFO 2025-07-16 22:41:19,936 basehttp "GET /administration/users/ HTTP/1.1" 200 6349
+INFO 2025-07-16 22:43:24,464 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 17847
+INFO 2025-07-16 22:43:24,656 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-16 22:46:35,566 basehttp "GET /admin/comptes/utilisateur/166/change/ HTTP/1.1" 200 34439
+INFO 2025-07-16 22:46:35,703 basehttp "GET /static/admin/js/SelectBox.js HTTP/1.1" 200 4530
+INFO 2025-07-16 22:46:35,711 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2025-07-16 22:46:35,715 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 304 0
+INFO 2025-07-16 22:46:35,730 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+INFO 2025-07-16 22:46:35,742 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 200 11991
+INFO 2025-07-16 22:46:35,768 basehttp "GET /static/admin/js/SelectFilter2.js HTTP/1.1" 200 15845
+INFO 2025-07-16 22:46:35,781 basehttp "GET /static/admin/js/calendar.js HTTP/1.1" 304 0
+INFO 2025-07-16 22:46:35,784 basehttp "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 304 0
+INFO 2025-07-16 22:46:35,847 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-16 22:46:35,937 basehttp "GET /static/admin/img/selector-icons.svg HTTP/1.1" 200 3291
+INFO 2025-07-16 22:46:35,949 basehttp "GET /static/admin/img/icon-clock.svg HTTP/1.1" 200 677
+INFO 2025-07-16 22:46:35,958 basehttp "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+WARNING 2025-07-16 22:46:36,109 log Not Found: /favicon.ico
+INFO 2025-07-16 22:46:36,119 basehttp - Broken pipe from ('127.0.0.1', 55482)
+INFO 2025-07-16 22:48:40,174 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 17660
+INFO 2025-07-16 22:48:40,390 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+WARNING 2025-07-16 22:48:40,594 log Not Found: /favicon.ico
+INFO 2025-07-16 22:48:40,595 basehttp - Broken pipe from ('127.0.0.1', 55703)
+INFO 2025-07-16 22:48:48,561 basehttp "GET /admin/comptes/utilisateur/166/change/ HTTP/1.1" 200 34439
+INFO 2025-07-16 22:48:48,797 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+WARNING 2025-07-16 22:48:49,038 log Not Found: /favicon.ico
+INFO 2025-07-16 22:48:49,040 basehttp - Broken pipe from ('127.0.0.1', 55713)
+INFO 2025-07-16 22:52:00,627 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\forms.py changed, reloading.
+INFO 2025-07-16 22:52:02,377 autoreload Watching for file changes with StatReloader
+INFO 2025-07-16 22:56:41,822 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\views.py changed, reloading.
+INFO 2025-07-16 22:56:44,271 autoreload Watching for file changes with StatReloader
+INFO 2025-07-16 22:57:21,610 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\forms.py changed, reloading.
+INFO 2025-07-16 22:57:23,411 autoreload Watching for file changes with StatReloader
+INFO 2025-07-16 23:05:02,405 autoreload Watching for file changes with StatReloader
+INFO 2025-07-16 23:05:11,467 basehttp "GET / HTTP/1.1" 302 0
+INFO 2025-07-16 23:05:11,642 views Utilisateur staff/admin détecté: None
+INFO 2025-07-16 23:05:11,643 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-16 23:05:11,821 basehttp "GET /administration/ HTTP/1.1" 200 9723
+INFO 2025-07-16 23:05:19,861 basehttp "GET /administration/securite/ HTTP/1.1" 200 46298
+INFO 2025-07-16 23:05:22,962 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-16 23:05:26,466 basehttp "POST /administration/alerte-lue/271/ HTTP/1.1" 302 0
+INFO 2025-07-16 23:05:26,690 basehttp "GET /administration/securite/ HTTP/1.1" 200 45569
+INFO 2025-07-16 23:05:33,449 basehttp "GET /profil/ HTTP/1.1" 200 7018
+INFO 2025-07-16 23:05:50,884 views Utilisateur staff/admin détecté: None
+INFO 2025-07-16 23:05:50,885 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-16 23:05:51,028 basehttp "GET /administration/ HTTP/1.1" 200 9435
+INFO 2025-07-16 23:05:53,355 basehttp "GET /administration/users/ HTTP/1.1" 200 6349
+INFO 2025-07-16 23:05:57,941 basehttp "GET /admin/comptes/utilisateur/166/change/ HTTP/1.1" 200 34571
+INFO 2025-07-16 23:05:58,180 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-16 23:06:07,449 basehttp "GET /admin/comptes/utilisateur/166/delete/ HTTP/1.1" 200 12092
+INFO 2025-07-16 23:06:07,861 basehttp - Broken pipe from ('127.0.0.1', 59309)
+INFO 2025-07-16 23:06:10,090 basehttp "POST /admin/comptes/utilisateur/166/delete/ HTTP/1.1" 302 0
+INFO 2025-07-16 23:06:10,276 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 17193
+INFO 2025-07-16 23:06:10,494 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-16 23:07:02,956 basehttp "GET / HTTP/1.1" 302 0
+INFO 2025-07-16 23:07:03,128 views Utilisateur staff/admin détecté: None
+INFO 2025-07-16 23:07:03,130 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-16 23:07:03,319 basehttp "GET /administration/ HTTP/1.1" 200 9435
+INFO 2025-07-16 23:07:10,342 basehttp "GET /administration/users/ HTTP/1.1" 200 5622
+INFO 2025-07-16 23:07:12,456 basehttp "GET /administration/users/create/ HTTP/1.1" 200 18970
+WARNING 2025-07-16 23:07:23,514 log Not Found: /admin/scan-rfid-uid/
+WARNING 2025-07-16 23:07:23,518 basehttp "GET /admin/scan-rfid-uid/ HTTP/1.1" 404 7850
+WARNING 2025-07-16 23:07:29,792 log Not Found: /admin/scan-rfid-uid/
+WARNING 2025-07-16 23:07:29,793 basehttp "GET /admin/scan-rfid-uid/ HTTP/1.1" 404 7850
+INFO 2025-07-17 00:41:59,018 basehttp "GET /admin/scan-rfid-uid/ HTTP/1.1" 302 0
+INFO 2025-07-17 00:41:59,069 basehttp "GET /admin/login/?next=/admin/scan-rfid-uid/ HTTP/1.1" 200 4249
+INFO 2025-07-17 00:42:08,615 basehttp "GET /admin/scan-rfid-uid/ HTTP/1.1" 302 0
+INFO 2025-07-17 00:42:08,638 basehttp "GET /admin/login/?next=/admin/scan-rfid-uid/ HTTP/1.1" 200 4249
+INFO 2025-07-17 00:42:19,060 basehttp "GET /admin/scan-rfid-uid/ HTTP/1.1" 302 0
+INFO 2025-07-17 00:42:19,082 basehttp "GET /admin/login/?next=/admin/scan-rfid-uid/ HTTP/1.1" 200 4249
+INFO 2025-07-17 00:42:24,680 basehttp "GET /admin/scan-rfid-uid/ HTTP/1.1" 302 0
+INFO 2025-07-17 00:42:24,701 basehttp "GET /admin/login/?next=/admin/scan-rfid-uid/ HTTP/1.1" 200 4249
+INFO 2025-07-17 00:42:29,386 basehttp "GET /admin/scan-rfid-uid/ HTTP/1.1" 302 0
+INFO 2025-07-17 00:42:29,408 basehttp "GET /admin/login/?next=/admin/scan-rfid-uid/ HTTP/1.1" 200 4249
+INFO 2025-07-17 00:54:09,997 basehttp "GET /admin/scan-rfid-uid/ HTTP/1.1" 302 0
+INFO 2025-07-17 00:54:10,073 basehttp "GET /admin/login/?next=/admin/scan-rfid-uid/ HTTP/1.1" 200 4249
+INFO 2025-07-17 00:54:42,184 autoreload Watching for file changes with StatReloader
+INFO 2025-07-17 00:56:38,978 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-17 00:56:53,685 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+DEBUG 2025-07-17 00:57:49,420 auth_backends Claims complets pour None: {'sub': 'cf3cb08d-9f85-48bd-8445-3ea2aa47ce18', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Moustapha DIOP', 'preferred_username': 'adminmoustaf', 'given_name': 'Moustapha', 'family_name': 'DIOP', 'email': 'moustaf@keurdoctor.com'}
+DEBUG 2025-07-17 00:57:49,422 auth_backends Rôles realm trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-17 00:57:49,436 auth_backends Rôles extraits pour None: ['admin', 'offline_access', 'default-roles-keurdoctorsecure', 'uma_authorization']
+INFO 2025-07-17 00:57:49,489 auth_backends Rôles assignés à None: ['admin']
+INFO 2025-07-17 00:57:49,510 auth_backends Groupes Django: ['admin']
+INFO 2025-07-17 00:57:49,519 auth_backends Staff: True, Superuser: True
+INFO 2025-07-17 00:57:49,570 basehttp "GET /oidc/callback/?state=xB8XqqqrYOpuqnT17wKwx8mRiuQ9mqJ1&session_state=9976f23e-c8f8-47e3-873c-77a23d4fbac3&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=eb4cfe55-459b-4ebf-b074-3307cafabea6.9976f23e-c8f8-47e3-873c-77a23d4fbac3.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-17 00:57:50,048 views Utilisateur staff/admin détecté: None
+INFO 2025-07-17 00:57:50,054 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-17 00:57:50,384 basehttp "GET /administration/ HTTP/1.1" 200 9435
+INFO 2025-07-17 00:57:55,842 basehttp "GET /administration/users/ HTTP/1.1" 200 5622
+INFO 2025-07-17 00:58:01,719 basehttp "GET /administration/users/create/ HTTP/1.1" 200 18970
+WARNING 2025-07-17 01:01:53,029 log Not Found: /admin/scan-rfid-uid/
+WARNING 2025-07-17 01:01:53,030 basehttp "GET /admin/scan-rfid-uid/ HTTP/1.1" 404 7850
+WARNING 2025-07-17 01:01:57,247 log Not Found: /admin/scan-rfid-uid/
+WARNING 2025-07-17 01:01:57,251 basehttp "GET /admin/scan-rfid-uid/ HTTP/1.1" 404 7850
+WARNING 2025-07-17 01:02:00,090 log Not Found: /admin/scan-rfid-uid/
+WARNING 2025-07-17 01:02:00,091 basehttp "GET /admin/scan-rfid-uid/ HTTP/1.1" 404 7850
+WARNING 2025-07-17 01:02:03,208 log Not Found: /admin/scan-rfid-uid/
+WARNING 2025-07-17 01:02:03,209 basehttp "GET /admin/scan-rfid-uid/ HTTP/1.1" 404 7850
+WARNING 2025-07-17 01:02:07,124 log Not Found: /admin/scan-rfid-uid/
+WARNING 2025-07-17 01:02:07,125 basehttp "GET /admin/scan-rfid-uid/ HTTP/1.1" 404 7850
+INFO 2025-07-17 01:06:42,276 autoreload Watching for file changes with StatReloader
+INFO 2025-07-17 01:06:51,525 basehttp "GET / HTTP/1.1" 302 0
+INFO 2025-07-17 01:06:51,951 views Utilisateur staff/admin détecté: None
+INFO 2025-07-17 01:06:51,967 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-17 01:06:52,204 basehttp "GET /administration/ HTTP/1.1" 200 9435
+INFO 2025-07-17 01:07:13,981 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 16984
+INFO 2025-07-17 01:07:14,182 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-17 01:07:43,369 basehttp "GET /administration/users/ HTTP/1.1" 200 5622
+INFO 2025-07-17 01:07:46,454 basehttp "GET /administration/users/create/ HTTP/1.1" 200 18975
+WARNING 2025-07-17 01:08:48,519 log Not Found: /administration/scan-rfid/
+WARNING 2025-07-17 01:08:48,523 basehttp "GET /administration/scan-rfid/ HTTP/1.1" 404 12079
+WARNING 2025-07-17 01:09:10,603 log Not Found: /administration/scan-rfid/
+WARNING 2025-07-17 01:09:10,605 basehttp "GET /administration/scan-rfid/ HTTP/1.1" 404 12079
+INFO 2025-07-17 01:14:25,621 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\keur_Doctor_app\urls.py changed, reloading.
+INFO 2025-07-17 01:14:28,704 autoreload Watching for file changes with StatReloader
+INFO 2025-07-17 01:15:00,129 autoreload Watching for file changes with StatReloader
+INFO 2025-07-17 01:15:13,899 basehttp "GET / HTTP/1.1" 302 0
+INFO 2025-07-17 01:15:14,134 views Utilisateur staff/admin détecté: None
+INFO 2025-07-17 01:15:14,135 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-17 01:15:14,405 basehttp "GET /administration/ HTTP/1.1" 200 9435
+INFO 2025-07-17 01:15:18,570 basehttp "GET /administration/users/ HTTP/1.1" 200 5622
+INFO 2025-07-17 01:15:21,619 basehttp "GET /administration/users/create/ HTTP/1.1" 200 18975
+INFO 2025-07-17 01:17:15,481 basehttp "GET /administration/scan-rfid/ HTTP/1.1" 200 114
+INFO 2025-07-17 01:23:31,380 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\views_rfid.py changed, reloading.
+INFO 2025-07-17 01:23:33,598 autoreload Watching for file changes with StatReloader
+INFO 2025-07-17 01:27:24,563 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\views_rfid.py changed, reloading.
+INFO 2025-07-17 01:27:26,130 autoreload Watching for file changes with StatReloader
+INFO 2025-07-17 01:28:09,460 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\views_rfid.py changed, reloading.
+INFO 2025-07-17 01:28:11,991 autoreload Watching for file changes with StatReloader
+INFO 2025-07-17 01:35:42,324 autoreload Watching for file changes with StatReloader
+INFO 2025-07-17 01:37:30,869 basehttp "GET / HTTP/1.1" 302 0
+INFO 2025-07-17 01:37:31,003 views Utilisateur staff/admin détecté: None
+INFO 2025-07-17 01:37:31,006 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-17 01:37:31,186 basehttp "GET /administration/ HTTP/1.1" 200 9435
+INFO 2025-07-17 01:37:38,085 basehttp "GET /administration/ HTTP/1.1" 200 9435
+INFO 2025-07-17 01:37:43,218 basehttp "GET /administration/ HTTP/1.1" 200 9435
+INFO 2025-07-17 01:37:46,376 basehttp "GET /administration/users/ HTTP/1.1" 200 5622
+INFO 2025-07-17 01:37:48,996 basehttp "GET /administration/users/create/ HTTP/1.1" 200 18975
+INFO 2025-07-17 01:38:43,062 basehttp "GET /administration/scan-rfid/ HTTP/1.1" 200 61
+INFO 2025-07-17 01:39:03,424 basehttp "GET /administration/scan-rfid/ HTTP/1.1" 200 61
+INFO 2025-07-17 01:41:43,633 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\views_rfid.py changed, reloading.
+INFO 2025-07-17 01:41:45,672 autoreload Watching for file changes with StatReloader
+INFO 2025-07-17 01:43:53,732 basehttp "GET /administration/scan-rfid/?port=COM5 HTTP/1.1" 200 114
+ERROR 2025-07-17 01:43:53,893 models Erreur lors du logging d'audit: Cannot assign "<SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x00000233180D6900>>": "AuditLog.utilisateur" must be a "Utilisateur" instance.
+WARNING 2025-07-17 01:43:53,902 log Not Found: /favicon.ico
+WARNING 2025-07-17 01:43:53,908 basehttp "GET /favicon.ico HTTP/1.1" 404 12236
+INFO 2025-07-17 01:53:53,835 autoreload Watching for file changes with StatReloader
+INFO 2025-07-17 01:54:18,309 basehttp "GET /administration/scan-rfid/?port=COM5 HTTP/1.1" 200 114
+ERROR 2025-07-17 01:54:18,599 models Erreur lors du logging d'audit: Cannot assign "<SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x0000022BA3E702F0>>": "AuditLog.utilisateur" must be a "Utilisateur" instance.
+WARNING 2025-07-17 01:54:18,631 log Not Found: /favicon.ico
+WARNING 2025-07-17 01:54:18,681 basehttp "GET /favicon.ico HTTP/1.1" 404 12236
+INFO 2025-07-17 01:55:38,290 basehttp "GET /administration/scan-rfid/?port=COM5 HTTP/1.1" 200 114
+ERROR 2025-07-17 01:55:38,367 models Erreur lors du logging d'audit: Cannot assign "<SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x0000022BA3E93C50>>": "AuditLog.utilisateur" must be a "Utilisateur" instance.
+WARNING 2025-07-17 01:55:38,375 log Not Found: /favicon.ico
+WARNING 2025-07-17 01:55:38,377 basehttp "GET /favicon.ico HTTP/1.1" 404 12236
+INFO 2025-07-17 01:55:39,634 basehttp "GET /administration/scan-rfid/?port=COM5 HTTP/1.1" 200 114
+ERROR 2025-07-17 01:55:39,697 models Erreur lors du logging d'audit: Cannot assign "<SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x0000022BA3EF2210>>": "AuditLog.utilisateur" must be a "Utilisateur" instance.
+WARNING 2025-07-17 01:55:39,707 log Not Found: /favicon.ico
+WARNING 2025-07-17 01:55:39,708 basehttp "GET /favicon.ico HTTP/1.1" 404 12236
+INFO 2025-07-17 01:55:40,850 basehttp "GET /administration/scan-rfid/?port=COM5 HTTP/1.1" 200 114
+ERROR 2025-07-17 01:55:40,915 models Erreur lors du logging d'audit: Cannot assign "<SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x0000022BA3E5F230>>": "AuditLog.utilisateur" must be a "Utilisateur" instance.
+WARNING 2025-07-17 01:55:40,920 log Not Found: /favicon.ico
+WARNING 2025-07-17 01:55:40,925 basehttp "GET /favicon.ico HTTP/1.1" 404 12236
+INFO 2025-07-17 02:00:47,994 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-17 02:00:50,924 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+DEBUG 2025-07-17 02:01:17,729 auth_backends Claims complets pour None: {'sub': 'cf3cb08d-9f85-48bd-8445-3ea2aa47ce18', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Moustapha DIOP', 'preferred_username': 'adminmoustaf', 'given_name': 'Moustapha', 'family_name': 'DIOP', 'email': 'moustaf@keurdoctor.com'}
+DEBUG 2025-07-17 02:01:17,734 auth_backends Rôles realm trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-17 02:01:17,735 auth_backends Rôles extraits pour None: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-17 02:01:17,752 auth_backends Rôles assignés à None: ['admin']
+INFO 2025-07-17 02:01:17,759 auth_backends Groupes Django: ['admin']
+INFO 2025-07-17 02:01:17,763 auth_backends Staff: True, Superuser: True
+INFO 2025-07-17 02:01:17,781 basehttp "GET /oidc/callback/?state=5EPjifk2LNpncjCqIAUCn4sTPXN1zWhX&session_state=37e7f9d5-0774-4ba1-b853-5ba806096e2b&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=b6d51507-a957-441d-bb47-623b68308462.37e7f9d5-0774-4ba1-b853-5ba806096e2b.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-17 02:01:17,954 views Utilisateur staff/admin détecté: None
+INFO 2025-07-17 02:01:17,960 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-17 02:01:18,136 basehttp "GET /administration/ HTTP/1.1" 200 9435
+INFO 2025-07-17 02:01:18,256 basehttp "GET /static/images/admin-bg.jpg HTTP/1.1" 304 0
+INFO 2025-07-17 02:01:20,336 basehttp "GET /administration/users/ HTTP/1.1" 200 5622
+INFO 2025-07-17 02:01:22,982 basehttp "GET /administration/users/create/ HTTP/1.1" 200 18975
+INFO 2025-07-17 02:02:35,685 basehttp "GET /administration/scan-rfid/ HTTP/1.1" 200 114
+INFO 2025-07-17 02:06:32,881 basehttp "GET /administration/scan-rfid/ HTTP/1.1" 200 114
+INFO 2025-07-17 02:06:39,262 basehttp "GET /administration/scan-rfid/ HTTP/1.1" 200 114
+INFO 2025-07-17 02:06:57,531 basehttp "GET /administration/scan-rfid/ HTTP/1.1" 200 114
+INFO 2025-07-17 02:12:17,718 basehttp "GET /administration/scan-rfid/ HTTP/1.1" 200 213
+INFO 2025-07-17 02:12:39,486 basehttp "GET /administration/users/create/ HTTP/1.1" 200 18975
+INFO 2025-07-17 02:12:56,445 basehttp "GET /administration/scan-rfid/ HTTP/1.1" 200 213

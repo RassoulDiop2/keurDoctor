@@ -38,6 +38,7 @@ urlpatterns = [
     path('api/user-info/', views.user_info, name='user_info'),
     path('api/set-role/', views.set_role_session, name='set_role_session'),
     path('api/rfid-auth/', api_rfid_auth, name='api_rfid_auth'),
+    path('api/rfid-patient-auth/', views.api_rfid_patient_auth, name='api_rfid_patient_auth'),
     
     # Déconnexion personnalisée
     path('logout/', views.custom_logout, name='custom_logout'),
@@ -57,6 +58,13 @@ urlpatterns = [
     path('rfid/enregistrer/', enregistrer_rfid_view, name='enregistrer_rfid'),
     path('rfid/enregistrer/<int:user_id>/', enregistrer_rfid_admin_view, name='enregistrer_rfid_admin'),
     path('rfid/attente/', rfid_wait_view, name='rfid_wait'),
+    
+    # Authentification RFID pour patients
+    path('patient/rfid/login/', views.patient_rfid_login, name='patient_rfid_login'),
+    path('patient/rfid/otp/', views.patient_rfid_otp, name='patient_rfid_otp'),
+    
+    # Méthodes d'authentification
+    path('authentification/methodes/', views.methodes_authentification, name='methodes_authentification'),
 
 
 ]

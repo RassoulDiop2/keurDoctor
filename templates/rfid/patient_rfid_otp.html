@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% block title %}Validation OTP - Patients{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-shield-alt me-2"></i>
+                        Validation OTP
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>Carte RFID validée !</strong><br>
+                        Votre carte RFID a été reconnue. Veuillez maintenant entrer votre code OTP pour finaliser
+                        l'authentification.
+                    </div>
+
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    <div class="text-center mb-4">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6 class="card-title">
+                                    <i class="fas fa-user me-2"></i>Informations de session
+                                </h6>
+                                <p class="card-text">
+                                    <strong>Email :</strong> {{ email }}<br>
+                                    <strong>Carte RFID :</strong> {{ card_uid|slice:":8" }}...
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="post" id="otp-form">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="otp_code" class="form-label">
+                                <i class="fas fa-key me-2"></i>Code OTP
+                            </label>
+                            <input type="text" class="form-control form-control-lg text-center" id="otp_code"
+                                name="otp_code" placeholder="123456" maxlength="6" pattern="[0-9]{6}" required
+                                autocomplete="off">
+                            <div class="form-text text-center">
+                                Entrez le code OTP à 6 chiffres reçu par SMS ou généré par votre application.
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-unlock me-2"></i>
+                                Valider et accéder au dashboard
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="text-center">
+                        <p class="text-muted mb-2">Actions disponibles :</p>
+                        <div class="btn-group" role="group">
+                            <a href="{% url 'patient_rfid_login' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Recommencer
+                            </a>
+                            <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-home me-2"></i>
+                                Retour à l'accueil
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aide OTP -->
+            <div class="card mt-3">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="fas fa-question-circle me-2"></i>
+                        Code OTP de test
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>En mode développement :</strong><br>
+                        Utilisez le code <strong>123456</strong> pour les tests.
+                    </div>
+                    <p class="mb-0">
+                        En production, ce code serait envoyé par SMS ou généré par une application d'authentification.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Focus automatique sur le champ OTP
+    document.getElementById('otp_code').focus();
+
+    // Validation du format OTP
+    document.getElementById('otp_code').addEventListener('input', function (e) {
+        // Supprimer tous les caractères non numériques
+        this.value = this.value.replace(/[^0-9]/g, '');
+
+        // Limiter à 6 chiffres
+        if (this.value.length > 6) {
+            this.value = this.value.slice(0, 6);
+        }
+    });
+
+    // Validation du formulaire
+    document.getElementById('otp-form').addEventListener('submit', function (e) {
+        const otpCode = document.getElementById('otp_code').value;
+
+        if (!otpCode) {
+            e.preventDefault();
+            alert('Veuillez entrer votre code OTP.');
+            return;
+        }
+
+        if (otpCode.length !== 6) {
+            e.preventDefault();
+            alert('Le code OTP doit contenir exactement 6 chiffres.');
+            return;
+        }
+
+        if (!/^\d{6}$/.test(otpCode)) {
+            e.preventDefault();
+            alert('Le code OTP ne doit contenir que des chiffres.');
+            return;
+        }
+    });
+
+    // Auto-submit après 6 chiffres
+    document.getElementById('otp_code').addEventListener('input', function (e) {
+        if (this.value.length === 6) {
+            // Petit délai pour laisser l'utilisateur voir le code complet
+            setTimeout(() => {
+                document.getElementById('otp-form').submit();
+            }, 500);
+        }
+    });
+</script>
+{% endblock %}

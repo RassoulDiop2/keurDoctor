@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% block title %}Connexion RFID - Patients{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-id-card me-2"></i>
+                        Connexion RFID - Patients
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Authentification RFID + OTP</strong><br>
+                        Cette méthode d'authentification est réservée aux patients.
+                        Vous aurez besoin de votre carte RFID et de votre code OTP.
+                    </div>
+
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    <form method="post" id="rfid-login-form">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="email" class="form-label">
+                                <i class="fas fa-envelope me-2"></i>Adresse email
+                            </label>
+                            <input type="email" class="form-control" id="email" name="email"
+                                placeholder="votre.email@exemple.com" required>
+                            <div class="form-text">
+                                Entrez l'adresse email associée à votre compte patient.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="card_uid" class="form-label">
+                                <i class="fas fa-credit-card me-2"></i>UID de la carte RFID
+                            </label>
+                            <input type="text" class="form-control" id="card_uid" name="card_uid"
+                                placeholder="Ex: 1234567890ABCDEF" required>
+                            <div class="form-text">
+                                Entrez l'identifiant unique de votre carte RFID.
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i>
+                                Valider la carte RFID
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="text-center">
+                        <p class="text-muted mb-2">Autres méthodes de connexion :</p>
+                        <div class="btn-group" role="group">
+                            <a href="{% url 'oidc_authentication_init' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-key me-2"></i>
+                                Connexion standard
+                            </a>
+                            <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-home me-2"></i>
+                                Retour à l'accueil
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instructions d'aide -->
+            <div class="card mt-3">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="fas fa-question-circle me-2"></i>
+                        Comment utiliser l'authentification RFID ?
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ol class="mb-0">
+                        <li>Entrez votre adresse email patient</li>
+                        <li>Saisissez l'UID de votre carte RFID</li>
+                        <li>Cliquez sur "Valider la carte RFID"</li>
+                        <li>Entrez votre code OTP (123456 pour les tests)</li>
+                        <li>Accédez à votre dashboard patient</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('rfid-login-form').addEventListener('submit', function (e) {
+        const email = document.getElementById('email').value;
+        const cardUid = document.getElementById('card_uid').value;
+
+        if (!email || !cardUid) {
+            e.preventDefault();
+            alert('Veuillez remplir tous les champs.');
+            return;
+        }
+
+        // Validation basique de l'email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            e.preventDefault();
+            alert('Veuillez entrer une adresse email valide.');
+            return;
+        }
+
+        // Validation basique de l'UID RFID
+        if (cardUid.length < 8) {
+            e.preventDefault();
+            alert('L\'UID de la carte RFID doit contenir au moins 8 caractères.');
+            return;
+        }
+    });
+</script>
+{% endblock %}

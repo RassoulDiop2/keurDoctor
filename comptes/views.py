@@ -937,17 +937,31 @@ def create_user_view(request):
                 role_autorise = form.cleaned_data['role_autorise']
                 
                 if role_autorise == 'medecin':
-                    Medecin.objects.create(
+                    medecin = Medecin.objects.create(
                         utilisateur=user,
                         specialite=form.cleaned_data['specialite'],
                         numero_praticien=form.cleaned_data['numero_praticien']
                     )
+                    # Ajouter les UIDs RFID si fournis
+                    if form.cleaned_data.get('rfid_uid'):
+                        medecin.rfid_uid = form.cleaned_data['rfid_uid']
+                    if form.cleaned_data.get('badge_bleu_uid'):
+                        medecin.badge_bleu_uid = form.cleaned_data['badge_bleu_uid']
+                    medecin.save()
+                    
                 elif role_autorise == 'patient':
-                    Patient.objects.create(
+                    patient = Patient.objects.create(
                         utilisateur=user,
                         date_naissance=form.cleaned_data['date_naissance'],
                         numero_dossier=form.cleaned_data['numero_dossier']
                     )
+                    # Ajouter les UIDs RFID si fournis
+                    if form.cleaned_data.get('rfid_uid'):
+                        patient.rfid_uid = form.cleaned_data['rfid_uid']
+                    if form.cleaned_data.get('badge_bleu_uid'):
+                        patient.badge_bleu_uid = form.cleaned_data['badge_bleu_uid']
+                    patient.save()
+                    
                 elif role_autorise == 'admin':
                     Administrateur.objects.create(
                         utilisateur=user,
@@ -958,6 +972,10 @@ def create_user_view(request):
                 try:
                     keycloak_success = create_keycloak_user_with_role(user, role_autorise, form.cleaned_data['password1'])
                     if keycloak_success:
+                        # Ajouter les attributs RFID dans Keycloak si fournis
+                        if form.cleaned_data.get('rfid_uid') or form.cleaned_data.get('badge_bleu_uid'):
+                            update_keycloak_rfid_attributes(user, form.cleaned_data.get('rfid_uid'), form.cleaned_data.get('badge_bleu_uid'))
+                        
                         send_mail("Creation de Compte", f"Bonjour {user.prenom} {user.nom} Votre compte {role_autorise} a ete creer avec succes.\n Vous pouvez vous connectez sur ce lien: http://localhost:8080/realms/KeurDoctorSecure/protocol/openid-connect/auth?client_id=django-KDclient&redirect_uri=http://localhost:8000&response_type=code.\n Email: {user.email} \n Mot de pass { form.cleaned_data['password1']}  ", "bobcodeur@gmail.com", [user.email])
                         messages.success(request, f"Utilisateur {user.email} créé avec succès dans Django et Keycloak.")
                     else:
@@ -988,92 +1006,53 @@ def create_user_view(request):
         'title': 'Créer un nouvel utilisateur'
     })
 
-
-def create_keycloak_user_with_role(utilisateur, role, password):
-    """Crée un utilisateur dans Keycloak avec le rôle spécifié"""
+def update_keycloak_rfid_attributes(utilisateur, rfid_uid, badge_bleu_uid):
+    """Met à jour les attributs RFID dans Keycloak"""
     try:
         admin_token = get_keycloak_admin_token(settings.KEYCLOAK_SERVER_URL)
         if not admin_token:
             logger.error("Impossible d'obtenir le token admin Keycloak")
             return False
 
-        # Création de l'utilisateur
-        user_data = {
-            "username": utilisateur.email,
-            "email": utilisateur.email,
-            "firstName": utilisateur.prenom,
-            "lastName": utilisateur.nom,
-            "enabled": True,
-            "emailVerified": True,
-            "credentials": [
-                {
-                    "type": "password",
-                    "value": password,
-                    "temporary": False
-                }
-            ],
-            "attributes": {
-                "keycloak_id": [str(utilisateur.keycloak_id)],
-                "role": [role]
-            }
-        }
-        
+        # Récupérer l'ID de l'utilisateur dans Keycloak
         headers = {
             'Authorization': f'Bearer {admin_token}',
             'Content-Type': 'application/json'
         }
         
-        # Créer l'utilisateur
-        url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users"
-        response = requests.post(url, json=user_data, headers=headers, timeout=10)
-        
-        if response.status_code != 201:
-            logger.error(f"Erreur création Keycloak: {response.status_code} - {response.text}")
-            return False
-
-        # Récupérer l'ID de l'utilisateur créé
         search_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users?email={utilisateur.email}"
         search_resp = requests.get(search_url, headers=headers)
         
         if search_resp.status_code != 200 or not search_resp.json():
-            logger.error("Utilisateur créé mais impossible de le retrouver pour l'affectation du rôle.")
+            logger.error("Utilisateur introuvable dans Keycloak")
             return False
             
         user_id = search_resp.json()[0]['id']
-
-        # Attribuer le rôle à l'utilisateur
-        role_mapping_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/role-mappings/realm"
         
-        # Récupérer l'ID du rôle
-        roles_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/roles"
-        roles_resp = requests.get(roles_url, headers=headers)
+        # Préparer les attributs RFID
+        attributes = {}
+        if rfid_uid:
+            attributes['rfid_uid'] = [rfid_uid]
+        if badge_bleu_uid:
+            attributes['badge_bleu_uid'] = [badge_bleu_uid]
         
-        if roles_resp.status_code == 200:
-            roles = roles_resp.json()
-            role_id = next((r['id'] for r in roles if r['name'] == role), None)
-            
-            if role_id:
-                role_payload = [{"id": role_id, "name": role}]
-                role_resp = requests.post(role_mapping_url, json=role_payload, headers=headers)
-                
-                if role_resp.status_code not in (204, 200):
-                    logger.error(f"Erreur lors de l'attribution du rôle: {role_resp.status_code} - {role_resp.text}")
-                    return False
-                else:
-                    logger.info(f"Rôle {role} attribué avec succès à l'utilisateur {utilisateur.email}")
-            else:
-                logger.error(f"Rôle {role} introuvable dans Keycloak.")
-                return False
+        # Mettre à jour les attributs
+        update_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}"
+        update_data = {"attributes": attributes}
+        
+        response = requests.put(update_url, json=update_data, headers=headers)
+        
+        if response.status_code in (204, 200):
+            logger.info(f"Attributs RFID mis à jour pour {utilisateur.email} dans Keycloak")
+            return True
         else:
-            logger.error("Impossible de récupérer la liste des rôles Keycloak.")
+            logger.error(f"Erreur lors de la mise à jour des attributs RFID: {response.status_code} - {response.text}")
             return False
-
-        logger.info(f"Utilisateur {utilisateur.email} créé avec succès dans Keycloak avec le rôle {role}")
-        return True
-
+            
     except Exception as e:
-        logger.error(f"Erreur lors de la création Keycloak: {e}")
+        logger.error(f"Erreur lors de la mise à jour des attributs RFID: {e}")
         return False
+
 
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -1116,6 +1095,193 @@ def api_rfid_auth(request):
         return JsonResponse({'success': False, 'message': 'Données JSON invalides.'}, status=400)
     except Exception as e:
         return JsonResponse({'success': False, 'message': f'Erreur technique : {str(e)}'}, status=500)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def api_rfid_patient_auth(request):
+    """
+    API spécifique pour l'authentification RFID des patients avec validation OTP.
+    Reçoit : email, card_uid, otp_code
+    Vérifie que la carte est liée à un patient et valide le code OTP.
+    """
+    try:
+        data = json.loads(request.body)
+        email = data.get('email')
+        card_uid = data.get('card_uid')
+        otp_code = data.get('otp_code')
+        
+        if not email or not card_uid:
+            return JsonResponse({'success': False, 'message': 'Paramètres manquants.'}, status=400)
+        
+        try:
+            utilisateur = Utilisateur.objects.get(email=email)
+        except Utilisateur.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Utilisateur non trouvé.'}, status=404)
+        
+        # Vérifier que c'est bien un patient
+        if utilisateur.role_autorise != 'patient':
+            return JsonResponse({'success': False, 'message': 'Seuls les patients peuvent utiliser cette méthode d\'authentification.'}, status=403)
+        
+        # Vérifier que l'utilisateur n'est pas bloqué
+        if utilisateur.est_bloque:
+            return JsonResponse({'success': False, 'message': 'Votre compte est bloqué. Contactez l\'administrateur.'}, status=403)
+        
+        # Vérifier la carte RFID
+        try:
+            rfid_card = RFIDCard.objects.get(utilisateur=utilisateur, card_uid=card_uid, actif=True)
+        except RFIDCard.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Carte RFID non reconnue ou non active.'}, status=401)
+        
+        # Si pas de code OTP fourni, retourner succès pour la première étape
+        if not otp_code:
+            # Stocker l'email en session pour la validation OTP
+            request.session['rfid_patient_email'] = email
+            request.session['rfid_card_uid'] = card_uid
+            return JsonResponse({
+                'success': True, 
+                'message': 'Carte RFID reconnue. Veuillez entrer votre code OTP.',
+                'requires_otp': True
+            })
+        
+        # Valider le code OTP (simulation - en production, utiliser un vrai système OTP)
+        if otp_code == '123456':  # Code OTP de test
+            # Authentification réussie
+            # Nettoyer la session
+            if 'rfid_patient_email' in request.session:
+                del request.session['rfid_patient_email']
+            if 'rfid_card_uid' in request.session:
+                del request.session['rfid_card_uid']
+            
+            # Enregistrer l'authentification réussie
+            HistoriqueAuthentification.objects.create(
+                utilisateur=utilisateur,
+                type_auth='NFC_CARTE',
+                succes=True,
+                adresse_ip=request.META.get('REMOTE_ADDR', ''),
+                user_agent=request.META.get('HTTP_USER_AGENT', ''),
+                role_tente='patient',
+                role_autorise='patient'
+            )
+            
+            return JsonResponse({
+                'success': True, 
+                'message': 'Authentification RFID + OTP réussie.',
+                'redirect_url': '/patient/'
+            })
+        else:
+            # Code OTP incorrect
+            return JsonResponse({'success': False, 'message': 'Code OTP incorrect.'}, status=401)
+            
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'message': 'Données JSON invalides.'}, status=400)
+    except Exception as e:
+        logger.error(f"Erreur lors de l'authentification RFID patient: {e}")
+        return JsonResponse({'success': False, 'message': f'Erreur technique : {str(e)}'}, status=500)
+
+
+def patient_rfid_login(request):
+    """
+    Page de connexion RFID pour les patients.
+    Permet aux patients de se connecter avec leur carte RFID + OTP.
+    """
+    if request.method == 'POST':
+        # Traitement du formulaire de connexion RFID
+        email = request.POST.get('email')
+        card_uid = request.POST.get('card_uid')
+        
+        if email and card_uid:
+            try:
+                utilisateur = Utilisateur.objects.get(email=email)
+                
+                # Vérifier que c'est bien un patient
+                if utilisateur.role_autorise != 'patient':
+                    messages.error(request, "Seuls les patients peuvent utiliser cette méthode d'authentification.")
+                    return redirect('patient_rfid_login')
+                
+                # Vérifier que l'utilisateur n'est pas bloqué
+                if utilisateur.est_bloque:
+                    messages.error(request, f"Votre compte est bloqué: {utilisateur.raison_blocage}")
+                    return redirect('patient_rfid_login')
+                
+                # Vérifier la carte RFID
+                try:
+                    rfid_card = RFIDCard.objects.get(utilisateur=utilisateur, card_uid=card_uid, actif=True)
+                except RFIDCard.DoesNotExist:
+                    messages.error(request, "Carte RFID non reconnue ou non active.")
+                    return redirect('patient_rfid_login')
+                
+                # Stocker les informations en session pour la validation OTP
+                request.session['rfid_patient_email'] = email
+                request.session['rfid_card_uid'] = card_uid
+                
+                return redirect('patient_rfid_otp')
+                
+            except Utilisateur.DoesNotExist:
+                messages.error(request, "Utilisateur non trouvé.")
+                return redirect('patient_rfid_login')
+    
+    return render(request, 'rfid/patient_rfid_login.html')
+
+
+def patient_rfid_otp(request):
+    """
+    Page de validation OTP après lecture RFID pour les patients.
+    """
+    # Vérifier que l'utilisateur a bien passé par l'étape RFID
+    email = request.session.get('rfid_patient_email')
+    card_uid = request.session.get('rfid_card_uid')
+    
+    if not email or not card_uid:
+        messages.error(request, "Session invalide. Veuillez recommencer l'authentification RFID.")
+        return redirect('patient_rfid_login')
+    
+    if request.method == 'POST':
+        otp_code = request.POST.get('otp_code')
+        
+        if otp_code:
+            # Valider le code OTP (simulation - en production, utiliser un vrai système OTP)
+            if otp_code == '123456':  # Code OTP de test
+                try:
+                    utilisateur = Utilisateur.objects.get(email=email)
+                    
+                    # Nettoyer la session
+                    del request.session['rfid_patient_email']
+                    del request.session['rfid_card_uid']
+                    
+                    # Enregistrer l'authentification réussie
+                    HistoriqueAuthentification.objects.create(
+                        utilisateur=utilisateur,
+                        type_auth='NFC_CARTE',
+                        succes=True,
+                        adresse_ip=request.META.get('REMOTE_ADDR', ''),
+                        user_agent=request.META.get('HTTP_USER_AGENT', ''),
+                        role_tente='patient',
+                        role_autorise='patient'
+                    )
+                    
+                    # Rediriger vers le dashboard patient
+                    messages.success(request, "Authentification RFID + OTP réussie !")
+                    return redirect('patient_dashboard')
+                    
+                except Utilisateur.DoesNotExist:
+                    messages.error(request, "Erreur lors de l'authentification.")
+                    return redirect('patient_rfid_login')
+            else:
+                messages.error(request, "Code OTP incorrect. Veuillez réessayer.")
+    
+    return render(request, 'rfid/patient_rfid_otp.html', {
+        'email': email,
+        'card_uid': card_uid
+    })
+
+
+def methodes_authentification(request):
+    """
+    Page d'information sur les différentes méthodes d'authentification disponibles.
+    """
+    return render(request, 'authentification/methodes.html')
+
 
 @login_required
 def enregistrer_rfid_view(request):
