@@ -30,6 +30,7 @@ urlpatterns = [
     path('administration/alerte-lue/<int:alerte_id>/', views.marquer_alerte_lue, name='marquer_alerte_lue'),
     path('administration/definir-role/<int:user_id>/', views.definir_role_utilisateur, name='definir_role_utilisateur'),
     path('administration/sync-keycloak/<int:user_id>/', views.synchroniser_utilisateur_keycloak, name='synchroniser_utilisateur_keycloak'),
+    path('administration/sync-keycloak-all/', views.synchroniser_tous_utilisateurs_keycloak, name='synchroniser_tous_utilisateurs_keycloak'),
 
     # Profil utilisateur
     path('profil/', views.profile_view, name='profile'),

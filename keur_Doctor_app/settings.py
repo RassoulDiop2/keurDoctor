@@ -110,6 +110,10 @@ OIDC_VERIFY_SSL = False  # True in production
 KEYCLOAK_ADMIN_USER = "admin"
 KEYCLOAK_ADMIN_PASSWORD = "admin"
 
+# Admin Client Configuration (for API calls)
+KEYCLOAK_ADMIN_CLIENT_ID = "admin-cli"
+KEYCLOAK_ADMIN_CLIENT_SECRET = ""  # Empty for admin-cli client
+
 # Session Configuration
 SESSION_COOKIE_NAME = 'keurdoctor_session'
 SESSION_COOKIE_AGE = 3600  # 1 hour

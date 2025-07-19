@@ -172,24 +172,20 @@ def rfid_dashboard(request):
 @staff_member_required
 def scan_rfid_uid(request):
     try:
-        port = request.GET.get('port', 'COM5') # Port par défaut
-        baudrate = 9600 # Définition correcte de baudrate
-        
-        # Vérifier si le port est disponible
+        port = request.GET.get('port', 'COM6') # Port par défaut mis à jour
+        baudrate = 9600
         import serial.tools.list_ports
         available_ports = [p.device for p in serial.tools.list_ports.comports()]
-        
         if port not in available_ports:
             return JsonResponse({
-                'success': False, 
-                'error': f"Port {port} non disponible. Ports disponibles: {available_ports}"
+               'success': False, 
+               'error': f"Port {port} non disponible. Ports disponibles: {available_ports}"
             })
-        
         ser = serial.Serial(port, baudrate, timeout=5)
         time.sleep(2)
         uid = None
         start = time.time()
-        while time.time() - start < 10: # 10 secondes max
+        while time.time() - start < 10:
             if ser.in_waiting:
                 line = ser.readline().decode('utf-8').strip()
                 if "card_uid" in line:
@@ -207,26 +203,23 @@ def scan_rfid_uid(request):
             return JsonResponse({'success': False, 'error': "Aucune carte détectée"})
     except PermissionError as e:
         return JsonResponse({
-            'success': False, 
-            'error': f"Erreur de permission pour le port {port}. Vérifiez que le port n'est pas utilisé par un autre programme."
+           'success': False, 
+           'error': f"Erreur de permission pour le port {port}. Vérifiez que le port n'est pas utilisé par un autre programme."
         })
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)})
 
-# Nouvelle vue pour l'interface d'administration métier
 def scan_rfid_admin_metier(request):
-    """Vue pour le scan RFID dans l'interface d'administration métier"""
     if not request.user.is_staff:
         return JsonResponse({'success': False, 'error': 'Accès non autorisé'})
-    
     try:
-        port = request.GET.get('port', 'COM5')
+        port = request.GET.get('port', 'COM6') # Port par défaut mis à jour
         baudrate = 9600
         ser = serial.Serial(port, baudrate, timeout=5)
         time.sleep(2)
         uid = None
         start = time.time()
-        while time.time() - start < 10:  # 10 secondes max
+        while time.time() - start < 10:
             if ser.in_waiting:
                 line = ser.readline().decode('utf-8').strip()
                 if "card_uid" in line:

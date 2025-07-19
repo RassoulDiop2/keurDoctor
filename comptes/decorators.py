@@ -17,19 +17,24 @@ def role_required(role):
         def _wrapped_view(request, *args, **kwargs):
             if not request.user.is_authenticated:
                 return redirect('home')
-            
             # Vérifier si l'utilisateur est bloqué
             if hasattr(request.user, 'est_bloque') and request.user.est_bloque:
                 messages.error(request, f"Votre compte est bloqué: {request.user.raison_blocage}")
                 return redirect('home')
-            
-            # Vérifier le rôle
+            # Vérifier le rôle (accepte variantes de groupes)
             user_groups = [group.name.lower() for group in request.user.groups.all()]
-            if role not in user_groups:
+            if role == 'admin':
+                valid_groups = ['admin', 'administrateurs']
+            elif role == 'medecin':
+                valid_groups = ['medecin', 'medecins', 'médecins']
+            elif role == 'patient':
+                valid_groups = ['patient', 'patients']
+            else:
+                valid_groups = [role]
+            if not any(g in user_groups for g in valid_groups):
                 logger.warning(f"Tentative d'accès non autorisé: {request.user.email} - Rôle requis: {role}")
                 messages.error(request, f"Accès refusé. Rôle {role} requis.")
                 return HttpResponseForbidden("Accès non autorisé")
-            
             return view_func(request, *args, **kwargs)
         return _wrapped_view
     return decorator

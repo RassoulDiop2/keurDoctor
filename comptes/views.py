@@ -19,6 +19,9 @@ import requests
 import uuid
 from django.conf import settings
 from django.utils import timezone
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.contrib.auth.models import Group
 
 logger = logging.getLogger(__name__)
 
@@ -622,78 +625,234 @@ def inscription_view(request):
         'title': 'Inscription'
     })
 
-def create_keycloak_user(utilisateur, role):
+def create_keycloak_user_with_role(utilisateur, role, password):
+    """
+    Crée ou met à jour un utilisateur dans Keycloak avec le rôle approprié et le mot de passe fourni
+    """
     try:
         admin_token = get_keycloak_admin_token(settings.KEYCLOAK_SERVER_URL)
         if not admin_token:
             logger.error("Impossible d'obtenir le token admin Keycloak")
             return False
 
-        # Création de l'utilisateur
-        user_data = {
-            "username": utilisateur.email,
-            "email": utilisateur.email,
-            "firstName": utilisateur.prenom,
-            "lastName": utilisateur.nom,
-            "enabled": True,
-            "emailVerified": True,
-            "attributes": {
-                "keycloak_id": [str(utilisateur.keycloak_id)],
-                "role": [role]
-            }
-        }
         headers = {
             'Authorization': f'Bearer {admin_token}',
             'Content-Type': 'application/json'
         }
-        url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users"
-        response = requests.post(url, json=user_data, headers=headers, timeout=10)
-        if response.status_code != 201:
-            logger.error(f"Erreur création Keycloak: {response.status_code} - {response.text}")
-            return False
 
-        # Récupérer l'ID de l'utilisateur créé
-        search_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users?email={utilisateur.email}"
+        # Vérifier si l'utilisateur existe déjà dans Keycloak
+        search_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users?username={utilisateur.email}"
         search_resp = requests.get(search_url, headers=headers)
-        if search_resp.status_code != 200 or not search_resp.json():
-            logger.error("Utilisateur créé mais impossible de le retrouver pour l'affectation du mot de passe/groupe.")
-            return False
-        user_id = search_resp.json()[0]['id']
+        
+        user_exists = False
+        if search_resp.status_code == 200 and search_resp.json():
+            # L'utilisateur existe déjà, on le met à jour
+            user_id = search_resp.json()[0]['id']
+            user_exists = True
+            logger.info(f"Utilisateur {utilisateur.email} existe déjà dans Keycloak, mise à jour...")
+            
+            # Données de mise à jour
+            update_data = {
+                "firstName": utilisateur.prenom,
+                "lastName": utilisateur.nom,
+                "enabled": True,
+                "emailVerified": True,
+                "attributes": {
+                    "keycloak_id": [str(utilisateur.keycloak_id)],
+                    "role": [role]
+                }
+            }
+            
+            # Mettre à jour l'utilisateur
+            update_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}"
+            update_resp = requests.put(update_url, json=update_data, headers=headers)
+            
+            if update_resp.status_code not in (204, 200):
+                logger.error(f"Erreur mise à jour Keycloak: {update_resp.status_code} - {update_resp.text}")
+                return False
+                
+            logger.info(f"Utilisateur {utilisateur.email} mis à jour dans Keycloak")
+            
+        if not user_exists:
+            # L'utilisateur n'existe pas, on le crée
+            logger.info(f"Création de l'utilisateur {utilisateur.email} dans Keycloak...")
+            
+            user_data = {
+                "username": utilisateur.email,
+                "email": utilisateur.email,
+                "firstName": utilisateur.prenom,
+                "lastName": utilisateur.nom,
+                "enabled": True,
+                "emailVerified": True,
+                "attributes": {
+                    "keycloak_id": [str(utilisateur.keycloak_id)],
+                    "role": [role]
+                }
+            }
+                
+            url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users"
+            response = requests.post(url, json=user_data, headers=headers, timeout=10)
+                
+            if response.status_code != 201:
+                logger.error(f"Erreur création Keycloak: {response.status_code} - {response.text}")
+                return False
 
-        # Définir un mot de passe temporaire (exemple : "ChangeMe123!")
+            # Récupérer l'ID de l'utilisateur créé
+            search_resp = requests.get(search_url, headers=headers)
+            if search_resp.status_code != 200 or not search_resp.json():
+                logger.error("Utilisateur créé mais impossible de le retrouver pour l'affectation du mot de passe/groupe.")
+                return False
+            user_id = search_resp.json()[0]['id']
+
+            logger.info(f"Utilisateur {utilisateur.email} créé dans Keycloak")
+
+        # Définir le mot de passe fourni (pour les utilisateurs nouveaux et existants)
         password_payload = {
             "type": "password",
-            "value": "ChangeMe123!",
-            "temporary": True  # L'utilisateur devra le changer à la première connexion
+            "value": password,
+            "temporary": False  # L'utilisateur peut utiliser ce mot de passe directement
         }
         pwd_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/reset-password"
         pwd_resp = requests.put(pwd_url, json=password_payload, headers=headers)
         if pwd_resp.status_code not in (204, 200):
             logger.error(f"Erreur lors de l'affectation du mot de passe: {pwd_resp.status_code} - {pwd_resp.text}")
+            return False
 
-        # Ajouter l'utilisateur au groupe
-        group_name = "medecins" if role == "medecin" else "patients"
+        # Ajouter l'utilisateur au groupe approprié
+        group_mapping = {
+            'admin': 'administrateurs',
+            'medecin': 'medecins', 
+            'patient': 'patients'
+        }
+        group_name = group_mapping.get(role, role)
+        
+        logger.info(f"[SYNC] Tentative d'ajout de {utilisateur.email} au groupe '{group_name}' dans Keycloak")
+        
         # Chercher l'ID du groupe
         group_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/groups"
         group_resp = requests.get(group_url, headers=headers)
+        
         if group_resp.status_code == 200:
             groups = group_resp.json()
+            logger.info(f"Groupes disponibles dans Keycloak: {[g['name'] for g in groups]}")
+            
             group_id = next((g['id'] for g in groups if g['name'] == group_name), None)
+            
             if group_id:
-                add_group_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/groups/{group_id}"
-                add_group_resp = requests.put(add_group_url, headers=headers)
-                if add_group_resp.status_code not in (204, 200):
-                    logger.error(f"Erreur lors de l'ajout au groupe: {add_group_resp.status_code} - {add_group_resp.text}")
+                logger.info(f"Groupe '{group_name}' trouvé avec ID: {group_id}")
+                
+                # Vérifier si l'utilisateur est déjà dans le groupe
+                user_groups_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/groups"
+                user_groups_resp = requests.get(user_groups_url, headers=headers)
+                
+                if user_groups_resp.status_code == 200:
+                    user_groups = user_groups_resp.json()
+                    user_group_names = [g['name'] for g in user_groups]
+                    logger.info(f"Groupes actuels de {utilisateur.email}: {user_group_names}")
+                    
+                    if group_name not in user_group_names:
+                        # Ajouter l'utilisateur au groupe
+                        add_group_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/groups/{group_id}"
+                        add_group_resp = requests.put(add_group_url, headers=headers)
+                        
+                        if add_group_resp.status_code in (204, 200):
+                            logger.info(f"[SYNC] Utilisateur {utilisateur.email} ajouté au groupe {group_name} dans Keycloak")
+                        else:
+                            logger.error(f"[SYNC] Erreur lors de l'ajout au groupe: {add_group_resp.status_code} - {add_group_resp.text}")
+                    else:
+                        logger.info(f"[SYNC] Utilisateur {utilisateur.email} est déjà dans le groupe {group_name}")
+                else:
+                    logger.error(f"[SYNC] Erreur lors de la récupération des groupes de l'utilisateur: {user_groups_resp.status_code}")
             else:
-                logger.error(f"Groupe {group_name} introuvable dans Keycloak.")
+                logger.warning(f"[SYNC] Groupe '{group_name}' introuvable dans Keycloak. Groupes disponibles: {[g['name'] for g in groups]}")
+                
+                # Essayer de créer le groupe s'il n'existe pas
+                logger.info(f"Tentative de création du groupe '{group_name}'...")
+                create_group_data = {
+                    "name": group_name,
+                    "attributes": {
+                        "description": [f"Groupe pour les {group_name}"]
+                    }
+                }
+                create_group_resp = requests.post(group_url, json=create_group_data, headers=headers)
+                
+                if create_group_resp.status_code in (201, 409):  # 409 = groupe existe déjà
+                    logger.info(f"[SYNC] Groupe '{group_name}' créé ou existe déjà")
+                    
+                    # Récupérer l'ID du groupe nouvellement créé
+                    group_resp2 = requests.get(group_url, headers=headers)
+                    if group_resp2.status_code == 200:
+                        groups2 = group_resp2.json()
+                        group_id2 = next((g['id'] for g in groups2 if g['name'] == group_name), None)
+                        
+                        if group_id2:
+                            add_group_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/groups/{group_id2}"
+                            add_group_resp = requests.put(add_group_url, headers=headers)
+                            
+                            if add_group_resp.status_code in (204, 200):
+                                logger.info(f"[SYNC] Utilisateur {utilisateur.email} ajouté au groupe {group_name} nouvellement créé")
+                            else:
+                                logger.error(f"[SYNC] Erreur lors de l'ajout au groupe nouvellement créé: {add_group_resp.status_code}")
+                        else:
+                            logger.error(f"[SYNC] Impossible de récupérer l'ID du groupe '{group_name}' nouvellement créé")
+                    else:
+                        logger.error(f"[SYNC] Erreur lors de la récupération des groupes après création: {group_resp2.status_code}")
+                else:
+                    logger.error(f"[SYNC] Erreur lors de la création du groupe: {create_group_resp.status_code} - {create_group_resp.text}")
         else:
-            logger.error("Impossible de récupérer la liste des groupes Keycloak.")
+            logger.error(f"[SYNC] Impossible de récupérer la liste des groupes Keycloak: {group_resp.status_code} - {group_resp.text}")
 
+        # Attribuer le rôle Keycloak (realm role) à l'utilisateur
+        role_mapping = {
+            'admin': 'admin',
+            'medecin': 'medecin',
+            'patient': 'patient'
+        }
+        role_name = role_mapping.get(role)
+        if role_name:
+            # 1. Récupérer l'ID du rôle
+            roles_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/roles/{role_name}"
+            role_resp = requests.get(roles_url, headers=headers)
+            if role_resp.status_code == 200:
+                role_data = role_resp.json()
+                role_id = role_data['id']
+                # 2. Attribuer le rôle à l'utilisateur
+                assign_role_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/role-mappings/realm"
+                payload = [{
+                    "id": role_id,
+                    "name": role_name
+                }]
+                assign_resp = requests.post(assign_role_url, json=payload, headers=headers)
+                if assign_resp.status_code in (204, 200):
+                    logger.info(f"[SYNC] Rôle '{role_name}' attribué à {utilisateur.email} dans Keycloak")
+                else:
+                    logger.error(f"[SYNC] Erreur lors de l'attribution du rôle: {assign_resp.status_code} - {assign_resp.text}")
+            else:
+                logger.error(f"[SYNC] Impossible de récupérer le rôle '{role_name}' dans Keycloak: {role_resp.status_code}")
+
+        logger.info(f"Utilisateur {utilisateur.email} synchronisé avec succès dans Keycloak avec le rôle {role}")
         return True
 
     except Exception as e:
-        logger.error(f"Erreur lors de la création Keycloak: {e}")
+        logger.error(f"Erreur lors de la synchronisation Keycloak: {e}")
         return False
+
+def create_keycloak_user(utilisateur, role):
+    """
+    Fonction legacy - utilise create_keycloak_user_with_role avec un mot de passe par défaut
+    """
+    return create_keycloak_user_with_role(utilisateur, role, "ChangeMe123!")
+
+def ajouter_utilisateur_dans_groupe_django(utilisateur):
+    group_mapping = {
+        'admin': 'administrateurs',
+        'medecin': 'medecins',
+        'patient': 'patients'
+    }
+    group_name = group_mapping.get(utilisateur.role_autorise)
+    if group_name:
+        group, _ = Group.objects.get_or_create(name=group_name)
+        utilisateur.groups.add(group)
 
 @role_required('admin')
 def synchroniser_utilisateur_keycloak(request, user_id):
@@ -704,18 +863,65 @@ def synchroniser_utilisateur_keycloak(request, user_id):
             
             # Synchroniser le rôle actuel
             if utilisateur.role_autorise:
-                sync_success = sync_role_to_keycloak(utilisateur, utilisateur.role_autorise)
+                # Générer un mot de passe temporaire pour la synchronisation
+                import secrets
+                import string
+                temp_password = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(12))
+                
+                sync_success = create_keycloak_user_with_role(utilisateur, utilisateur.role_autorise, temp_password)
                 
                 if sync_success:
-                    messages.success(request, f"Utilisateur {utilisateur.email} synchronisé avec Keycloak (rôle: {utilisateur.role_autorise})")
+                    messages.success(request, f"✅ Utilisateur {utilisateur.email} synchronisé avec Keycloak (rôle: {utilisateur.role_autorise})")
+                    logger.info(f"Utilisateur {utilisateur.email} synchronisé avec Keycloak")
                 else:
-                    messages.error(request, f"Erreur lors de la synchronisation de {utilisateur.email} avec Keycloak")
+                    messages.error(request, f"❌ Erreur lors de la synchronisation de {utilisateur.email} avec Keycloak")
+                    logger.error(f"Échec de la synchronisation Keycloak pour {utilisateur.email}")
             else:
-                messages.warning(request, f"Utilisateur {utilisateur.email} n'a pas de rôle autorisé à synchroniser")
+                messages.warning(request, f"⚠️ Utilisateur {utilisateur.email} n'a pas de rôle autorisé à synchroniser")
                 
         except Exception as e:
             logger.error(f"Erreur lors de la synchronisation: {e}")
-            messages.error(request, f"Erreur lors de la synchronisation: {e}")
+            messages.error(request, f"❌ Erreur lors de la synchronisation: {e}")
+    
+    return redirect('gestion_securite')
+
+@role_required('admin')
+def synchroniser_tous_utilisateurs_keycloak(request):
+    """Synchronise tous les utilisateurs Django avec Keycloak"""
+    if request.method == 'POST':
+        try:
+            utilisateurs = Utilisateur.objects.filter(role_autorise__isnull=False)
+            succes_count = 0
+            echec_count = 0
+            
+            for utilisateur in utilisateurs:
+                try:
+                    # Générer un mot de passe temporaire
+                    import secrets
+                    import string
+                    temp_password = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(12))
+                    
+                    sync_success = create_keycloak_user_with_role(utilisateur, utilisateur.role_autorise, temp_password)
+                    
+                    if sync_success:
+                        succes_count += 1
+                        logger.info(f"Utilisateur {utilisateur.email} synchronisé avec Keycloak")
+                    else:
+                        echec_count += 1
+                        logger.error(f"Échec de la synchronisation pour {utilisateur.email}")
+                        
+                except Exception as e:
+                    echec_count += 1
+                    logger.error(f"Erreur lors de la synchronisation de {utilisateur.email}: {e}")
+            
+            if echec_count == 0:
+                messages.success(request, f"✅ Synchronisation réussie : {succes_count} utilisateurs synchronisés avec Keycloak")
+            else:
+                messages.warning(request, f"⚠️ Synchronisation partielle : {succes_count} succès, {echec_count} échecs")
+                
+        except Exception as e:
+            logger.error(f"Erreur lors de la synchronisation globale: {e}")
+            messages.error(request, f"❌ Erreur lors de la synchronisation globale: {e}")
     
     return redirect('gestion_securite')
 
@@ -970,19 +1176,82 @@ def create_user_view(request):
                 
                 # Créer l'utilisateur dans Keycloak avec le rôle
                 try:
+                    logger.info(f"Tentative de création de l'utilisateur {user.email} dans Keycloak avec le rôle {role_autorise}")
                     keycloak_success = create_keycloak_user_with_role(user, role_autorise, form.cleaned_data['password1'])
+                    
+                    # Préparer l'email HTML personnalisé
+                    role_labels = {
+                        'admin': 'Administrateur',
+                        'medecin': 'Médecin',
+                        'patient': 'Patient',
+                    }
+                    role_label = role_labels.get(role_autorise, role_autorise)
+                    
+                    subject = "Bienvenue sur KeurDoctor – Création de votre compte"
+                    html_message = render_to_string("emails/creation_compte.html", {
+                        "prenom": user.prenom,
+                        "nom": user.nom,
+                        "role": role_label,
+                        "email": user.email,
+                        "password": form.cleaned_data['password1'],
+                        "lien_connexion": "http://localhost:8080/realms/KeurDoctorSecure/protocol/openid-connect/auth?client_id=django-KDclient&redirect_uri=http://localhost:8000&response_type=code"
+                    })
+                    plain_message = strip_tags(html_message)
+                    from_email = "bobcodeur@gmail.com"
+                    to = user.email
+                    
+                    # Envoyer l'email
+                    try:
+                        send_mail(subject, plain_message, from_email, [to], html_message=html_message)
+                        logger.info(f"Email de bienvenue envoyé à {user.email}")
+                    except Exception as email_error:
+                        logger.error(f"Erreur lors de l'envoi de l'email: {email_error}")
+                    
                     if keycloak_success:
                         # Ajouter les attributs RFID dans Keycloak si fournis
                         if form.cleaned_data.get('rfid_uid') or form.cleaned_data.get('badge_bleu_uid'):
-                            update_keycloak_rfid_attributes(user, form.cleaned_data.get('rfid_uid'), form.cleaned_data.get('badge_bleu_uid'))
+                            rfid_success = update_keycloak_rfid_attributes(user, form.cleaned_data.get('rfid_uid'), form.cleaned_data.get('badge_bleu_uid'))
+                            if rfid_success:
+                                logger.info(f"Attributs RFID mis à jour pour {user.email} dans Keycloak")
+                            else:
+                                logger.warning(f"Échec de la mise à jour des attributs RFID pour {user.email}")
                         
-                        send_mail("Creation de Compte", f"Bonjour {user.prenom} {user.nom} Votre compte {role_autorise} a ete creer avec succes.\n Vous pouvez vous connectez sur ce lien: http://localhost:8080/realms/KeurDoctorSecure/protocol/openid-connect/auth?client_id=django-KDclient&redirect_uri=http://localhost:8000&response_type=code.\n Email: {user.email} \n Mot de pass { form.cleaned_data['password1']}  ", "bobcodeur@gmail.com", [user.email])
-                        messages.success(request, f"Utilisateur {user.email} créé avec succès dans Django et Keycloak.")
+                        messages.success(request, f"✅ Utilisateur {user.email} créé avec succès dans Django et Keycloak avec le rôle {role_label}.")
+                        logger.info(f"Utilisateur {user.email} créé avec succès dans Django et Keycloak")
                     else:
-                        messages.warning(request, f"Utilisateur {user.email} créé dans Django mais erreur lors de la création dans Keycloak.")
+                        messages.warning(request, f"⚠️ Utilisateur {user.email} créé dans Django mais erreur lors de la création dans Keycloak. L'email de confirmation a été envoyé. Vous pouvez synchroniser manuellement plus tard.")
+                        logger.error(f"Échec de la création Keycloak pour {user.email}")
                 except Exception as e:
                     logger.error(f"Erreur lors de la création Keycloak: {e}")
-                    messages.warning(request, f"Utilisateur {user.email} créé dans Django mais erreur lors de la création dans Keycloak.")
+                    
+                    # Envoyer l'email même en cas d'exception
+                    role_labels = {
+                        'admin': 'Administrateur',
+                        'medecin': 'Médecin',
+                        'patient': 'Patient',
+                    }
+                    role_label = role_labels.get(role_autorise, role_autorise)
+                    
+                    subject = "Bienvenue sur KeurDoctor – Création de votre compte"
+                    html_message = render_to_string("emails/creation_compte.html", {
+                        "prenom": user.prenom,
+                        "nom": user.nom,
+                        "role": role_label,
+                        "email": user.email,
+                        "password": form.cleaned_data['password1'],
+                        "lien_connexion": "http://localhost:8080/realms/KeurDoctorSecure/protocol/openid-connect/auth?client_id=django-KDclient&redirect_uri=http://localhost:8000&response_type=code"
+                    })
+                    plain_message = strip_tags(html_message)
+                    from_email = "bobcodeur@gmail.com"
+                    to = user.email
+                    
+                    try:
+                        send_mail(subject, plain_message, from_email, [to], html_message=html_message)
+                        logger.info(f"Email de bienvenue envoyé à {user.email} malgré l'erreur Keycloak")
+                    except Exception as email_error:
+                        logger.error(f"Erreur lors de l'envoi de l'email: {email_error}")
+                    
+                    messages.warning(request, f"⚠️ Utilisateur {user.email} créé dans Django mais erreur lors de la création dans Keycloak. L'email de confirmation a été envoyé. Vous pouvez synchroniser manuellement plus tard.")
                 
                 # Créer une alerte de sécurité
                 AlerteSecurite.objects.create(

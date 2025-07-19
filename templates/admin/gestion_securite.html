@@ -13,6 +13,49 @@
         </div>
     </div>
 
+    <!-- Actions de Synchronisation Keycloak -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-sync-alt me-2"></i>
+                        Synchronisation Keycloak
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p class="mb-3">
+                                <strong>Synchronisation automatique :</strong>
+                                Les nouveaux utilisateurs créés par l'admin sont automatiquement synchronisés avec
+                                Keycloak.
+                                Si un utilisateur n'est pas dans Keycloak, utilisez les boutons ci-dessous.
+                            </p>
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <strong>Note :</strong> La synchronisation crée l'utilisateur dans Keycloak avec un mot
+                                de passe temporaire.
+                                L'utilisateur recevra un email avec ses identifiants.
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <form method="post" action="{% url 'synchroniser_tous_utilisateurs_keycloak' %}"
+                                class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary btn-lg"
+                                    onclick="return confirm('⚠️ ATTENTION: Cette action va synchroniser TOUS les utilisateurs Django avec Keycloak. Continuer ?')">
+                                    <i class="fas fa-sync-alt me-2"></i>
+                                    Sync Tous les Utilisateurs
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Statistiques -->
     <div class="row mb-4">
         <div class="col-md-3">

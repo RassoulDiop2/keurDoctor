@@ -20,7 +20,8 @@ class SecurityMiddleware(MiddlewareMixin):
             return None
         
         # Log de la requête
-        if hasattr(request, 'user') and request.user.is_authenticated:
+        from .models import Utilisateur
+        if hasattr(request, 'user') and isinstance(request.user, Utilisateur) and request.user.is_authenticated:
             AuditLog.log_action(
                 utilisateur=request.user,
                 type_action=AuditLog.TypeAction.LECTURE_DONNEES,
@@ -28,6 +29,7 @@ class SecurityMiddleware(MiddlewareMixin):
                 request=request,
                 niveau_risque=AuditLog.NiveauRisque.FAIBLE
             )
+        # Sinon, ne rien logguer pour les AnonymousUser ou autres types
         
         # Vérification des tentatives de connexion
         if request.path.startswith('/oidc/') and request.user.is_authenticated:
