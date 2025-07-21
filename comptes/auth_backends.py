@@ -160,23 +160,23 @@ class KeycloakOIDCAuthenticationBackend(OIDCAuthenticationBackend):
         roles = list(set([role.lower() for role in roles if role]))
         logger.info(f"Rôles extraits pour {user.username}: {roles}")
         user.groups.clear()
-        role_mapping = {
-            'admin': ('admin', 'administrateurs'),
-            'medecin': ('medecin', 'medecins'),
-            'patient': ('patient', 'patients'),
+        # Mapping unique Django
+        role_to_group = {
+            'admin': 'administrateurs',
+            'medecin': 'médecins',
+            'patient': 'patients',
         }
-        roles_assigned = []
-        # Synchronisation du champ role_autorise : toujours mettre à jour selon le rôle principal trouvé
         main_role = None
         for role in ['admin', 'medecin', 'patient']:
             if role in roles:
                 main_role = role
                 break
         if main_role:
-            group_name, group_django = role_mapping[main_role]
-            group, _ = Group.objects.get_or_create(name=group_django)
+            group_name = role_to_group[main_role]
+            group, _ = Group.objects.get_or_create(name=group_name)
+            user.groups.clear()
             user.groups.add(group)
-            user.role_autorise = group_name
+            user.role_autorise = main_role
             # Permissions spéciales pour admin
             if main_role == 'admin':
                 user.is_staff = True
@@ -185,11 +185,12 @@ class KeycloakOIDCAuthenticationBackend(OIDCAuthenticationBackend):
                 user.is_staff = False
                 user.is_superuser = False
             user.save()
-            logger.info(f"Champ role_autorise synchronisé: {user.email} -> {group_name}")
+            logger.info(f"Champ role_autorise synchronisé: {user.email} -> {main_role} (groupe: {group_name})")
         else:
             user.role_autorise = None
             user.is_staff = False
             user.is_superuser = False
+            user.groups.clear()
             user.save()
             logger.info(f"Aucun rôle principal trouvé pour {user.email}, role_autorise vidé.")
     

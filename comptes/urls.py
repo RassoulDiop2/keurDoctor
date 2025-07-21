@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 from comptes.views import user_management
 from .views import api_rfid_auth, enregistrer_rfid_view, enregistrer_rfid_admin_view, rfid_wait_view
+from .views_rfid import api_scan_rfid, patient_rfid_login, patient_rfid_otp
 
 urlpatterns = [
     # Page d'accueil
@@ -68,4 +69,9 @@ urlpatterns = [
     path('authentification/methodes/', views.methodes_authentification, name='methodes_authentification'),
 
 
+]
+urlpatterns += [
+    path('api/scan-rfid/', api_scan_rfid, name='api_scan_rfid'),
+    path('rfid/patient/login/', patient_rfid_login, name='patient_rfid_login'),
+    path('rfid/patient/otp/', patient_rfid_otp, name='patient_rfid_otp'),
 ]

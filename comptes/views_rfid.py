@@ -10,9 +10,12 @@ import logging
 from django.contrib.admin.views.decorators import staff_member_required
 import serial
 import time
+import random
+from django.core.mail import send_mail
+from django.conf import settings
 
 from .models import RFIDCard, Utilisateur, HistoriqueAuthentification
-from .rfid_arduino_handler import ArduinoRFIDHandler
+from .rfid_arduino_handler import ArduinoRFIDHandler, lire_uid_rfid
 
 logger = logging.getLogger(__name__)
 
@@ -237,3 +240,60 @@ def scan_rfid_admin_metier(request):
             return JsonResponse({'success': False, 'error': "Aucune carte détectée"})
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}) 
+
+@csrf_exempt
+def api_scan_rfid(request):
+    if request.method == 'POST':
+        try:
+            uid = lire_uid_rfid()
+            if uid:
+                return JsonResponse({'success': True, 'uid': uid})
+            else:
+                return JsonResponse({'success': False, 'error': "Aucune carte détectée."})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Méthode non autorisée.'}) 
+
+def patient_rfid_login(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        card_uid = request.POST.get('card_uid')
+        try:
+            user = Utilisateur.objects.get(email=email)
+            # Vérifier que la carte est bien associée à ce patient
+            if not RFIDCard.objects.filter(utilisateur=user, card_uid=card_uid).exists():
+                messages.error(request, "Carte RFID non reconnue pour cet utilisateur.")
+                return redirect('patient_rfid_login')
+            # Générer OTP
+            otp = str(random.randint(100000, 999999))
+            request.session['otp_code'] = otp
+            request.session['otp_email'] = email
+            # Envoyer OTP par email
+            send_mail(
+                'Votre code OTP KeurDoctor',
+                f'Votre code de connexion est : {otp}',
+                settings.DEFAULT_FROM_EMAIL,
+                [email],
+                fail_silently=False,
+            )
+            return redirect('patient_rfid_otp')
+        except Utilisateur.DoesNotExist:
+            messages.error(request, "Utilisateur non trouvé.")
+    return render(request, 'rfid/patient_rfid_login.html')
+
+def patient_rfid_otp(request):
+    email = request.session.get('otp_email')
+    if request.method == 'POST':
+        otp_code = request.POST.get('otp_code')
+        if otp_code == request.session.get('otp_code'):
+            # Authentifier l’utilisateur (login)
+            user = Utilisateur.objects.get(email=email)
+            from django.contrib.auth import login
+            login(request, user)
+            # Nettoyer la session OTP
+            request.session.pop('otp_code', None)
+            request.session.pop('otp_email', None)
+            return redirect('patient_dashboard')
+        else:
+            messages.error(request, "Code OTP invalide.")
+    return render(request, 'rfid/patient_rfid_otp.html', {'email': email}) 

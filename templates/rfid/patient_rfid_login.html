@@ -42,20 +42,16 @@
                                 Entrez l'adresse email associée à votre compte patient.
                             </div>
                         </div>
-
-                        <div class="mb-3">
-                            <label for="card_uid" class="form-label">
-                                <i class="fas fa-credit-card me-2"></i>UID de la carte RFID
-                            </label>
-                            <input type="text" class="form-control" id="card_uid" name="card_uid"
-                                placeholder="Ex: 1234567890ABCDEF" required>
-                            <div class="form-text">
-                                Entrez l'identifiant unique de votre carte RFID.
-                            </div>
+                        <input type="hidden" id="card_uid" name="card_uid">
+                        <div class="d-grid gap-2 mb-3">
+                            <button type="button" class="btn btn-info btn-lg" id="scan-rfid-btn">
+                                <i class="fas fa-wifi me-2"></i>
+                                Scanner ma carte RFID
+                            </button>
                         </div>
-
+                        <div id="scan-status" class="mb-3 text-center text-muted" style="display:none;"></div>
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">
+                            <button type="submit" class="btn btn-primary btn-lg" id="submit-btn" disabled>
                                 <i class="fas fa-sign-in-alt me-2"></i>
                                 Valider la carte RFID
                             </button>
@@ -91,9 +87,9 @@
                 <div class="card-body">
                     <ol class="mb-0">
                         <li>Entrez votre adresse email patient</li>
-                        <li>Saisissez l'UID de votre carte RFID</li>
-                        <li>Cliquez sur "Valider la carte RFID"</li>
-                        <li>Entrez votre code OTP (123456 pour les tests)</li>
+                        <li>Cliquez sur "Scanner ma carte RFID"</li>
+                        <li>Patientez, puis cliquez sur "Valider la carte RFID"</li>
+                        <li>Entrez votre code OTP reçu</li>
                         <li>Accédez à votre dashboard patient</li>
                     </ol>
                 </div>
@@ -103,29 +99,40 @@
 </div>
 
 <script>
+    const scanBtn = document.getElementById('scan-rfid-btn');
+    const scanStatus = document.getElementById('scan-status');
+    const cardUidInput = document.getElementById('card_uid');
+    const submitBtn = document.getElementById('submit-btn');
+
+    scanBtn.addEventListener('click', function () {
+        scanStatus.style.display = 'block';
+        scanStatus.textContent = 'En attente du scan de votre carte...';
+        scanBtn.disabled = true;
+        // Appel AJAX pour récupérer l’UID (sans l’afficher)
+        fetch('/api/scan-rfid/', { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    cardUidInput.value = data.uid;
+                    scanStatus.textContent = 'Carte détectée. Vous pouvez valider.';
+                    submitBtn.disabled = false;
+                } else {
+                    scanStatus.textContent = 'Erreur : ' + data.error;
+                    submitBtn.disabled = true;
+                }
+                scanBtn.disabled = false;
+            })
+            .catch(() => {
+                scanStatus.textContent = 'Erreur de communication avec le lecteur.';
+                scanBtn.disabled = false;
+                submitBtn.disabled = true;
+            });
+    });
+    // Empêcher la soumission si pas d’UID
     document.getElementById('rfid-login-form').addEventListener('submit', function (e) {
-        const email = document.getElementById('email').value;
-        const cardUid = document.getElementById('card_uid').value;
-
-        if (!email || !cardUid) {
+        if (!cardUidInput.value) {
             e.preventDefault();
-            alert('Veuillez remplir tous les champs.');
-            return;
-        }
-
-        // Validation basique de l'email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            e.preventDefault();
-            alert('Veuillez entrer une adresse email valide.');
-            return;
-        }
-
-        // Validation basique de l'UID RFID
-        if (cardUid.length < 8) {
-            e.preventDefault();
-            alert('L\'UID de la carte RFID doit contenir au moins 8 caractères.');
-            return;
+            alert('Veuillez scanner votre carte RFID avant de valider.');
         }
     });
 </script>

@@ -14,6 +14,42 @@ from .models import (Utilisateur,
                      AlerteSecurite)
 from django.utils import timezone
 from django.utils.safestring import mark_safe
+from django import forms
+from django.contrib.auth.models import Group
+
+class UtilisateurCreationForm(forms.ModelForm):
+    ROLE_CHOICES = [
+        ('admin', 'Administrateur'),
+        ('medecin', 'Médecin'),
+        ('patient', 'Patient'),
+    ]
+    role = forms.ChoiceField(choices=ROLE_CHOICES, label="Rôle")
+
+    class Meta:
+        model = Utilisateur
+        fields = ('email', 'prenom', 'nom', 'role', 'password')
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        role = self.cleaned_data['role']
+        # Ajout explicite des champs prénom et nom
+        user.prenom = self.cleaned_data['prenom']
+        user.nom = self.cleaned_data['nom']
+        if commit:
+            user.save()
+            group_map = {
+                'admin': 'administrateurs',
+                'medecin': 'médecins',
+                'patient': 'patients',
+            }
+            group_name = group_map[role]
+            group, _ = Group.objects.get_or_create(name=group_name)
+            user.groups.clear()
+            user.groups.add(group)
+            # Met à jour le champ role_autorise aussi
+            user.role_autorise = role
+            user.save()
+        return user
 
 class UtilisateurAdmin(UserAdmin):
     """Configuration admin personnalisée pour le modèle Utilisateur"""
@@ -39,9 +75,19 @@ class UtilisateurAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'prenom', 'nom', 'password1', 'password2', 'role_autorise'),
+            'fields': ('email', 'prenom', 'nom', 'role', 'password1', 'password2'),
         }),
     )
+
+    add_form = UtilisateurCreationForm
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        if obj is None:
+            # Masquer le champ groupes à la création
+            if 'groups' in form.base_fields:
+                form.base_fields['groups'].widget = forms.HiddenInput()
+        return form
 
 class MedecinAdmin(admin.ModelAdmin):
     list_display = ('utilisateur', 'specialite', 'numero_praticien')
@@ -178,6 +224,8 @@ class MedecinAdmin(admin.ModelAdmin):
     }
 
 # Enregistrer les modèles avec leurs configurations personnalisées
+ #admin.site.unregister(Utilisateur)
+ 
 admin.site.register(Utilisateur, UtilisateurAdmin)
 admin.site.register(Medecin, MedecinAdmin)
 admin.site.register(Patient, PatientAdmin)

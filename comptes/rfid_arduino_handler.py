@@ -136,6 +136,29 @@ class ArduinoRFIDHandler:
             time.sleep(0.1)  # Petite pause pour éviter de surcharger
 
 
+def lire_uid_rfid():
+    # Adapter le port selon la config (ex: 'COM6' sous Windows)
+    port = 'COM6'
+    baudrate = 9600
+    timeout = 5
+    ser = serial.Serial(port, baudrate, timeout=timeout)
+    try:
+        start = time.time()
+        while time.time() - start < timeout:
+            line = ser.readline().decode('utf-8').strip()
+            if line:
+                # Supposons que l’Arduino envoie l’UID seul ou en JSON {"uid": ...}
+                if line.startswith('{'):
+                    import json
+                    data = json.loads(line)
+                    return data.get('uid')
+                else:
+                    return line
+        return None
+    finally:
+        ser.close()
+
+
 def test_arduino_connection():
     """Fonction de test pour vérifier la connexion Arduino"""
     handler = ArduinoRFIDHandler()
