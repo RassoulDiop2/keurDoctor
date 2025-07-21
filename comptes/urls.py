@@ -68,6 +68,9 @@ urlpatterns = [
     # Méthodes d'authentification
     path('authentification/methodes/', views.methodes_authentification, name='methodes_authentification'),
 
+    # Statistiques admin
+    path('administration/statistiques/', views.admin_stats, name='admin_stats'),
+
 
 ]
 urlpatterns += [

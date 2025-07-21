@@ -3962,3 +3962,127 @@ WARNING 2025-07-21 02:41:03,892 log Forbidden: /profil/
 WARNING 2025-07-21 02:41:03,893 basehttp "GET /profil/ HTTP/1.1" 403 20
 WARNING 2025-07-21 02:41:04,963 log Not Found: /favicon.ico
 INFO 2025-07-21 02:41:04,964 basehttp - Broken pipe from ('127.0.0.1', 50799)
+INFO 2025-07-21 02:51:49,570 autoreload Watching for file changes with StatReloader
+INFO 2025-07-21 02:51:54,995 basehttp "GET /administration/ HTTP/1.1" 200 9718
+WARNING 2025-07-21 02:51:55,467 log Not Found: /favicon.ico
+INFO 2025-07-21 02:51:55,469 basehttp - Broken pipe from ('127.0.0.1', 51347)
+INFO 2025-07-21 02:51:59,757 basehttp "GET /profil/ HTTP/1.1" 200 7024
+WARNING 2025-07-21 02:52:00,095 log Not Found: /favicon.ico
+INFO 2025-07-21 02:52:00,096 basehttp - Broken pipe from ('127.0.0.1', 51354)
+INFO 2025-07-21 02:53:15,547 views Utilisateur staff/admin détecté: None
+INFO 2025-07-21 02:53:15,549 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-21 02:53:15,870 basehttp "GET /administration/ HTTP/1.1" 200 9718
+WARNING 2025-07-21 02:53:16,350 log Not Found: /favicon.ico
+INFO 2025-07-21 02:53:16,356 basehttp - Broken pipe from ('127.0.0.1', 51420)
+INFO 2025-07-21 02:53:21,675 basehttp "GET /administration/users/ HTTP/1.1" 200 6346
+INFO 2025-07-21 02:53:27,703 basehttp "GET /administration/users/create/ HTTP/1.1" 200 19322
+WARNING 2025-07-21 02:53:28,726 log Not Found: /favicon.ico
+INFO 2025-07-21 02:53:28,728 basehttp - Broken pipe from ('127.0.0.1', 51428)
+INFO 2025-07-21 02:54:24,174 views Tentative de création de l'utilisateur sadikhniang010@gmail.com dans Keycloak avec le rôle medecin
+INFO 2025-07-21 02:54:24,448 views Création de l'utilisateur sadikhniang010@gmail.com dans Keycloak...
+INFO 2025-07-21 02:54:24,685 views Utilisateur sadikhniang010@gmail.com créé dans Keycloak
+INFO 2025-07-21 02:54:25,043 views [SYNC] Tentative d'ajout de sadikhniang010@gmail.com au groupe 'medecins' dans Keycloak
+INFO 2025-07-21 02:54:25,078 views Groupes disponibles dans Keycloak: ['administrateurs', 'medecins', 'patients']
+INFO 2025-07-21 02:54:25,082 views Groupe 'medecins' trouvé avec ID: fe632dd9-a7ca-4506-be54-67dde8359872
+INFO 2025-07-21 02:54:25,144 views Groupes actuels de sadikhniang010@gmail.com: []
+INFO 2025-07-21 02:54:25,212 views [SYNC] Utilisateur sadikhniang010@gmail.com ajouté au groupe medecins dans Keycloak
+INFO 2025-07-21 02:54:25,393 views [SYNC] Rôle 'medecin' attribué à sadikhniang010@gmail.com dans Keycloak
+INFO 2025-07-21 02:54:25,393 views Utilisateur sadikhniang010@gmail.com synchronisé avec succès dans Keycloak avec le rôle medecin
+INFO 2025-07-21 02:54:30,714 views Email de bienvenue envoyé à sadikhniang010@gmail.com
+INFO 2025-07-21 02:54:30,715 views Utilisateur sadikhniang010@gmail.com créé avec succès dans Django et Keycloak
+INFO 2025-07-21 02:54:30,726 basehttp "POST /administration/users/create/ HTTP/1.1" 302 0
+INFO 2025-07-21 02:54:30,970 basehttp "GET /administration/users/ HTTP/1.1" 200 7074
+INFO 2025-07-21 02:54:47,857 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-21 02:54:47,957 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-21 02:54:50,386 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+DEBUG 2025-07-21 02:55:47,007 auth_backends Claims complets pour None: {'sub': '3e6d3a58-7546-4807-add9-5acbb3a254a4', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']}, 'name': 'Dr.Sadikh NIANG', 'preferred_username': 'sadikhniang010@gmail.com', 'given_name': 'Dr.Sadikh', 'family_name': 'NIANG', 'email': 'sadikhniang010@gmail.com'}
+DEBUG 2025-07-21 02:55:47,034 auth_backends Rôles realm trouvés: ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']
+INFO 2025-07-21 02:55:47,049 auth_backends Rôles extraits pour None: ['uma_authorization', 'default-roles-keurdoctorsecure', 'offline_access', 'medecin']
+INFO 2025-07-21 02:55:47,087 auth_backends Champ role_autorise synchronisé: sadikhniang010@gmail.com -> medecin (groupe: médecins)
+INFO 2025-07-21 02:55:47,114 basehttp "GET /oidc/callback/?state=5rosPRH88pXExcL5YOOVHk4XZGCkdxuY&session_state=e06f36eb-be1d-49c0-8e71-440f42776389&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=3fce404c-50dd-43f2-9deb-34c5c9a52a84.e06f36eb-be1d-49c0-8e71-440f42776389.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-21 02:55:47,563 views Utilisateur: None, Groupes: ['médecins']
+INFO 2025-07-21 02:55:47,569 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-21 02:55:47,940 basehttp "GET /medecin/ HTTP/1.1" 200 8830
+WARNING 2025-07-21 02:55:48,714 log Not Found: /favicon.ico
+INFO 2025-07-21 02:55:48,740 basehttp - Broken pipe from ('127.0.0.1', 51473)
+INFO 2025-07-21 02:55:58,637 basehttp "GET /profil/ HTTP/1.1" 200 7037
+WARNING 2025-07-21 02:55:59,092 log Not Found: /favicon.ico
+INFO 2025-07-21 02:55:59,110 basehttp - Broken pipe from ('127.0.0.1', 51552)
+INFO 2025-07-21 02:56:19,659 views Utilisateur: None, Groupes: ['médecins']
+INFO 2025-07-21 02:56:19,664 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-21 02:56:19,898 basehttp "GET /medecin/ HTTP/1.1" 200 8830
+INFO 2025-07-21 02:58:38,966 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-21 02:58:39,064 basehttp "GET / HTTP/1.1" 200 18926
+ERROR 2025-07-21 02:58:39,267 models Erreur lors du logging d'audit: Cannot assign "<SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x000001DDCEACF790>>": "AuditLog.utilisateur" must be a "Utilisateur" instance.
+WARNING 2025-07-21 02:58:39,298 log Not Found: /favicon.ico
+INFO 2025-07-21 02:58:39,315 basehttp - Broken pipe from ('127.0.0.1', 51699)
+INFO 2025-07-21 02:59:13,189 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+DEBUG 2025-07-21 02:59:51,822 auth_backends Claims complets pour None: {'sub': 'c13cb737-0f6c-487f-acad-057919467ee9', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Admin DIOP', 'preferred_username': 'admin0@keurdoctor.com', 'given_name': 'Admin', 'family_name': 'DIOP', 'email': 'admin0@keurdoctor.com'}
+DEBUG 2025-07-21 02:59:51,822 auth_backends Rôles realm trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-21 02:59:51,823 auth_backends Rôles extraits pour None: ['uma_authorization', 'default-roles-keurdoctorsecure', 'admin', 'offline_access']
+INFO 2025-07-21 02:59:51,853 auth_backends Champ role_autorise synchronisé: admin0@keurdoctor.com -> admin (groupe: administrateurs)
+INFO 2025-07-21 02:59:51,874 basehttp "GET /oidc/callback/?state=XLyolKTyyF1IQucalmmkR0fwFEunCWW8&session_state=daebd7b3-7670-4acd-9526-46105868ee1f&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=34a37149-b6cb-4976-b38b-383f50c6bb26.daebd7b3-7670-4acd-9526-46105868ee1f.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-21 02:59:52,086 views Utilisateur staff/admin détecté: None
+INFO 2025-07-21 02:59:52,087 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-21 02:59:52,389 basehttp "GET /administration/ HTTP/1.1" 200 9718
+WARNING 2025-07-21 02:59:52,938 log Not Found: /favicon.ico
+INFO 2025-07-21 02:59:52,939 basehttp - Broken pipe from ('127.0.0.1', 51731)
+INFO 2025-07-21 02:59:56,121 basehttp "GET /administration/users/ HTTP/1.1" 200 7074
+INFO 2025-07-21 03:00:04,141 basehttp "GET /administration/users/create/ HTTP/1.1" 200 19378
+INFO 2025-07-21 03:01:39,011 views Tentative de création de l'utilisateur carolinendiaye363@gmail.com dans Keycloak avec le rôle patient
+INFO 2025-07-21 03:01:39,219 views Création de l'utilisateur carolinendiaye363@gmail.com dans Keycloak...
+INFO 2025-07-21 03:01:39,348 views Utilisateur carolinendiaye363@gmail.com créé dans Keycloak
+INFO 2025-07-21 03:01:39,511 views [SYNC] Tentative d'ajout de carolinendiaye363@gmail.com au groupe 'patients' dans Keycloak
+INFO 2025-07-21 03:01:39,536 views Groupes disponibles dans Keycloak: ['administrateurs', 'medecins', 'patients']
+INFO 2025-07-21 03:01:39,542 views Groupe 'patients' trouvé avec ID: 0cb1e7e0-3d69-4c2e-ae8b-cdbe346357d9
+INFO 2025-07-21 03:01:39,586 views Groupes actuels de carolinendiaye363@gmail.com: []
+INFO 2025-07-21 03:01:39,655 views [SYNC] Utilisateur carolinendiaye363@gmail.com ajouté au groupe patients dans Keycloak
+INFO 2025-07-21 03:01:39,765 views [SYNC] Rôle 'patient' attribué à carolinendiaye363@gmail.com dans Keycloak
+INFO 2025-07-21 03:01:39,766 views Utilisateur carolinendiaye363@gmail.com synchronisé avec succès dans Keycloak avec le rôle patient
+INFO 2025-07-21 03:01:42,071 views Email de bienvenue envoyé à carolinendiaye363@gmail.com
+INFO 2025-07-21 03:01:42,071 views Utilisateur carolinendiaye363@gmail.com créé avec succès dans Django et Keycloak
+INFO 2025-07-21 03:01:42,087 basehttp "POST /administration/users/create/ HTTP/1.1" 302 0
+INFO 2025-07-21 03:01:42,324 basehttp "GET /administration/users/ HTTP/1.1" 200 7804
+INFO 2025-07-21 03:01:58,050 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-21 03:01:58,179 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-21 03:02:00,757 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+DEBUG 2025-07-21 03:02:35,700 auth_backends Claims complets pour None: {'sub': '63a4d16a-9556-4713-8a11-936a85f7fb8e', 'email_verified': True, 'realm_access': {'roles': ['patient', 'offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Caroline NDIAYE', 'preferred_username': 'carolinendiaye363@gmail.com', 'given_name': 'Caroline', 'family_name': 'NDIAYE', 'email': 'carolinendiaye363@gmail.com'}
+DEBUG 2025-07-21 03:02:35,728 auth_backends Rôles realm trouvés: ['patient', 'offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-21 03:02:35,728 auth_backends Rôles extraits pour None: ['uma_authorization', 'default-roles-keurdoctorsecure', 'patient', 'offline_access']
+INFO 2025-07-21 03:02:35,821 auth_backends Champ role_autorise synchronisé: carolinendiaye363@gmail.com -> patient (groupe: patients)
+INFO 2025-07-21 03:02:35,849 basehttp "GET /oidc/callback/?state=DBvGEk49RJ7FRn2ALxdhZdyLn274MOr9&session_state=d033b128-a7c7-4ad7-ac44-96ecebe3bd70&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=8dbe3eeb-890e-4456-8448-7966d53bec80.d033b128-a7c7-4ad7-ac44-96ecebe3bd70.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-21 03:02:36,088 views Utilisateur: None, Groupes: ['patients']
+INFO 2025-07-21 03:02:36,105 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-21 03:02:36,427 basehttp "GET /patient/ HTTP/1.1" 200 7759
+INFO 2025-07-21 03:02:36,549 basehttp "GET /static/images/patient-bg.jpg HTTP/1.1" 304 0
+WARNING 2025-07-21 03:02:37,097 log Not Found: /favicon.ico
+INFO 2025-07-21 03:02:37,101 basehttp - Broken pipe from ('127.0.0.1', 51770)
+INFO 2025-07-21 03:04:32,866 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 19000
+INFO 2025-07-21 03:04:33,157 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+WARNING 2025-07-21 03:04:33,474 log Not Found: /favicon.ico
+INFO 2025-07-21 03:04:33,475 basehttp - Broken pipe from ('127.0.0.1', 51984)
+INFO 2025-07-21 03:04:49,776 basehttp "GET /profil/ HTTP/1.1" 200 7041
+WARNING 2025-07-21 03:04:50,199 log Not Found: /favicon.ico
+INFO 2025-07-21 03:04:50,201 basehttp - Broken pipe from ('127.0.0.1', 51998)
+INFO 2025-07-21 03:06:19,187 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-21 03:06:19,288 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-21 03:08:52,717 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+DEBUG 2025-07-21 03:09:23,086 auth_backends Claims complets pour None: {'sub': 'c13cb737-0f6c-487f-acad-057919467ee9', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Admin DIOP', 'preferred_username': 'admin0@keurdoctor.com', 'given_name': 'Admin', 'family_name': 'DIOP', 'email': 'admin0@keurdoctor.com'}
+DEBUG 2025-07-21 03:09:23,087 auth_backends Rôles realm trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-21 03:09:23,087 auth_backends Rôles extraits pour None: ['uma_authorization', 'default-roles-keurdoctorsecure', 'admin', 'offline_access']
+INFO 2025-07-21 03:09:23,116 auth_backends Champ role_autorise synchronisé: admin0@keurdoctor.com -> admin (groupe: administrateurs)
+INFO 2025-07-21 03:09:23,137 basehttp "GET /oidc/callback/?state=NwI9TH4NqcvmJp2JZgZAX0FMhUkNMZT4&session_state=01451561-6d15-4b31-944f-9bbc023b4214&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=086d2cf5-c7ac-4ad9-be2a-ea9f556820c7.01451561-6d15-4b31-944f-9bbc023b4214.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-21 03:09:23,390 views Utilisateur staff/admin détecté: None
+INFO 2025-07-21 03:09:23,397 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-21 03:09:23,714 basehttp "GET /administration/ HTTP/1.1" 200 9718
+WARNING 2025-07-21 03:09:24,301 log Not Found: /favicon.ico
+INFO 2025-07-21 03:09:24,302 basehttp - Broken pipe from ('127.0.0.1', 52176)
+INFO 2025-07-21 03:09:26,343 basehttp "GET /administration/securite/ HTTP/1.1" 200 20443
+INFO 2025-07-21 03:10:04,514 basehttp "POST /administration/alerte-lue/312/ HTTP/1.1" 302 0
+INFO 2025-07-21 03:10:04,991 basehttp "GET /administration/securite/ HTTP/1.1" 200 19714
+INFO 2025-07-21 03:10:08,360 basehttp "POST /administration/alerte-lue/313/ HTTP/1.1" 302 0
+INFO 2025-07-21 03:10:08,685 basehttp "GET /administration/securite/ HTTP/1.1" 200 18985
+INFO 2025-07-21 03:10:12,849 basehttp "POST /administration/alerte-lue/314/ HTTP/1.1" 302 0
+INFO 2025-07-21 03:10:13,120 basehttp "GET /administration/securite/ HTTP/1.1" 200 18256
+INFO 2025-07-21 03:24:57,615 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\views.py changed, reloading.
+INFO 2025-07-21 03:25:11,130 autoreload Watching for file changes with StatReloader

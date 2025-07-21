@@ -22,6 +22,7 @@ from django.utils import timezone
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.contrib.auth.models import Group
+from django.contrib.admin.views.decorators import staff_member_required
 
 logger = logging.getLogger(__name__)
 
@@ -1604,5 +1605,27 @@ def rfid_wait_view(request):
     # Stocker l'email en session pour le polling
     request.session['rfid_auth_email'] = request.user.email
     return render(request, 'rfid/wait_rfid.html', {'user_email': request.user.email})
+
+
+@login_required
+@staff_member_required
+def admin_stats(request):
+    # Récupération des stats de base
+    from comptes.models import Utilisateur, Medecin, Patient, RendezVous
+    users_count = Utilisateur.objects.count()
+    medecins_count = Medecin.objects.count()
+    patients_count = Patient.objects.count()
+    rdv_count = RendezVous.objects.count()
+    # Activité récente
+    recent_users = Utilisateur.objects.order_by('-date_creation')[:10]
+    recent_rdv = RendezVous.objects.order_by('-date_heure')[:10]
+    return render(request, 'dashboards/admin_stats.html', {
+        'users_count': users_count,
+        'medecins_count': medecins_count,
+        'patients_count': patients_count,
+        'rdv_count': rdv_count,
+        'recent_users': recent_users,
+        'recent_rdv': recent_rdv,
+    })
 
 
