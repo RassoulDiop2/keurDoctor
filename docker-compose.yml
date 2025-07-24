@@ -6,23 +6,44 @@ services:
         PIP_TIMEOUT: 300
     container_name: django_keurdoctor
     ports:
-      - "8000:8000"
+      - "8000:8000"   # HTTP pour développement
+      - "8443:8443"   # HTTPS sécurisé
     environment:
-      - DEBUG=1
-      - KEYCLOAK_SERVER_URL=http://keycloak_dev:8080
+      - DEBUG=0  # Production mode pour HTTPS
+      - KEYCLOAK_SERVER_URL=https://keycloak_dev:8443
+      - FORCE_HTTPS=1
     volumes:
       - .:/app
+      - ./ssl:/app/ssl  # Certificats SSL
     depends_on:
       keycloak_dev:
         condition: service_healthy
-    command: python manage.py runserver 0.0.0.0:8000
+    command: >
+      sh -c "
+        # Génération des certificats SSL auto-signés pour développement
+        mkdir -p /app/ssl &&
+        if [ ! -f /app/ssl/server.crt ]; then
+          openssl req -x509 -newkey rsa:4096 -keyout /app/ssl/server.key -out /app/ssl/server.crt -days 365 -nodes -subj '/CN=localhost/O=KeurDoctor/C=SN' &&
+          chmod 600 /app/ssl/server.key
+        fi &&
+        # Démarrage en mode HTTPS
+        python manage.py runsslserver 0.0.0.0:8443 --certificate /app/ssl/server.crt --key /app/ssl/server.key
+      "
     profiles:
       - full  # Ce service ne démarre que si on spécifie le profile "full"
 
   keycloak_dev:
     image: quay.io/keycloak/keycloak:26.1.2
     container_name: keycloak_dev
-    command: start-dev --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false --http-enabled=true --hostname-strict=false
+    command: >
+      start-dev 
+      --spi-theme-static-max-age=-1 
+      --spi-theme-cache-themes=false 
+      --spi-theme-cache-templates=false 
+      --https-port=8443 
+      --https-certificate-file=/opt/keycloak/ssl/server.crt 
+      --https-certificate-key-file=/opt/keycloak/ssl/server.key
+      --hostname-strict=false
     environment:
       KC_DB: postgres
       KC_DB_URL_HOST: postgres_dev
@@ -32,20 +53,25 @@ services:
       KC_DB_SCHEMA: public
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      # Configuration HTTPS
+      KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/ssl/server.crt
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/ssl/server.key
       # Configuration pour les logs
       KC_LOG_LEVEL: INFO
     volumes:
       - ./keycloak-themes:/opt/keycloak/themes
+      - ./ssl:/opt/keycloak/ssl  # Certificats SSL partagés
       # Persistence des données de développement
       - keycloak_data_dev:/opt/keycloak/data
     ports:
-      - "8080:8080"
+      - "8080:8080"   # HTTP pour développement
+      - "8443:8443"   # HTTPS sécurisé
       - "9000:9000"
     depends_on:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      test: ["CMD", "curl", "-f", "-k", "https://localhost:8443"]
       interval: 30s
       timeout: 10s
       retries: 20

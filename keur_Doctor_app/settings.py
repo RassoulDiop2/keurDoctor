@@ -5,7 +5,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-0_p^430zgi-da9$d-k13a7#6+m^=k6yl7nlc597kz^kpiddk79'
 
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    'testserver',
+    'snake-driven-completely.ngrok-free.app',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -81,8 +86,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ==================== KEYCLOAK/OIDC CONFIGURATION ====================
 
-# Server Configuration
-KEYCLOAK_SERVER_URL = "http://localhost:8080"
+# Server Configuration - Ajusté pour développement
+KEYCLOAK_SERVER_URL = "http://localhost:8080"  # HTTP pour développement local
 OIDC_REALM = "KeurDoctorSecure"
 BASE_OIDC_URL = f"{KEYCLOAK_SERVER_URL}/realms/{OIDC_REALM}"
 
@@ -104,7 +109,7 @@ OIDC_RP_SCOPES = 'openid email profile roles'
 OIDC_STORE_ACCESS_TOKEN = True
 OIDC_STORE_ID_TOKEN = True
 OIDC_STORE_USERINFO = True
-OIDC_VERIFY_SSL = False  # True in production
+OIDC_VERIFY_SSL = False  # False en développement, True en production
 
 # Admin Configuration (for session invalidation)
 KEYCLOAK_ADMIN_USER = "admin"
@@ -118,9 +123,13 @@ KEYCLOAK_ADMIN_CLIENT_SECRET = ""  # Empty for admin-cli client
 SESSION_COOKIE_NAME = 'keurdoctor_session'
 SESSION_COOKIE_AGE = 3600  # 1 hour
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_SECURE = False  # True in production
+SESSION_COOKIE_SECURE = False  # False en développement, True en production
 SESSION_COOKIE_DOMAIN = None  # Set to '.yourdomain.com' in production
-CSRF_COOKIE_SECURE = False  # True in production
+SESSION_COOKIE_HTTPONLY = True  # Protection XSS
+SESSION_COOKIE_SAMESITE = 'Lax'  # Lax en développement, Strict en production
+CSRF_COOKIE_SECURE = False  # False en développement, True en production
+CSRF_COOKIE_HTTPONLY = True  # Protection XSS pour CSRF
+CSRF_COOKIE_SAMESITE = 'Lax'  # Lax pour compatibilité développement
 
 # Redirect URLs
 LOGIN_URL = '/oidc/authenticate/'
@@ -187,19 +196,10 @@ AUTH_USER_MODEL = 'comptes.Utilisateur'
 # Clé de chiffrement pour les données sensibles
 ENCRYPTION_KEY = b'your-encryption-key-here'  # À changer en production
 
-# Configuration de sécurité renforcée
+# Configuration de sécurité de base
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-
-# Configuration des sessions sécurisées
-SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SECURE = False  # True en production avec HTTPS
-CSRF_COOKIE_SECURE = False  # True en production avec HTTPS
-CSRF_COOKIE_HTTPONLY = True
 
 # Limitation des tentatives de connexion
 MAX_LOGIN_ATTEMPTS = 3
@@ -208,8 +208,6 @@ LOGIN_TIMEOUT = 300  # 5 minutes
 # Audit et journalisation
 AUDIT_LOG_ENABLED = True
 SENSITIVE_FIELDS = ['numero_dossier', 'numero_praticien', 'specialite', 'date_naissance']
-
-
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

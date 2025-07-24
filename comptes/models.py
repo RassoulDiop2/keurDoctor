@@ -315,86 +315,7 @@ class EncryptedTextField(models.TextField):
         return str(value) if value is not None else None
 # --- Fin du déplacement ---
 
-class Medecin(models.Model):
-    utilisateur = models.OneToOneField(Utilisateur, on_delete=models.CASCADE, primary_key=True)
-    specialite = models.CharField(max_length=100)
-    numero_praticien = models.CharField(max_length=50, unique=True)
-    rfid_uid = EncryptedTextField(unique=True, blank=True, null=True, help_text="UID carte RFID (visible admin uniquement)")
-    badge_bleu_uid = EncryptedTextField(unique=True, blank=True, null=True, help_text="UID badge bleu (visible admin uniquement)")
-
-    class Meta:
-        verbose_name = "Médecin"
-        verbose_name_plural = "Médecins"
-
-    def __str__(self):
-        return f"Dr. {self.utilisateur.nom} ({self.specialite})"
-
-
-class Patient(models.Model):
-    utilisateur = models.OneToOneField(Utilisateur, on_delete=models.CASCADE, primary_key=True)
-    date_naissance = models.DateField()
-    numero_dossier = models.CharField(max_length=50, unique=True)
-    rfid_uid = EncryptedTextField(unique=True, blank=True, null=True, help_text="UID carte RFID (visible admin uniquement)")
-    badge_bleu_uid = EncryptedTextField(unique=True, blank=True, null=True, help_text="UID badge bleu (visible admin uniquement)")
-
-    class Meta:
-        verbose_name = "Patient"
-        verbose_name_plural = "Patients"
-
-    def __str__(self):
-        return f"{self.utilisateur.prenom} {self.utilisateur.nom} (Dossier: {self.numero_dossier})"
-
-
-class Administrateur(models.Model):
-    utilisateur = models.OneToOneField(Utilisateur, on_delete=models.CASCADE, primary_key=True)
-    niveau_acces = models.IntegerField(default=1)
-
-    class Meta:
-        verbose_name = "Administrateur"
-        verbose_name_plural = "Administrateurs"
-
-    def __str__(self):
-        return f"Admin {self.utilisateur.email} (Niveau {self.niveau_acces})"
-
-
-class RendezVous(models.Model):
-    class StatutRendezVous(models.TextChoices):
-        EN_ATTENTE = 'EN_ATTENTE', 'En attente'
-        CONFIRME = 'CONFIRME', 'Confirmé'
-        ANNULE = 'ANNULE', 'Annulé'
-
-    medecin = models.ForeignKey(Medecin, on_delete=models.CASCADE)
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    date_heure = models.DateTimeField()
-    statut = models.CharField(max_length=20, choices=StatutRendezVous.choices, default=StatutRendezVous.EN_ATTENTE)
-
-    class Meta:
-        verbose_name = "Rendez-vous"
-        verbose_name_plural = "Rendez-vous"
-        ordering = ['date_heure']
-        constraints = [
-            models.UniqueConstraint(fields=['medecin', 'date_heure'], name='unique_medecin_time'),
-            models.UniqueConstraint(fields=['patient', 'date_heure'], name='unique_patient_time')
-        ]
-
-    def __str__(self):
-        return f"RDV {self.patient} avec {self.medecin} le {self.date_heure}"
-
-
-class DossierMedical(models.Model):
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    medecin_referent = models.ForeignKey(Medecin, on_delete=models.SET_NULL, null=True, blank=True)
-    date_creation = models.DateField(auto_now_add=True)
-    resume = models.TextField()
-    path_fichier = models.CharField(max_length=255)
-
-    class Meta:
-        verbose_name = "Dossier médical"
-        verbose_name_plural = "Dossiers médicaux"
-        ordering = ['-date_creation']
-
-    def __str__(self):
-        return f"Dossier de {self.patient} (Créé le {self.date_creation})"
+# Modèles métier supprimés - versions complètes en fin de fichier
 
 
 class AuditLog(models.Model):
@@ -509,4 +430,257 @@ class RFIDCard(models.Model):
     def __str__(self):
         return f"{self.card_uid} ({self.utilisateur.email})"
 
+
+# ===== NOUVEAUX MODÈLES POUR LES FONCTIONNALITÉS MÉDICALES =====
+
+class SpecialiteMedicale(models.Model):
+    """Spécialités médicales disponibles"""
+    nom = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True)
+    
+    class Meta:
+        verbose_name = "Spécialité médicale"
+        verbose_name_plural = "Spécialités médicales"
+        ordering = ['nom']
+    
+    def __str__(self):
+        return self.nom
+
+
+class MedecinNew(models.Model):
+    """Profil étendu pour les médecins"""
+    utilisateur = models.OneToOneField(Utilisateur, on_delete=models.CASCADE, related_name='profil_medecin_new')
+    numero_ordre = models.CharField(max_length=20, unique=True, help_text="Numéro d'ordre du conseil médical", default="NON_RENSEIGNE")
+    specialites = models.ManyToManyField(SpecialiteMedicale, blank=True)
+    telephone_cabinet = models.CharField(max_length=20, blank=True)
+    adresse_cabinet = models.TextField(blank=True)
+    horaires_consultation = models.TextField(blank=True, help_text="Horaires de consultation")
+    tarif_consultation = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    accepte_nouveaux_patients = models.BooleanField(default=True)
+    date_installation = models.DateField(null=True, blank=True)
+    
+    class Meta:
+        verbose_name = "Médecin"
+        verbose_name_plural = "Médecins"
+        db_table = 'comptes_medecin_new'
+    
+    def __str__(self):
+        return f"Dr. {self.utilisateur.prenom} {self.utilisateur.nom}"
+    
+    @property
+    def patients_actifs(self):
+        return Patient.objects.filter(medecin_traitant=self).count()
+    
+    @property
+    def rdv_cette_semaine(self):
+        from datetime import date, timedelta
+        debut_semaine = date.today() - timedelta(days=date.today().weekday())
+        fin_semaine = debut_semaine + timedelta(days=6)
+        return RendezVous.objects.filter(
+            medecin=self,
+            date_rdv__range=[debut_semaine, fin_semaine],
+            statut__in=['confirme', 'en_attente']
+        ).count()
+
+
+class PatientNew(models.Model):
+    """Profil étendu pour les patients"""
+    utilisateur = models.OneToOneField(Utilisateur, on_delete=models.CASCADE, related_name='profil_patient_new')
+    numero_securite_sociale = models.CharField(max_length=15, unique=True, blank=True)
+    date_naissance = models.DateField()
+    telephone = models.CharField(max_length=20, blank=True)
+    adresse = models.TextField(blank=True)
+    medecin_traitant = models.ForeignKey('MedecinNew', on_delete=models.SET_NULL, null=True, blank=True, related_name='patients')
+    groupe_sanguin = models.CharField(max_length=5, blank=True)
+    allergies_connues = models.TextField(blank=True)
+    antecedents_medicaux = models.TextField(blank=True)
+    personne_a_contacter_nom = models.CharField(max_length=100, blank=True)
+    personne_a_contacter_telephone = models.CharField(max_length=20, blank=True)
+    
+    class Meta:
+        verbose_name = "Patient"
+        verbose_name_plural = "Patients"
+        db_table = 'comptes_patient_new'
+    
+    def __str__(self):
+        return f"{self.utilisateur.prenom} {self.utilisateur.nom}"
+    
+    @property
+    def age(self):
+        from datetime import date
+        today = date.today()
+        return today.year - self.date_naissance.year - ((today.month, today.day) < (self.date_naissance.month, self.date_naissance.day))
+    
+    @property
+    def derniere_consultation(self):
+        return Consultation.objects.filter(patient=self).order_by('-date_consultation').first()
+
+
+class RendezVous(models.Model):
+    """Gestion des rendez-vous"""
+    STATUT_CHOICES = [
+        ('en_attente', 'En attente'),
+        ('confirme', 'Confirmé'),
+        ('annule', 'Annulé'),
+        ('termine', 'Terminé'),
+        ('absent', 'Patient absent'),
+    ]
+    
+    TYPE_CHOICES = [
+        ('consultation', 'Consultation'),
+        ('visite_controle', 'Visite de contrôle'),
+        ('urgence', 'Urgence'),
+        ('teleconsultation', 'Téléconsultation'),
+    ]
+    
+    patient = models.ForeignKey('PatientNew', on_delete=models.CASCADE, related_name='rendez_vous')
+    medecin = models.ForeignKey('MedecinNew', on_delete=models.CASCADE, related_name='rendez_vous')
+    date_rdv = models.DateTimeField()
+    duree_prevue = models.IntegerField(default=30, help_text="Durée en minutes")
+    type_rdv = models.CharField(max_length=20, choices=TYPE_CHOICES, default='consultation')
+    statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default='en_attente')
+    motif = models.TextField()
+    notes_secretariat = models.TextField(blank=True)
+    date_creation = models.DateTimeField(default=timezone.now)
+    date_modification = models.DateTimeField(default=timezone.now)
+    cree_par = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, null=True, blank=True)
+    
+    class Meta:
+        verbose_name = "Rendez-vous"
+        verbose_name_plural = "Rendez-vous"
+        ordering = ['date_rdv']
+    
+    def __str__(self):
+        return f"{self.patient} - {self.medecin} - {self.date_rdv.strftime('%d/%m/%Y %H:%M')}"
+
+
+class Consultation(models.Model):
+    """Consultations médicales et dossiers"""
+    rendez_vous = models.OneToOneField(RendezVous, on_delete=models.CASCADE, null=True, blank=True)
+    patient = models.ForeignKey('PatientNew', on_delete=models.CASCADE, related_name='consultations')
+    medecin = models.ForeignKey('MedecinNew', on_delete=models.CASCADE, related_name='consultations')
+    date_consultation = models.DateTimeField()
+    motif_consultation = models.TextField()
+    symptomes = models.TextField(blank=True)
+    examen_clinique = models.TextField(blank=True)
+    diagnostic = models.TextField(blank=True)
+    traitement_prescrit = models.TextField(blank=True)
+    examens_complements = models.TextField(blank=True, help_text="Examens complémentaires prescrits")
+    observations = models.TextField(blank=True)
+    prochaine_visite = models.DateField(null=True, blank=True)
+    confidentialite = models.BooleanField(default=True)
+    
+    class Meta:
+        verbose_name = "Consultation"
+        verbose_name_plural = "Consultations"
+        ordering = ['-date_consultation']
+    
+    def __str__(self):
+        return f"Consultation {self.patient} - {self.date_consultation.strftime('%d/%m/%Y')}"
+
+
+class Prescription(models.Model):
+    """Ordonnances et prescriptions"""
+    consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE, related_name='prescriptions')
+    medicament = models.CharField(max_length=200)
+    posologie = models.TextField()
+    duree_traitement = models.CharField(max_length=100)
+    instructions_particulieres = models.TextField(blank=True)
+    date_prescription = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = "Prescription"
+        verbose_name_plural = "Prescriptions"
+        ordering = ['-date_prescription']
+    
+    def __str__(self):
+        return f"{self.medicament} - {self.consultation.patient}"
+
+
+# Alias temporaires pour la compatibilité 
+Medecin = MedecinNew
+Patient = PatientNew
+
+class DossierMedical(models.Model):
+    """Dossier médical complet du patient"""
+    patient = models.OneToOneField('PatientNew', on_delete=models.CASCADE, related_name='dossier_medical')
+    date_creation = models.DateTimeField(auto_now_add=True)
+    date_mise_a_jour = models.DateTimeField(auto_now=True)
+    notes_importantes = models.TextField(blank=True)
+    statut = models.CharField(max_length=20, choices=[
+        ('actif', 'Actif'),
+        ('archive', 'Archivé'),
+        ('transfere', 'Transféré'),
+    ], default='actif')
+    
+    class Meta:
+        verbose_name = "Dossier médical"
+        verbose_name_plural = "Dossiers médicaux"
+    
+    def __str__(self):
+        return f"Dossier de {self.patient}"
+    
+    @property
+    def derniere_consultation(self):
+        return self.patient.consultations.order_by('-date_consultation').first()
+    
+    @property
+    def nombre_consultations(self):
+        return self.patient.consultations.count()
+
+
+class DocumentMedical(models.Model):
+    """Documents liés au dossier médical"""
+    TYPE_CHOICES = [
+        ('ordonnance', 'Ordonnance'),
+        ('resultat_examen', 'Résultat d\'examen'),
+        ('courrier_medical', 'Courrier médical'),
+        ('imagerie', 'Imagerie médicale'),
+        ('autres', 'Autres'),
+    ]
+    
+    dossier = models.ForeignKey(DossierMedical, on_delete=models.CASCADE, related_name='documents')
+    type_document = models.CharField(max_length=20, choices=TYPE_CHOICES)
+    titre = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    fichier = models.FileField(upload_to='documents_medicaux/', blank=True)
+    date_creation = models.DateTimeField(auto_now_add=True)
+    cree_par = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, null=True)
+    
+    class Meta:
+        verbose_name = "Document médical"
+        verbose_name_plural = "Documents médicaux"
+        ordering = ['-date_creation']
+    
+    def __str__(self):
+        return f"{self.titre} - {self.dossier.patient}"
+
+
+# Signaux Django pour synchronisation automatique des groupes
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+@receiver(post_save, sender=Utilisateur)
+def sync_user_groups_on_role_change(sender, instance, created, **kwargs):
+    """
+    Signal qui synchronise automatiquement les groupes Django
+    quand le rôle d'un utilisateur est modifié
+    """
+    if instance.role_autorise:
+        try:
+            # Import local pour éviter les imports circulaires
+            from .views import sync_django_groups
+            
+            # Synchroniser les groupes Django
+            success = sync_django_groups(instance, instance.role_autorise)
+            
+            if success:
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.info(f"✅ Groupes Django auto-synchronisés pour {instance.email} (rôle: {instance.role_autorise})")
+            
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"❌ Erreur auto-sync groupes Django pour {instance.email}: {e}")
 

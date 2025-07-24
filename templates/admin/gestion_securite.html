@@ -3,6 +3,36 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
+<style>
+    .return-btn {
+        background: linear-gradient(135deg, #1976d2, #1565c0);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 12px 24px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 3px 12px rgba(25, 118, 210, 0.25);
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 1000;
+    }
+
+    .return-btn:hover {
+        background: linear-gradient(135deg, #1565c0, #0d47a1);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 18px rgba(25, 118, 210, 0.35);
+        color: white;
+        text-decoration: none;
+    }
+</style>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
@@ -38,17 +68,43 @@
                                 de passe temporaire.
                                 L'utilisateur recevra un email avec ses identifiants.
                             </div>
+                            <div class="alert alert-warning mt-2">
+                                <i class="fas fa-users-cog me-2"></i>
+                                <strong>Groupes Django :</strong> Les groupes Django sont automatiquement synchronisés
+                                lors de l'attribution des rôles. Si vous observez des problèmes de redirection après
+                                connexion, utilisez "Sync Groupes Django" puis "Vérifier Groupes".
+                            </div>
                         </div>
                         <div class="col-md-4 text-end">
-                            <form method="post" action="{% url 'synchroniser_tous_utilisateurs_keycloak' %}"
-                                class="d-inline">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-primary btn-lg"
-                                    onclick="return confirm('⚠️ ATTENTION: Cette action va synchroniser TOUS les utilisateurs Django avec Keycloak. Continuer ?')">
-                                    <i class="fas fa-sync-alt me-2"></i>
-                                    Sync Tous les Utilisateurs
-                                </button>
-                            </form>
+                            <div class="btn-group-vertical gap-2" role="group">
+                                <form method="post" action="{% url 'synchroniser_tous_utilisateurs_keycloak' %}"
+                                    class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary btn-lg w-100"
+                                        onclick="return confirm('⚠️ ATTENTION: Cette action va synchroniser TOUS les utilisateurs Django avec Keycloak. Continuer ?')">
+                                        <i class="fas fa-sync-alt me-2"></i>
+                                        Sync Tous Keycloak
+                                    </button>
+                                </form>
+
+                                <form method="post" action="{% url 'synchroniser_groupes_django_tous' %}"
+                                    class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success btn-lg w-100"
+                                        onclick="return confirm('🔄 Synchroniser les groupes Django pour tous les utilisateurs ?')">
+                                        <i class="fas fa-users-cog me-2"></i>
+                                        Sync Groupes Django
+                                    </button>
+                                </form>
+
+                                <form method="get" action="{% url 'verifier_synchronisation_groupes' %}"
+                                    class="d-inline">
+                                    <button type="submit" class="btn btn-info btn-lg w-100">
+                                        <i class="fas fa-search me-2"></i>
+                                        Vérifier Groupes
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -431,6 +487,11 @@
         </div>
     </div>
 </div>
+
+<!-- Bouton retour au dashboard (position fixe en bas à droite) -->
+<a href="{% url 'admin_dashboard' %}" class="return-btn">
+    <i class="fas fa-arrow-left"></i> Retour au Dashboard
+</a>
 
 <script>
     function definirRole(utilisateurId) {

@@ -3,15 +3,20 @@ from django.utils.html import format_html
 from django.urls import reverse
 from django.contrib.auth.admin import UserAdmin
 from .models import (Utilisateur,
-                     Medecin,
-                     Patient,
-                     Administrateur,
+                     MedecinNew,
+                     PatientNew,
                      RendezVous,
-                     DossierMedical,
                      HistoriqueAuthentification,
                      HistoriqueJournalisation,
                      LicenceAcceptation,
-                     AlerteSecurite)
+                     AlerteSecurite,
+                     SpecialiteMedicale,
+                     Consultation,
+                     Prescription,
+                     DossierMedical,
+                     DocumentMedical,
+                     AuditLog,
+                     RFIDCard)
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django import forms
@@ -98,10 +103,6 @@ class PatientAdmin(admin.ModelAdmin):
     list_display = ('utilisateur', 'date_naissance', 'numero_dossier')
     search_fields = ('utilisateur__email', 'utilisateur__prenom', 'utilisateur__nom', 'numero_dossier')
     list_filter = ('date_naissance',)
-
-class AdministrateurAdmin(admin.ModelAdmin):
-    list_display = ('utilisateur', 'niveau_acces')
-    list_filter = ('niveau_acces',)
 
 class RendezVousAdmin(admin.ModelAdmin):
     list_display = ('medecin', 'patient', 'date_heure', 'statut')
@@ -205,36 +206,79 @@ class RFIDScanWidget(admin.widgets.AdminTextInputWidget):
         scan_btn = f'<button type="button" class="button scan-rfid-btn" data-field="{name}">Scanner</button>'
         return mark_safe(html + scan_btn)
 
-@admin.register(Patient)
+@admin.register(PatientNew)
 class PatientAdmin(admin.ModelAdmin):
-    list_display = ('utilisateur', 'numero_dossier')
-    fields = ('utilisateur', 'date_naissance', 'numero_dossier', 'rfid_uid', 'badge_bleu_uid')
-    formfield_overrides = {
-        Patient._meta.get_field('rfid_uid'): {'widget': RFIDScanWidget},
-        Patient._meta.get_field('badge_bleu_uid'): {'widget': RFIDScanWidget},
-    }
+    list_display = ('utilisateur', 'date_naissance', 'medecin_traitant')
+    fields = ('utilisateur', 'numero_securite_sociale', 'date_naissance', 'telephone', 'adresse', 'medecin_traitant', 'groupe_sanguin', 'allergies_connues')
+    search_fields = ('utilisateur__email', 'utilisateur__nom', 'utilisateur__prenom', 'numero_securite_sociale')
+    list_filter = ('medecin_traitant', 'groupe_sanguin')
 
-@admin.register(Medecin)
+@admin.register(MedecinNew)
 class MedecinAdmin(admin.ModelAdmin):
-    list_display = ('utilisateur', 'specialite', 'numero_praticien')
-    fields = ('utilisateur', 'specialite', 'numero_praticien', 'rfid_uid', 'badge_bleu_uid')
-    formfield_overrides = {
-        Medecin._meta.get_field('rfid_uid'): {'widget': RFIDScanWidget},
-        Medecin._meta.get_field('badge_bleu_uid'): {'widget': RFIDScanWidget},
-    }
+    list_display = ('utilisateur', 'numero_ordre', 'patients_actifs', 'accepte_nouveaux_patients')
+    fields = ('utilisateur', 'numero_ordre', 'specialites', 'telephone_cabinet', 'adresse_cabinet', 'horaires_consultation', 'tarif_consultation', 'accepte_nouveaux_patients')
+    search_fields = ('utilisateur__email', 'utilisateur__nom', 'utilisateur__prenom', 'numero_ordre')
+    list_filter = ('specialites', 'accepte_nouveaux_patients')
+    filter_horizontal = ('specialites',)
+
+# Enregistrer les nouveaux modèles médicaux
+@admin.register(SpecialiteMedicale)
+class SpecialiteMedicaleAdmin(admin.ModelAdmin):
+    list_display = ('nom', 'description')
+    search_fields = ('nom',)
+
+@admin.register(RendezVous)
+class RendezVousAdmin(admin.ModelAdmin):
+    list_display = ('patient', 'medecin', 'date_rdv', 'type_rdv', 'statut')
+    list_filter = ('statut', 'type_rdv', 'medecin')
+    search_fields = ('patient__utilisateur__nom', 'patient__utilisateur__prenom', 'medecin__utilisateur__nom')
+    date_hierarchy = 'date_rdv'
+
+@admin.register(Consultation)
+class ConsultationAdmin(admin.ModelAdmin):
+    list_display = ('patient', 'medecin', 'date_consultation', 'motif_consultation')
+    list_filter = ('medecin', 'date_consultation')
+    search_fields = ('patient__utilisateur__nom', 'motif_consultation', 'diagnostic')
+    date_hierarchy = 'date_consultation'
+
+@admin.register(Prescription)
+class PrescriptionAdmin(admin.ModelAdmin):
+    list_display = ('consultation', 'medicament', 'date_prescription')
+    list_filter = ('date_prescription',)
+    search_fields = ('medicament', 'consultation__patient__utilisateur__nom')
+
+@admin.register(DossierMedical)
+class DossierMedicalAdmin(admin.ModelAdmin):
+    list_display = ('patient', 'statut', 'date_creation', 'date_mise_a_jour')
+    list_filter = ('statut', 'date_creation')
+    search_fields = ('patient__utilisateur__nom', 'patient__utilisateur__prenom')
+
+@admin.register(DocumentMedical)
+class DocumentMedicalAdmin(admin.ModelAdmin):
+    list_display = ('titre', 'type_document', 'dossier', 'date_creation')
+    list_filter = ('type_document', 'date_creation')
+    search_fields = ('titre', 'dossier__patient__utilisateur__nom')
 
 # Enregistrer les modèles avec leurs configurations personnalisées
- #admin.site.unregister(Utilisateur)
- 
 admin.site.register(Utilisateur, UtilisateurAdmin)
-admin.site.register(Medecin, MedecinAdmin)
-admin.site.register(Patient, PatientAdmin)
-admin.site.register(Administrateur, AdministrateurAdmin)
-admin.site.register(RendezVous, RendezVousAdmin)
-admin.site.register(DossierMedical, DossierMedicalAdmin)
+admin.site.register(LicenceAcceptation)
 admin.site.register(HistoriqueAuthentification, HistoriqueAuthentificationAdmin)
 admin.site.register(HistoriqueJournalisation, HistoriqueJournalisationAdmin)
-admin.site.register(LicenceAcceptation)
 admin.site.register(AlerteSecurite, AlerteSecuriteAdmin)
+
+@admin.register(AuditLog)
+class AuditLogAdmin(admin.ModelAdmin):
+    list_display = ('utilisateur', 'type_action', 'niveau_risque', 'date_heure', 'adresse_ip')
+    list_filter = ('type_action', 'niveau_risque', 'date_heure', 'est_suspect')
+    search_fields = ('utilisateur__nom', 'utilisateur__email', 'description', 'adresse_ip')
+    readonly_fields = ('date_heure', 'session_id')
+    ordering = ['-date_heure']
+
+@admin.register(RFIDCard)
+class RFIDCardAdmin(admin.ModelAdmin):
+    list_display = ('card_uid', 'utilisateur', 'actif', 'date_enregistrement')
+    list_filter = ('actif', 'date_enregistrement')
+    search_fields = ('card_uid', 'utilisateur__nom', 'utilisateur__email')
+    readonly_fields = ('date_enregistrement',)
 
 

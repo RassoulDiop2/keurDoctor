@@ -13,16 +13,18 @@ from django.utils.decorators import method_decorator
 import json
 from .decorators import role_required, any_role_required, detecter_usurpation_role, verifier_elevation_privileges
 from .forms import InscriptionForm, AdminCreateUserForm, RFIDCardRegisterForm
-from .models import Utilisateur, Medecin, Patient, AlerteSecurite, HistoriqueAuthentification, LicenceAcceptation, AuditLog, Administrateur, RFIDCard
+from .models import Utilisateur, Medecin, Patient, AlerteSecurite, RendezVous, HistoriqueAuthentification, LicenceAcceptation, AuditLog, RFIDCard, DossierMedical, MedecinNew, PatientNew
 import logging
 import requests
 import uuid
+import random
 from django.conf import settings
 from django.utils import timezone
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.contrib.auth.models import Group
 from django.contrib.admin.views.decorators import staff_member_required
+
 
 logger = logging.getLogger(__name__)
 
@@ -52,8 +54,8 @@ def licence_view(request):
             request.session['licence_accepted'] = True
             request.session['licence_ip'] = request.META.get('REMOTE_ADDR', '')
             request.session['licence_user_agent'] = request.META.get('HTTP_USER_AGENT', '')
+            request.session['show_licence_success'] = True
             
-            messages.success(request, 'Licence acceptée. Vous pouvez maintenant procéder à l\'inscription.')
             return redirect('inscription')
         else:
             messages.error(request, 'Vous devez accepter la politique de confidentialité et confirmer votre âge.')
@@ -95,6 +97,26 @@ def redirection_role(request):
 
         user_groups = [group.name.lower() for group in request.user.groups.all()]
         logger.info(f"Utilisateur: {request.user.username}, Groupes: {user_groups}")
+
+        # Vérifier et synchroniser les groupes si nécessaire
+        if hasattr(request.user, 'role_autorise') and request.user.role_autorise:
+            expected_groups = {
+                'admin': ['admin', 'administrateurs'],
+                'medecin': ['medecin', 'médecins', 'medecins'], 
+                'patient': ['patient', 'patients']
+            }
+            
+            role = request.user.role_autorise
+            if role in expected_groups:
+                expected = expected_groups[role]
+                has_expected_group = any(group in user_groups for group in expected)
+                
+                if not has_expected_group:
+                    logger.warning(f"Utilisateur {request.user.username} avec rôle {role} n'a pas le bon groupe. Synchronisation...")
+                    sync_django_groups(request.user, role)
+                    # Recharger les groupes après synchronisation
+                    user_groups = [group.name.lower() for group in request.user.groups.all()]
+                    logger.info(f"Groupes après synchronisation: {user_groups}")
 
         # Redirection selon le groupe (support anciens et nouveaux noms)
         if 'admin' in user_groups or 'administrateurs' in user_groups:
@@ -155,15 +177,25 @@ def admin_dashboard(request):
     alertes_critiques = AlerteSecurite.objects.filter(niveau_urgence='CRITIQUE', est_lue=False).count()
     utilisateurs_en_attente = Utilisateur.objects.filter(role_autorise__isnull=True).count()
     alertes_non_lues_count = AlerteSecurite.objects.filter(est_lue=False).count()
+
+    # Statistiques dynamiques
+    users_count = Utilisateur.objects.count()
+    medecins_count = MedecinNew.objects.count()
+    patients_count = PatientNew.objects.count()
+    rdv_count = RendezVous.objects.count()
     
     return render(request, 'dashboards/admin.html', {
         'user': request.user,
         'title': 'Administration',
         'alertes_non_lues': alertes_non_lues,
-        'utilisateurs_bloques': utilisateurs_bloques,
         'alertes_critiques': alertes_critiques,
         'utilisateurs_en_attente': utilisateurs_en_attente,
         'alertes_non_lues_count': alertes_non_lues_count,
+        'utilisateurs_bloques': utilisateurs_bloques,
+        'users_count': users_count,
+        'medecins_count': medecins_count,
+        'patients_count': patients_count,
+        'rdv_count': rdv_count,
     })
 
 
@@ -323,11 +355,58 @@ def sync_role_to_keycloak(utilisateur, role):
         if sessions_resp.status_code == 204:
             logger.info(f"Sessions Keycloak invalidées pour {utilisateur.email}")
 
-        logger.info(f"Synchronisation Keycloak réussie pour {utilisateur.email} - Rôle: {role}")
+        # 8. Synchroniser les groupes Django
+        sync_django_groups(utilisateur, role)
+
+        logger.info(f"Synchronisation Keycloak et Django réussie pour {utilisateur.email} - Rôle: {role}")
         return True
 
     except Exception as e:
         logger.error(f"Erreur lors de la synchronisation Keycloak: {e}")
+        return False
+
+
+def sync_django_groups(utilisateur, role):
+    """
+    Synchronise les groupes Django avec le rôle attribué
+    """
+    try:
+        # Mapping des rôles vers les groupes Django
+        group_mapping = {
+            'admin': 'administrateurs',
+            'medecin': 'medecins',
+            'patient': 'patients'
+        }
+        
+        # Retirer l'utilisateur de tous les groupes de rôles existants
+        for old_group_name in group_mapping.values():
+            try:
+                old_group = Group.objects.get(name=old_group_name)
+                utilisateur.groups.remove(old_group)
+                logger.info(f"Utilisateur {utilisateur.email} retiré du groupe {old_group_name}")
+            except Group.DoesNotExist:
+                pass
+        
+        # Ajouter l'utilisateur au nouveau groupe si le rôle est valide
+        if role and role in group_mapping:
+            group_name = group_mapping[role]
+            try:
+                group, created = Group.objects.get_or_create(name=group_name)
+                utilisateur.groups.add(group)
+                if created:
+                    logger.info(f"Groupe {group_name} créé et utilisateur {utilisateur.email} ajouté")
+                else:
+                    logger.info(f"Utilisateur {utilisateur.email} ajouté au groupe {group_name}")
+                return True
+            except Exception as e:
+                logger.error(f"Erreur lors de l'ajout au groupe {group_name}: {e}")
+                return False
+        
+        logger.info(f"Groupes Django synchronisés pour {utilisateur.email} - Rôle: {role}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Erreur lors de la synchronisation des groupes Django: {e}")
         return False
 
 
@@ -382,20 +461,655 @@ def definir_role_utilisateur(request, user_id):
 
 @role_required('medecin')
 def medecin_dashboard(request):
-    """Dashboard médecin"""
-    return render(request, 'dashboards/medecin.html', {
-        'user': request.user,
-        'title': 'Espace Médecin'
-    })
+    """Dashboard médecin avec données réelles"""
+    try:
+        # Récupérer le profil médecin
+        medecin = MedecinNew.objects.get(utilisateur=request.user)
+        
+        # Récupérer les rendez-vous à venir
+        from datetime import date, timedelta
+        from django.utils import timezone
+        aujourd_hui = timezone.now().date()
+        dans_7_jours = aujourd_hui + timedelta(days=7)
+        
+        mes_rdv_futurs = RendezVous.objects.filter(
+            medecin=medecin,
+            date_rdv__date__gte=aujourd_hui,
+            statut__in=['EN_ATTENTE', 'CONFIRME']
+        ).order_by('date_rdv')[:5]
+        
+        # Statistiques
+        patients_suivis = PatientNew.objects.filter(
+            rendez_vous__medecin=medecin
+        ).distinct().count()
+        
+        rdv_a_venir = RendezVous.objects.filter(
+            medecin=medecin,
+            date_rdv__date__gte=aujourd_hui,
+            statut__in=['EN_ATTENTE', 'CONFIRME']
+        ).count()
+        
+        # Dossiers médicaux créés par ce médecin
+        dossiers_crees = DossierMedical.objects.filter(
+            patient__rendez_vous__medecin=medecin
+        ).distinct().count()
+        
+        # Notifications simulées (à remplacer par un vrai système)
+        notifications = []
+        
+        # Rendez-vous en attente de confirmation
+        rdv_en_attente = RendezVous.objects.filter(
+            medecin=medecin,
+            statut='EN_ATTENTE'
+        ).count()
+        
+        if rdv_en_attente > 0:
+            notifications.append({
+                'type': 'warning',
+                'icon': 'exclamation-triangle',
+                'message': f'{rdv_en_attente} rendez-vous en attente de validation.'
+            })
+        
+        # Nouveaux patients cette semaine
+        nouveaux_patients = PatientNew.objects.filter(
+            utilisateur__date_joined__gte=timezone.now() - timedelta(days=7),
+            rendez_vous__medecin=medecin
+        ).distinct().count()
+        
+        if nouveaux_patients > 0:
+            notifications.append({
+                'type': 'info',
+                'icon': 'info-circle',
+                'message': f'{nouveaux_patients} nouveau(x) patient(s) cette semaine.'
+            })
+        
+        stats = {
+            'patients_suivis': patients_suivis,
+            'rdv_a_venir': rdv_a_venir,
+            'dossiers_crees': dossiers_crees,
+        }
+        
+        context = {
+            'user': request.user,
+            'title': 'Espace Médecin',
+            'medecin': medecin,
+            'mes_rdv_futurs': mes_rdv_futurs,
+            'stats': stats,
+            'notifications': notifications,
+        }
+        
+    except MedecinNew.DoesNotExist:
+        # Si pas de profil médecin, créer un profil basique
+        stats = {
+            'patients_suivis': 0,
+            'rdv_a_venir': 0,
+            'dossiers_crees': 0,
+        }
+        
+        context = {
+            'user': request.user,
+            'title': 'Espace Médecin',
+            'medecin': None,
+            'mes_rdv_futurs': [],
+            'stats': stats,
+            'notifications': [{
+                'type': 'warning',
+                'icon': 'exclamation-triangle',
+                'message': 'Profil médecin incomplet. Contactez l\'administrateur.'
+            }],
+            'profile_incomplete': True
+        }
+    
+    return render(request, 'dashboards/medecin.html', context)
 
 
 @role_required('patient')
 def patient_dashboard(request):
-    """Dashboard patient"""
-    return render(request, 'dashboards/patient.html', {
-        'user': request.user,
-        'title': 'Espace Patient'
-    })
+    """Dashboard patient avec données réelles"""
+    try:
+        # Récupérer le profil patient
+        patient = PatientNew.objects.get(utilisateur=request.user)
+        
+        # Récupérer les rendez-vous à venir
+        from datetime import date, timedelta
+        aujourd_hui = date.today()
+        
+        rdv_a_venir = RendezVous.objects.filter(
+            patient=patient,
+            date_rdv__date__gte=aujourd_hui,
+            statut__in=['EN_ATTENTE', 'CONFIRME']
+        ).order_by('date_rdv')[:3]
+        
+        # Historique des rendez-vous
+        rdv_passes = RendezVous.objects.filter(
+            patient=patient,
+            date_rdv__date__lt=aujourd_hui
+        ).order_by('-date_rdv')[:5]
+        
+        # Dossier médical
+        try:
+            dossier = DossierMedical.objects.get(patient=patient)
+            derniere_consultation = rdv_passes.first()
+        except DossierMedical.DoesNotExist:
+            dossier = None
+            derniere_consultation = None
+        
+        context = {
+            'user': request.user,
+            'title': 'Espace Patient',
+            'patient': patient,
+            'rdv_a_venir': rdv_a_venir,
+            'rdv_passes': rdv_passes,
+            'dossier': dossier,
+            'derniere_consultation': derniere_consultation,
+        }
+        
+    except PatientNew.DoesNotExist:
+        # Si pas de profil patient, créer un profil basique
+        context = {
+            'user': request.user,
+            'title': 'Espace Patient',
+            'patient': None,
+            'rdv_a_venir': [],
+            'rdv_passes': [],
+            'dossier': None,
+            'derniere_consultation': None,
+            'profile_incomplete': True
+        }
+    
+    return render(request, 'dashboards/patient.html', context)
+
+
+# ===== NOUVELLES VUES FONCTIONNELLES POUR LES DASHBOARDS =====
+
+@role_required('medecin')
+def liste_patients_medecin(request):
+    """Liste des patients pour un médecin"""
+    try:
+        medecin = MedecinNew.objects.get(utilisateur=request.user)
+        from django.utils import timezone
+        from datetime import timedelta
+        
+        # Patients ayant eu des RDV avec ce médecin avec informations supplémentaires
+        patients_base = PatientNew.objects.filter(
+            rendez_vous__medecin=medecin
+        ).distinct().order_by('utilisateur__nom')
+        
+        # Enrichir les données des patients
+        patients_enrichis = []
+        for patient in patients_base:
+            # Dernière visite
+            derniere_visite = RendezVous.objects.filter(
+                patient=patient,
+                medecin=medecin,
+                statut='TERMINE'
+            ).order_by('-date_rdv').first()
+            
+            # Prochain RDV
+            prochain_rdv = RendezVous.objects.filter(
+                patient=patient,
+                medecin=medecin,
+                date_rdv__gte=timezone.now(),
+                statut__in=['EN_ATTENTE', 'CONFIRME']
+            ).order_by('date_rdv').first()
+            
+            patient.derniere_visite = derniere_visite.date_rdv if derniere_visite else None
+            patient.prochain_rdv = prochain_rdv.date_rdv if prochain_rdv else None
+            patients_enrichis.append(patient)
+        
+        # Statistiques pour le médecin
+        rdv_cette_semaine = RendezVous.objects.filter(
+            medecin=medecin,
+            date_rdv__gte=timezone.now(),
+            date_rdv__lt=timezone.now() + timedelta(days=7)
+        ).count()
+        
+        rdv_ce_mois = RendezVous.objects.filter(
+            medecin=medecin,
+            date_rdv__gte=timezone.now().replace(day=1),
+            date_rdv__lt=timezone.now().replace(day=1) + timedelta(days=31)
+        ).count()
+        
+        rdv_en_attente = RendezVous.objects.filter(
+            medecin=medecin,
+            statut='EN_ATTENTE'
+        ).count()
+        
+        context = {
+            'patients': patients_enrichis,
+            'medecin': medecin,
+            'title': 'Mes Patients',
+            'rdv_cette_semaine': rdv_cette_semaine,
+            'rdv_ce_mois': rdv_ce_mois,
+            'rdv_en_attente': rdv_en_attente,
+        }
+        return render(request, 'dashboards/liste_patients_medecin.html', context)
+    except MedecinNew.DoesNotExist:
+        messages.error(request, "Profil médecin non trouvé")
+        return redirect('medecin_dashboard')
+
+
+@role_required('medecin')
+def calendrier_medecin(request):
+    """Calendrier des rendez-vous pour un médecin"""
+    try:
+        medecin = MedecinNew.objects.get(utilisateur=request.user)
+        
+        # Récupération des paramètres de filtrage
+        statut_filtre = request.GET.get('statut', 'all')
+        
+        # Récupérer les rendez-vous du mois avec pagination
+        from django.utils import timezone
+        from datetime import date, timedelta
+        from django.core.paginator import Paginator
+        
+        aujourd_hui = timezone.now().date()
+        
+        # Récupérer tous les rendez-vous du médecin
+        rdv_queryset = RendezVous.objects.filter(medecin=medecin)
+        
+        # Appliquer le filtre de statut
+        if statut_filtre != 'all':
+            rdv_queryset = rdv_queryset.filter(statut=statut_filtre)
+        
+        rdv_queryset = rdv_queryset.order_by('-date_rdv')
+        
+        # Pagination
+        paginator = Paginator(rdv_queryset, 10)
+        page_number = request.GET.get('page')
+        rdv_page = paginator.get_page(page_number)
+        
+        # Séparer les rendez-vous par catégorie
+        rdv_aujourd_hui = RendezVous.objects.filter(
+            medecin=medecin,
+            date_rdv__date=aujourd_hui
+        ).order_by('date_rdv')
+        
+        rdv_a_venir = RendezVous.objects.filter(
+            medecin=medecin,
+            date_rdv__date__gt=aujourd_hui,
+            statut__in=['EN_ATTENTE', 'CONFIRME']
+        ).order_by('date_rdv')[:5]
+        
+        rdv_passes = RendezVous.objects.filter(
+            medecin=medecin,
+            date_rdv__date__lt=aujourd_hui
+        ).order_by('-date_rdv')[:5]
+        
+        # Statistiques
+        stats = {
+            'total': RendezVous.objects.filter(medecin=medecin).count(),
+            'en_attente': RendezVous.objects.filter(medecin=medecin, statut='EN_ATTENTE').count(),
+            'confirmes': RendezVous.objects.filter(medecin=medecin, statut='CONFIRME').count(),
+            'termines': RendezVous.objects.filter(medecin=medecin, statut='TERMINE').count(),
+            'annules': RendezVous.objects.filter(medecin=medecin, statut='ANNULE').count(),
+        }
+        
+        context = {
+            'rdv_page': rdv_page,
+            'rdv_aujourd_hui': rdv_aujourd_hui,
+            'rdv_a_venir': rdv_a_venir,
+            'rdv_passes': rdv_passes,
+            'medecin': medecin,
+            'title': 'Mon Calendrier',
+            'statut_filtre': statut_filtre,
+            'stats': stats,
+        }
+        return render(request, 'dashboards/calendrier_medecin.html', context)
+    except MedecinNew.DoesNotExist:
+        messages.error(request, "Profil médecin non trouvé")
+        return redirect('medecin_dashboard')
+
+
+@role_required('medecin')
+def confirmer_rdv_medecin(request, rdv_id):
+    """Confirmer un rendez-vous"""
+    if request.method == 'POST':
+        try:
+            medecin = MedecinNew.objects.get(utilisateur=request.user)
+            rdv = RendezVous.objects.get(id=rdv_id, medecin=medecin)
+            
+            rdv.statut = 'CONFIRME'
+            rdv.save()
+            
+            return JsonResponse({'success': True, 'message': 'Rendez-vous confirmé'})
+        except (MedecinNew.DoesNotExist, RendezVous.DoesNotExist):
+            return JsonResponse({'success': False, 'message': 'Rendez-vous non trouvé'})
+    
+    return JsonResponse({'success': False, 'message': 'Méthode non autorisée'})
+
+
+@role_required('medecin')
+def annuler_rdv_medecin(request, rdv_id):
+    """Annuler un rendez-vous"""
+    if request.method == 'POST':
+        try:
+            medecin = MedecinNew.objects.get(utilisateur=request.user)
+            rdv = RendezVous.objects.get(id=rdv_id, medecin=medecin)
+            
+            rdv.statut = 'ANNULE'
+            rdv.save()
+            
+            return JsonResponse({'success': True, 'message': 'Rendez-vous annulé'})
+        except (MedecinNew.DoesNotExist, RendezVous.DoesNotExist):
+            return JsonResponse({'success': False, 'message': 'Rendez-vous non trouvé'})
+    
+    return JsonResponse({'success': False, 'message': 'Méthode non autorisée'})
+
+
+@role_required('medecin')
+def terminer_rdv_medecin(request, rdv_id):
+    """Terminer un rendez-vous"""
+    if request.method == 'POST':
+        try:
+            medecin = MedecinNew.objects.get(utilisateur=request.user)
+            rdv = RendezVous.objects.get(id=rdv_id, medecin=medecin)
+            
+            rdv.statut = 'TERMINE'
+            rdv.save()
+            
+            return JsonResponse({'success': True, 'message': 'Rendez-vous terminé'})
+        except (MedecinNew.DoesNotExist, RendezVous.DoesNotExist):
+            return JsonResponse({'success': False, 'message': 'Rendez-vous non trouvé'})
+    
+    return JsonResponse({'success': False, 'message': 'Méthode non autorisée'})
+
+
+@role_required('patient')
+def prendre_rdv(request):
+    """Prise de rendez-vous pour un patient"""
+    try:
+        patient = PatientNew.objects.get(utilisateur=request.user)
+        
+        if request.method == 'POST':
+            medecin_id = request.POST.get('medecin_id')
+            date_rdv = request.POST.get('date_rdv')
+            heure_rdv = request.POST.get('heure_rdv')
+            motif = request.POST.get('motif', '')
+            
+            try:
+                medecin = MedecinNew.objects.get(id=medecin_id)
+                from datetime import datetime
+                from django.utils import timezone
+                
+                # Construire la date complète
+                date_heure_str = f"{date_rdv} {heure_rdv}"
+                date_heure_naive = datetime.strptime(date_heure_str, "%Y-%m-%d %H:%M")
+                date_heure = timezone.make_aware(date_heure_naive)
+                
+                # Vérifier que la date n'est pas dans le passé
+                if date_heure < timezone.now():
+                    messages.error(request, "Impossible de prendre un rendez-vous dans le passé")
+                else:
+                    # Vérifier disponibilité (créneau de 30 minutes)
+                    rdv_existant = RendezVous.objects.filter(
+                        medecin=medecin,
+                        date_rdv__date=date_heure.date(),
+                        date_rdv__hour=date_heure.hour,
+                        date_rdv__minute__range=[date_heure.minute-29, date_heure.minute+29]
+                    ).exists()
+                    
+                    if not rdv_existant:
+                        rdv = RendezVous.objects.create(
+                            patient=patient,
+                            medecin=medecin,
+                            date_rdv=date_heure,
+                            motif=motif,
+                            statut='EN_ATTENTE'
+                        )
+                        messages.success(request, f"Rendez-vous demandé avec succès pour le {date_heure.strftime('%d/%m/%Y à %H:%M')} avec Dr. {medecin.utilisateur.nom}")
+                        return redirect('patient_dashboard')
+                    else:
+                        messages.error(request, "Ce créneau horaire n'est pas disponible")
+                        
+            except MedecinNew.DoesNotExist:
+                messages.error(request, "Médecin sélectionné introuvable")
+            except ValueError as e:
+                messages.error(request, "Format de date ou heure invalide")
+            except Exception as e:
+                messages.error(request, f"Erreur lors de la prise de rendez-vous: {e}")
+        
+        # Préparer les données pour le template
+        from datetime import date, timedelta
+        date_min = date.today().strftime('%Y-%m-%d')
+        date_max = (date.today() + timedelta(days=90)).strftime('%Y-%m-%d')  # 3 mois à l'avance
+        
+        # Liste des médecins disponibles avec leurs spécialités
+        medecins = MedecinNew.objects.select_related('utilisateur').prefetch_related('specialites').order_by('utilisateur__nom')
+        
+        context = {
+            'medecins': medecins,
+            'patient': patient,
+            'date_min': date_min,
+            'date_max': date_max,
+            'title': 'Prendre un Rendez-vous'
+        }
+        return render(request, 'dashboards/prendre_rdv.html', context)
+    except PatientNew.DoesNotExist:
+        messages.error(request, "Profil patient non trouvé")
+        return redirect('patient_dashboard')
+
+
+@role_required('patient')
+def mon_dossier_medical(request):
+    """Consultation du dossier médical par le patient"""
+    try:
+        patient = PatientNew.objects.get(utilisateur=request.user)
+        
+        try:
+            dossier = DossierMedical.objects.get(patient=patient)
+        except DossierMedical.DoesNotExist:
+            dossier = None
+        
+        # Historique des consultations (via rendez-vous)
+        consultations = RendezVous.objects.filter(
+            patient=patient,
+            statut='TERMINE'
+        ).order_by('-date_rdv')
+        
+        context = {
+            'patient': patient,
+            'dossier': dossier,
+            'consultations': consultations,
+            'title': 'Mon Dossier Médical'
+        }
+        return render(request, 'dashboards/dossier_medical.html', context)
+    except PatientNew.DoesNotExist:
+        messages.error(request, "Profil patient non trouvé")
+        return redirect('patient_dashboard')
+
+
+@role_required('patient')
+def historique_rdv_patient(request):
+    """Historique complet des rendez-vous pour un patient"""
+    try:
+        patient = PatientNew.objects.get(utilisateur=request.user)
+        
+        # Tous les rendez-vous du patient
+        rdv_tous = RendezVous.objects.filter(patient=patient).order_by('-date_rdv')
+        
+        # Filtrage par statut
+        statut_filtre = request.GET.get('statut', 'tous')
+        if statut_filtre != 'tous':
+            rdv_tous = rdv_tous.filter(statut=statut_filtre)
+        
+        # Pagination
+        from django.core.paginator import Paginator
+        paginator = Paginator(rdv_tous, 10)  # 10 rendez-vous par page
+        page_number = request.GET.get('page')
+        rdv_page = paginator.get_page(page_number)
+        
+        # Statistiques
+        stats = {
+            'total': RendezVous.objects.filter(patient=patient).count(),
+            'en_attente': RendezVous.objects.filter(patient=patient, statut='EN_ATTENTE').count(),
+            'confirme': RendezVous.objects.filter(patient=patient, statut='CONFIRME').count(),
+            'termine': RendezVous.objects.filter(patient=patient, statut='TERMINE').count(),
+            'annule': RendezVous.objects.filter(patient=patient, statut='ANNULE').count(),
+        }
+        
+        context = {
+            'patient': patient,
+            'rdv_page': rdv_page,
+            'stats': stats,
+            'statut_filtre': statut_filtre,
+            'title': 'Historique des Rendez-vous'
+        }
+        return render(request, 'dashboards/historique_rdv.html', context)
+    except PatientNew.DoesNotExist:
+        messages.error(request, "Profil patient non trouvé")
+        return redirect('patient_dashboard')
+
+
+@role_required('patient')
+def annuler_rdv_patient(request, rdv_id):
+    """Annulation d'un rendez-vous par le patient"""
+    if request.method == 'POST':
+        try:
+            patient = PatientNew.objects.get(utilisateur=request.user)
+            rdv = get_object_or_404(RendezVous, id=rdv_id, patient=patient)
+            
+            # Vérifier que le rendez-vous peut être annulé
+            if rdv.statut in ['EN_ATTENTE', 'CONFIRME']:
+                rdv.statut = 'ANNULE'
+                rdv.save()
+                
+                # Créer une notification pour le médecin (optionnel)
+                from django.utils import timezone
+                logger.info(f"Rendez-vous {rdv_id} annulé par le patient {patient.utilisateur.email}")
+                
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Rendez-vous annulé avec succès'
+                })
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Ce rendez-vous ne peut pas être annulé'
+                })
+                
+        except PatientNew.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': 'Profil patient introuvable'
+            })
+        except Exception as e:
+            logger.error(f"Erreur lors de l'annulation du RDV {rdv_id}: {e}")
+            return JsonResponse({
+                'success': False,
+                'message': 'Erreur lors de l\'annulation'
+            })
+    
+    return JsonResponse({'success': False, 'message': 'Méthode non autorisée'})
+
+
+@role_required('admin')
+def statistiques_detaillees(request):
+    """Statistiques détaillées pour l'administrateur"""
+    from datetime import date, timedelta
+    from django.db.models import Count, Q
+    
+    # Statistiques générales
+    stats = {
+        'total_utilisateurs': Utilisateur.objects.count(),
+        'total_medecins': MedecinNew.objects.count(),
+        'total_patients': PatientNew.objects.count(),
+        'total_rdv': RendezVous.objects.count(),
+        'rdv_cette_semaine': RendezVous.objects.filter(
+            date_rdv__date__range=[
+                date.today(),
+                date.today() + timedelta(days=7)
+            ]
+        ).count(),
+        'utilisateurs_actifs_30j': Utilisateur.objects.filter(
+            date_derniere_connexion__gte=date.today() - timedelta(days=30)
+        ).count(),
+        'alertes_non_resolues': AlerteSecurite.objects.filter(est_lue=False).count(),
+    }
+    
+    # Répartition par rôle
+    repartition_roles = Utilisateur.objects.values('role_autorise').annotate(
+        count=Count('id')
+    ).order_by('role_autorise')
+    
+    # Évolution des inscriptions (derniers 30 jours)
+    evolution_inscriptions = []
+    for i in range(30):
+        jour = date.today() - timedelta(days=i)
+        count = Utilisateur.objects.filter(date_creation__date=jour).count()
+        evolution_inscriptions.append({
+            'date': jour,
+            'count': count
+        })
+    
+    context = {
+        'stats': stats,
+        'repartition_roles': repartition_roles,
+        'evolution_inscriptions': reversed(evolution_inscriptions),
+        'title': 'Statistiques Détaillées'
+    }
+    return render(request, 'dashboards/admin_stats.html', context)
+
+
+@role_required('medecin')
+def creer_dossier_medical(request):
+    """Création d'un nouveau dossier médical"""
+    try:
+        medecin = MedecinNew.objects.get(utilisateur=request.user)
+        
+        if request.method == 'POST':
+            patient_id = request.POST.get('patient_id')
+            resume = request.POST.get('resume')
+            antecedents = request.POST.get('antecedents', '')
+            traitement_actuel = request.POST.get('traitement_actuel', '')
+            groupe_sanguin = request.POST.get('groupe_sanguin', '')
+            statut = request.POST.get('statut', 'actif')
+            
+            try:
+                patient = PatientNew.objects.get(id=patient_id)
+                
+                # Vérifier si le dossier existe déjà
+                dossier, created = DossierMedical.objects.get_or_create(
+                    patient=patient,
+                    defaults={
+                        'notes_importantes': resume,
+                        'statut': statut
+                    }
+                )
+                
+                if created:
+                    messages.success(request, f"Dossier médical créé pour {patient.utilisateur.prenom} {patient.utilisateur.nom}")
+                else:
+                    # Mettre à jour le dossier existant
+                    dossier.notes_importantes = resume
+                    dossier.statut = statut
+                    dossier.save()
+                    messages.info(request, f"Dossier médical mis à jour pour {patient.utilisateur.prenom} {patient.utilisateur.nom}")
+                
+                return redirect('liste_patients_medecin')
+            except PatientNew.DoesNotExist:
+                messages.error(request, "Patient non trouvé")
+        
+        # Liste des patients pour ce médecin
+        patients = PatientNew.objects.filter(
+            rendez_vous__medecin=medecin
+        ).distinct().order_by('utilisateur__nom')
+        
+        # Derniers dossiers créés
+        dossiers_recents = DossierMedical.objects.filter(
+            patient__rendez_vous__medecin=medecin
+        ).distinct().order_by('-date_creation')[:5]
+        
+        context = {
+            'patients': patients,
+            'medecin': medecin,
+            'title': 'Créer un Dossier Médical',
+            'dossiers_recents': dossiers_recents,
+        }
+        return render(request, 'dashboards/creer_dossier.html', context)
+    except MedecinNew.DoesNotExist:
+        messages.error(request, "Profil médecin non trouvé")
+        return redirect('medecin_dashboard')
 
 
 @login_required
@@ -529,8 +1243,18 @@ def inscription_view(request):
     """Vue pour l'inscription des nouveaux utilisateurs"""
     # Vérifier si la licence a été acceptée
     if not request.session.get('licence_accepted'):
-        messages.warning(request, 'Vous devez d\'abord accepter la politique de confidentialité.')
         return redirect('licence')
+    
+    # Système de filtrage simple : vider tous les messages sauf ceux autorisés
+    storage = messages.get_messages(request)
+    # Consommer tous les messages existants
+    list(storage)  # Ceci vide le storage
+    
+    # Ajouter uniquement le message de licence acceptée si nécessaire
+    if request.session.get('show_licence_success'):
+        messages.success(request, 'Licence acceptée. Vous pouvez maintenant procéder à votre inscription.')
+        del request.session['show_licence_success']
+    
     if request.method == 'POST':
         form = InscriptionForm(request.POST)
         if form.is_valid():
@@ -576,11 +1300,22 @@ def inscription_view(request):
                 if create_keycloak_user(utilisateur, role):
                     # Créer le profil spécifique selon le rôle (optionnel, car pas encore autorisé)
                     if role == 'medecin':
-                        Medecin.objects.create(
+                        medecin = MedecinNew.objects.create(
                             utilisateur=utilisateur,
-                            specialite=form.cleaned_data['specialite'],
-                            numero_praticien=form.cleaned_data['numero_praticien']
+                            numero_ordre=form.cleaned_data.get('numero_praticien', 'NON_RENSEIGNE'),
                         )
+                        # Ajouter la spécialité si fournie
+                        specialite_nom = form.cleaned_data.get('specialite')
+                        if specialite_nom:
+                            try:
+                                from comptes.models import SpecialiteMedicale
+                                specialite, created = SpecialiteMedicale.objects.get_or_create(
+                                    nom=specialite_nom.strip(),
+                                    defaults={'description': f'Spécialité: {specialite_nom}'}
+                                )
+                                medecin.specialites.add(specialite)
+                            except Exception as e:
+                                logger.error(f"Erreur lors de l'ajout de la spécialité: {e}")
                     elif role == 'patient':
                         # Générer un numéro de dossier unique
                         numero_dossier = form.cleaned_data['numero_dossier']
@@ -588,20 +1323,20 @@ def inscription_view(request):
                             # Vérifier si le numéro existe déjà
                             counter = 1
                             original_numero = numero_dossier
-                            while Patient.objects.filter(numero_dossier=numero_dossier).exists():
+                            while PatientNew.objects.filter(numero_securite_sociale=numero_dossier).exists():
                                 numero_dossier = f"{original_numero}_{counter}"
                                 counter += 1
                         else:
                             # Générer un numéro automatique si aucun n'est fourni
                             import random
                             numero_dossier = f"P{random.randint(1000, 9999)}"
-                            while Patient.objects.filter(numero_dossier=numero_dossier).exists():
+                            while PatientNew.objects.filter(numero_securite_sociale=numero_dossier).exists():
                                 numero_dossier = f"P{random.randint(1000, 9999)}"
                         
-                        Patient.objects.create(
+                        PatientNew.objects.create(
                             utilisateur=utilisateur,
                             date_naissance=form.cleaned_data['date_naissance'],
-                            numero_dossier=numero_dossier
+                            numero_securite_sociale=numero_dossier  # Utiliser numero_dossier comme numero_securite_sociale temporairement
                         )
                     
                     # Nettoyer la session
@@ -609,6 +1344,8 @@ def inscription_view(request):
                     del request.session['licence_ip']
                     del request.session['licence_user_agent']
                     messages.success(request, f'Inscription réussie ! Votre compte a été créé et est en attente de validation par un administrateur.')
+                    # Marquer ce message comme autorisé pour la page d'accueil
+                    request.session['inscription_success_message'] = True
                     return redirect('home')
                 else:
                     # Si Keycloak échoue, supprimer l'utilisateur Django
@@ -678,40 +1415,40 @@ def create_keycloak_user_with_role(utilisateur, role, password):
             # L'utilisateur n'existe pas, on le crée
             logger.info(f"Création de l'utilisateur {utilisateur.email} dans Keycloak...")
             
-            user_data = {
-                "username": utilisateur.email,
-                "email": utilisateur.email,
-                "firstName": utilisateur.prenom,
-                "lastName": utilisateur.nom,
-                "enabled": True,
-                "emailVerified": True,
-                "attributes": {
-                    "keycloak_id": [str(utilisateur.keycloak_id)],
-                    "role": [role]
-                }
+        user_data = {
+            "username": utilisateur.email,
+            "email": utilisateur.email,
+            "firstName": utilisateur.prenom,
+            "lastName": utilisateur.nom,
+            "enabled": True,
+            "emailVerified": True,
+            "attributes": {
+                "keycloak_id": [str(utilisateur.keycloak_id)],
+                "role": [role]
             }
+        }
                 
-            url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users"
-            response = requests.post(url, json=user_data, headers=headers, timeout=10)
+        url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users"
+        response = requests.post(url, json=user_data, headers=headers, timeout=10)
                 
-            if response.status_code != 201:
-                logger.error(f"Erreur création Keycloak: {response.status_code} - {response.text}")
-                return False
+        if response.status_code != 201:
+            logger.error(f"Erreur création Keycloak: {response.status_code} - {response.text}")
+            return False
 
-            # Récupérer l'ID de l'utilisateur créé
-            search_resp = requests.get(search_url, headers=headers)
-            if search_resp.status_code != 200 or not search_resp.json():
-                logger.error("Utilisateur créé mais impossible de le retrouver pour l'affectation du mot de passe/groupe.")
-                return False
-            user_id = search_resp.json()[0]['id']
+        # Récupérer l'ID de l'utilisateur créé
+        search_resp = requests.get(search_url, headers=headers)
+        if search_resp.status_code != 200 or not search_resp.json():
+            logger.error("Utilisateur créé mais impossible de le retrouver pour l'affectation du mot de passe/groupe.")
+            return False
+        user_id = search_resp.json()[0]['id']
 
-            logger.info(f"Utilisateur {utilisateur.email} créé dans Keycloak")
+        logger.info(f"Utilisateur {utilisateur.email} créé dans Keycloak")
 
         # Définir le mot de passe fourni (pour les utilisateurs nouveaux et existants)
         password_payload = {
             "type": "password",
             "value": password,
-            "temporary": False  # L'utilisateur peut utiliser ce mot de passe directement
+            "temporary": True  # L'utilisateur devra changer son mot de passe à la première connexion
         }
         pwd_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/reset-password"
         pwd_resp = requests.put(pwd_url, json=password_payload, headers=headers)
@@ -755,7 +1492,7 @@ def create_keycloak_user_with_role(utilisateur, role, password):
                         # Ajouter l'utilisateur au groupe
                         add_group_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/groups/{group_id}"
                         add_group_resp = requests.put(add_group_url, headers=headers)
-                        
+
                         if add_group_resp.status_code in (204, 200):
                             logger.info(f"[SYNC] Utilisateur {utilisateur.email} ajouté au groupe {group_name} dans Keycloak")
                         else:
@@ -845,15 +1582,10 @@ def create_keycloak_user(utilisateur, role):
     return create_keycloak_user_with_role(utilisateur, role, "ChangeMe123!")
 
 def ajouter_utilisateur_dans_groupe_django(utilisateur):
-    group_mapping = {
-        'admin': 'administrateurs',
-        'medecin': 'medecins',
-        'patient': 'patients'
-    }
-    group_name = group_mapping.get(utilisateur.role_autorise)
-    if group_name:
-        group, _ = Group.objects.get_or_create(name=group_name)
-        utilisateur.groups.add(group)
+    """
+    Fonction legacy - utilise maintenant sync_django_groups
+    """
+    return sync_django_groups(utilisateur, utilisateur.role_autorise)
 
 @role_required('admin')
 def synchroniser_utilisateur_keycloak(request, user_id):
@@ -904,12 +1636,15 @@ def synchroniser_tous_utilisateurs_keycloak(request):
                     
                     sync_success = create_keycloak_user_with_role(utilisateur, utilisateur.role_autorise, temp_password)
                     
-                    if sync_success:
+                    # Synchroniser aussi les groupes Django
+                    django_sync_success = sync_django_groups(utilisateur, utilisateur.role_autorise)
+                    
+                    if sync_success and django_sync_success:
                         succes_count += 1
-                        logger.info(f"Utilisateur {utilisateur.email} synchronisé avec Keycloak")
+                        logger.info(f"Utilisateur {utilisateur.email} synchronisé avec Keycloak et groupes Django")
                     else:
                         echec_count += 1
-                        logger.error(f"Échec de la synchronisation pour {utilisateur.email}")
+                        logger.error(f"Échec de la synchronisation pour {utilisateur.email} (Keycloak: {sync_success}, Django: {django_sync_success})")
                         
                 except Exception as e:
                     echec_count += 1
@@ -925,6 +1660,87 @@ def synchroniser_tous_utilisateurs_keycloak(request):
             messages.error(request, f"❌ Erreur lors de la synchronisation globale: {e}")
     
     return redirect('gestion_securite')
+
+@role_required('admin')
+def synchroniser_groupes_django_tous(request):
+    """Synchronise les groupes Django pour tous les utilisateurs ayant un rôle"""
+    if request.method == 'POST':
+        try:
+            utilisateurs = Utilisateur.objects.filter(role_autorise__isnull=False)
+            success_count = 0
+            error_count = 0
+            
+            for utilisateur in utilisateurs:
+                try:
+                    if sync_django_groups(utilisateur, utilisateur.role_autorise):
+                        success_count += 1
+                        logger.info(f"✅ Groupes Django synchronisés: {utilisateur.email}")
+                    else:
+                        error_count += 1
+                        logger.error(f"❌ Erreur groupes Django: {utilisateur.email}")
+                except Exception as e:
+                    error_count += 1
+                    logger.error(f"❌ Erreur pour {utilisateur.email}: {e}")
+            
+            if error_count == 0:
+                messages.success(request, f"✅ Groupes Django synchronisés pour {success_count} utilisateurs")
+            else:
+                messages.warning(request, f"⚠️ Groupes Django: {success_count} réussies, {error_count} erreurs")
+                
+        except Exception as e:
+            logger.error(f"Erreur lors de la synchronisation des groupes: {e}")
+            messages.error(request, f"❌ Erreur: {e}")
+    
+    return redirect('gestion_securite')
+
+@role_required('admin')
+def verifier_synchronisation_groupes(request):
+    """Vérifie l'état de synchronisation des groupes Django"""
+    if request.method == 'GET':
+        try:
+            utilisateurs = Utilisateur.objects.filter(role_autorise__isnull=False)
+            desynchronises = []
+            
+            for utilisateur in utilisateurs:
+                role = utilisateur.role_autorise
+                group_mapping = {
+                    'admin': 'administrateurs',
+                    'medecin': 'medecins',
+                    'patient': 'patients'
+                }
+                group_name = group_mapping.get(role, role)
+                
+                try:
+                    group = Group.objects.get(name=group_name)
+                    if not utilisateur.groups.filter(id=group.id).exists():
+                        desynchronises.append({
+                            'utilisateur': utilisateur.email,
+                            'role': role,
+                            'group_manquant': group_name
+                        })
+                except Group.DoesNotExist:
+                    desynchronises.append({
+                        'utilisateur': utilisateur.email,
+                        'role': role,
+                        'group_manquant': f"{group_name} (groupe n'existe pas)"
+                    })
+            
+            if desynchronises:
+                message = "❌ Utilisateurs désynchronisés:\n"
+                for item in desynchronises[:5]:  # Limiter l'affichage
+                    message += f"• {item['utilisateur']} -> {item['group_manquant']}\n"
+                if len(desynchronises) > 5:
+                    message += f"... et {len(desynchronises) - 5} autres"
+                messages.warning(request, message)
+            else:
+                messages.success(request, "✅ Tous les groupes Django sont synchronisés")
+                
+        except Exception as e:
+            logger.error(f"Erreur lors de la vérification: {e}")
+            messages.error(request, f"❌ Erreur: {e}")
+    
+    return redirect('gestion_securite')
+
 
 # Vues de test pour la sécurité
 @login_required
@@ -1144,36 +1960,50 @@ def create_user_view(request):
                 role_autorise = form.cleaned_data['role_autorise']
                 
                 if role_autorise == 'medecin':
-                    medecin = Medecin.objects.create(
+                    medecin = MedecinNew.objects.create(
                         utilisateur=user,
-                        specialite=form.cleaned_data['specialite'],
-                        numero_praticien=form.cleaned_data['numero_praticien']
+                        numero_ordre=form.cleaned_data.get('numero_praticien', 'NON_RENSEIGNE'),
                     )
+                    # Ajouter la spécialité si fournie
+                    specialite_nom = form.cleaned_data.get('specialite')
+                    if specialite_nom:
+                        try:
+                            from comptes.models import SpecialiteMedicale
+                            specialite, created = SpecialiteMedicale.objects.get_or_create(
+                                nom=specialite_nom.strip(),
+                                defaults={'description': f'Spécialité: {specialite_nom}'}
+                            )
+                            medecin.specialites.add(specialite)
+                        except Exception as e:
+                            logger.error(f"Erreur lors de l'ajout de la spécialité: {e}")
+                    
                     # Ajouter les UIDs RFID si fournis
                     if form.cleaned_data.get('rfid_uid'):
-                        medecin.rfid_uid = form.cleaned_data['rfid_uid']
+                        # Gérer les cartes RFID séparément
+                        pass
                     if form.cleaned_data.get('badge_bleu_uid'):
-                        medecin.badge_bleu_uid = form.cleaned_data['badge_bleu_uid']
-                    medecin.save()
+                        # Gérer les badges séparément
+                        pass
                     
                 elif role_autorise == 'patient':
-                    patient = Patient.objects.create(
+                    patient = PatientNew.objects.create(
                         utilisateur=user,
                         date_naissance=form.cleaned_data['date_naissance'],
-                        numero_dossier=form.cleaned_data['numero_dossier']
+                        numero_securite_sociale=form.cleaned_data.get('numero_dossier', '')  # Mapper numero_dossier vers numero_securite_sociale
                     )
-                    # Ajouter les UIDs RFID si fournis
+                    # Ajouter les UIDs RFID si fournis - les cartes RFID seront gérées séparément
                     if form.cleaned_data.get('rfid_uid'):
-                        patient.rfid_uid = form.cleaned_data['rfid_uid']
+                        # Gérer les cartes RFID séparément
+                        pass
                     if form.cleaned_data.get('badge_bleu_uid'):
-                        patient.badge_bleu_uid = form.cleaned_data['badge_bleu_uid']
+                        # Gérer les badges séparément
+                        pass
                     patient.save()
                     
                 elif role_autorise == 'admin':
-                    Administrateur.objects.create(
-                        utilisateur=user,
-                        niveau_acces=form.cleaned_data['niveau_acces']
-                    )
+                    # Les admins sont gérés par les groupes Django
+                    # Le niveau d'accès peut être stocké dans le profil utilisateur si nécessaire
+                    pass
                 
                 # Créer l'utilisateur dans Keycloak avec le rôle
                 try:
@@ -1610,22 +2440,208 @@ def rfid_wait_view(request):
 @login_required
 @staff_member_required
 def admin_stats(request):
-    # Récupération des stats de base
     from comptes.models import Utilisateur, Medecin, Patient, RendezVous
+    from django.db.models import Count, Q
+    from django.utils import timezone
+    from datetime import timedelta, datetime
+    from django.http import JsonResponse
+    import json
+    
+    # Récupération des stats de base
     users_count = Utilisateur.objects.count()
-    medecins_count = Medecin.objects.count()
-    patients_count = Patient.objects.count()
+    medecins_count = MedecinNew.objects.count()
+    patients_count = PatientNew.objects.count()
     rdv_count = RendezVous.objects.count()
+    
     # Activité récente
     recent_users = Utilisateur.objects.order_by('-date_creation')[:10]
-    recent_rdv = RendezVous.objects.order_by('-date_heure')[:10]
-    return render(request, 'dashboards/admin_stats.html', {
+    recent_rdv = RendezVous.objects.order_by('-date_rdv')[:10]
+    
+    # Données pour graphique évolution (12 derniers mois)
+    today = timezone.now()
+    months_data = []
+    evolution_users = []
+    evolution_rdv = []
+    
+    for i in range(12):
+        month_start = today.replace(day=1) - timedelta(days=30*i)
+        month_end = month_start.replace(day=28) + timedelta(days=4)
+        month_end = month_end - timedelta(days=month_end.day)
+        
+        users_month = Utilisateur.objects.filter(
+            date_creation__gte=month_start,
+            date_creation__lte=month_end
+        ).count()
+        
+        rdv_month = RendezVous.objects.filter(
+            date_rdv__gte=month_start,
+            date_rdv__lte=month_end
+        ).count()
+        
+        months_data.insert(0, month_start.strftime('%b'))
+        evolution_users.insert(0, users_month)
+        evolution_rdv.insert(0, rdv_month)
+    
+    # Données pour graphique répartition par rôle
+    admin_count = Utilisateur.objects.filter(role_autorise='admin').count()
+    medecin_count_role = Utilisateur.objects.filter(role_autorise='medecin').count()
+    patient_count_role = Utilisateur.objects.filter(role_autorise='patient').count()
+    
+    # Si les comptes par rôle sont vides, utiliser les profils spécialisés
+    if medecin_count_role == 0:
+        medecin_count_role = medecins_count
+    if patient_count_role == 0:
+        patient_count_role = patients_count
+    
+    repartition_data = [medecin_count_role, patient_count_role, admin_count]
+    repartition_labels = ['Médecins', 'Patients', 'Admins']
+    
+    # Top médecins par nombre de rendez-vous
+    top_medecins = RendezVous.objects.values('medecin__utilisateur__nom', 'medecin__utilisateur__prenom') \
+                    .annotate(rdv_count=Count('id')) \
+                    .order_by('-rdv_count')[:5]
+    
+    top_medecins_labels = [f"Dr. {m['medecin__utilisateur__prenom']} {m['medecin__utilisateur__nom']}" for m in top_medecins]
+    top_medecins_data = [m['rdv_count'] for m in top_medecins]
+    
+    # Si c'est une requête AJAX, retourner les données JSON
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'users_count': users_count,
+            'medecins_count': medecins_count,
+            'patients_count': patients_count,
+            'rdv_count': rdv_count,
+            'evolution_users': evolution_users,
+            'evolution_rdv': evolution_rdv,
+            'repartition_data': repartition_data,
+            'top_medecins_labels': top_medecins_labels,
+            'top_medecins_data': top_medecins_data,
+        })
+    
+    context = {
         'users_count': users_count,
         'medecins_count': medecins_count,
         'patients_count': patients_count,
         'rdv_count': rdv_count,
         'recent_users': recent_users,
         'recent_rdv': recent_rdv,
-    })
+        # Données pour les graphiques
+        'evolution_months': json.dumps(months_data),
+        'evolution_users': json.dumps(evolution_users),
+        'evolution_rdv': json.dumps(evolution_rdv),
+        'repartition_labels': json.dumps(repartition_labels),
+        'repartition_data': json.dumps(repartition_data),
+        'top_medecins_labels': json.dumps(top_medecins_labels),
+        'top_medecins_data': json.dumps(top_medecins_data),
+    }
+    
+    return render(request, 'dashboards/admin_stats.html', context)
+
+
+@login_required 
+def https_status_view(request):
+    """
+    Vue pour afficher le statut de sécurité HTTPS en temps réel
+    """
+    # Informations sur la connexion actuelle
+    connection_info = {
+        'is_secure': request.is_secure(),
+        'protocol': request.META.get('SERVER_PROTOCOL', 'HTTP/1.1'),
+        'host': request.get_host(),
+        'remote_addr': request.META.get('REMOTE_ADDR', 'Inconnu'),
+        'user_agent': request.META.get('HTTP_USER_AGENT', 'Inconnu'),
+        'url_complete': request.build_absolute_uri(),
+    }
+    
+    # Vérification des en-têtes de sécurité (simulation côté serveur)
+    security_headers = {
+        'hsts_enabled': True,  # Configuré dans settings
+        'csp_enabled': True,   # Configuré dans middleware
+        'x_frame_options': True,
+        'x_content_type_options': True,
+        'referrer_policy': True,
+    }
+    
+    # Statistiques des connexions sécurisées (dernières 24h)
+    from datetime import timedelta
+    from django.utils import timezone
+    
+    date_limite = timezone.now() - timedelta(hours=24)
+    
+    # Logs des connexions HTTPS vs HTTP
+    logs_stats = {
+        'total_connections': 0,
+        'https_connections': 0,
+        'http_attempts': 0,
+        'security_alerts': 0,
+    }
+    
+    try:
+        # Compter les alertes de sécurité liées aux tentatives HTTP
+        logs_stats['security_alerts'] = AlerteSecurite.objects.filter(
+            date_creation__gte=date_limite,
+            type_alerte='TENTATIVE_ACCES_NON_AUTORISE'
+        ).count()
+        
+        # Compter les connexions réussies
+        logs_stats['total_connections'] = HistoriqueAuthentification.objects.filter(
+            date_heure_acces__gte=date_limite,
+            succes=True
+        ).count()
+        
+    except Exception as e:
+        logger.error(f"Erreur lors du calcul des statistiques HTTPS: {e}")
+    
+    # Informations sur les certificats SSL (simulation)
+    ssl_info = {
+        'certificate_valid': True,
+        'certificate_issuer': 'KeurDoctor Self-Signed',
+        'certificate_expiry': 'Dans 365 jours',
+        'certificate_type': 'RSA 4096 bits',
+    }
+    
+    # Recommandations de sécurité
+    recommendations = []
+    
+    if not request.is_secure():
+        recommendations.append({
+            'level': 'danger',
+            'message': 'Votre connexion n\'est pas sécurisée. Passez en HTTPS immédiatement.',
+            'action': f'https://{request.get_host()}{request.get_full_path()}'
+        })
+    
+    if 'localhost' in request.get_host() or '127.0.0.1' in request.get_host():
+        recommendations.append({
+            'level': 'warning',
+            'message': 'Vous utilisez un certificat auto-signé. Pour la production, utilisez un certificat signé par une CA.',
+            'action': None
+        })
+    
+    if request.is_secure():
+        recommendations.append({
+            'level': 'success',
+            'message': 'Excellent ! Votre connexion est parfaitement sécurisée en HTTPS.',
+            'action': None
+        })
+    
+    context = {
+        'connection_info': connection_info,
+        'security_headers': security_headers,
+        'logs_stats': logs_stats,
+        'ssl_info': ssl_info,
+        'recommendations': recommendations,
+        'title': 'Statut de Sécurité HTTPS'
+    }
+    
+    # Logger l'accès à cette page de monitoring
+    AuditLog.log_action(
+        utilisateur=request.user,
+        type_action=AuditLog.TypeAction.LECTURE_DONNEES,
+        description="Consultation du statut de sécurité HTTPS",
+        request=request,
+        niveau_risque=AuditLog.NiveauRisque.FAIBLE
+    )
+    
+    return render(request, 'securite/https_status.html', context)
 
 

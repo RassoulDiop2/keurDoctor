@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} - KeurDoctor{% endblock %}
+
+{% block content %}
+<style>
+    .header-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+    }
+
+    .stats-card {
+        background: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+        transition: transform 0.3s ease;
+    }
+
+    .stats-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .rdv-card {
+        background: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid #007bff;
+    }
+
+    .status-badge {
+        font-size: 0.8rem;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+    }
+
+    .status-en-attente {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .status-confirme {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+
+    .status-termine {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .status-annule {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .filter-section {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+    }
+</style>
+
+<div class="header-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1><i class="fas fa-history me-3"></i>{{ title }}</h1>
+                <p class="mb-0">Consultez l'historique complet de vos rendez-vous médicaux</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <a href="{% url 'patient_dashboard' %}" class="btn btn-light">
+                    <i class="fas fa-arrow-left me-2"></i>Retour au dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Statistiques -->
+    <div class="row mb-4">
+        <div class="col-md-2">
+            <div class="stats-card text-center">
+                <div class="h3 text-primary mb-2">{{ stats.total }}</div>
+                <div class="small text-muted">Total</div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="stats-card text-center">
+                <div class="h3 text-warning mb-2">{{ stats.en_attente }}</div>
+                <div class="small text-muted">En attente</div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="stats-card text-center">
+                <div class="h3 text-info mb-2">{{ stats.confirme }}</div>
+                <div class="small text-muted">Confirmés</div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="stats-card text-center">
+                <div class="h3 text-success mb-2">{{ stats.termine }}</div>
+                <div class="small text-muted">Terminés</div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="stats-card text-center">
+                <div class="h3 text-danger mb-2">{{ stats.annule }}</div>
+                <div class="small text-muted">Annulés</div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <a href="{% url 'prendre_rdv' %}"
+                class="btn btn-primary h-100 d-flex align-items-center justify-content-center">
+                <i class="fas fa-plus me-2"></i>Nouveau RDV
+            </a>
+        </div>
+    </div>
+
+    <!-- Filtres -->
+    <div class="filter-section">
+        <h5><i class="fas fa-filter me-2"></i>Filtrer par statut</h5>
+        <div class="btn-group" role="group">
+            <a href="?statut=tous"
+                class="btn {% if statut_filtre == 'tous' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                Tous
+            </a>
+            <a href="?statut=EN_ATTENTE"
+                class="btn {% if statut_filtre == 'EN_ATTENTE' %}btn-warning{% else %}btn-outline-warning{% endif %}">
+                En attente
+            </a>
+            <a href="?statut=CONFIRME"
+                class="btn {% if statut_filtre == 'CONFIRME' %}btn-info{% else %}btn-outline-info{% endif %}">
+                Confirmés
+            </a>
+            <a href="?statut=TERMINE"
+                class="btn {% if statut_filtre == 'TERMINE' %}btn-success{% else %}btn-outline-success{% endif %}">
+                Terminés
+            </a>
+            <a href="?statut=ANNULE"
+                class="btn {% if statut_filtre == 'ANNULE' %}btn-danger{% else %}btn-outline-danger{% endif %}">
+                Annulés
+            </a>
+        </div>
+    </div>
+
+    <!-- Liste des rendez-vous -->
+    <div class="row">
+        <div class="col-12">
+            {% if rdv_page %}
+            {% for rdv in rdv_page %}
+            <div class="rdv-card">
+                <div class="row align-items-center">
+                    <div class="col-md-3">
+                        <h6 class="mb-1">
+                            <i class="fas fa-user-md me-2"></i>
+                            Dr. {{ rdv.medecin.utilisateur.prenom }} {{ rdv.medecin.utilisateur.nom }}
+                        </h6>
+                        {% if rdv.medecin.specialites.all %}
+                        <small class="text-muted">
+                            {{ rdv.medecin.specialites.first.nom }}
+                        </small>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-2">
+                        <div class="text-center">
+                            <div class="fw-bold">{{ rdv.date_rdv|date:"d/m/Y" }}</div>
+                            <small class="text-muted">{{ rdv.date_rdv|date:"H:i" }}</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        {% if rdv.motif %}
+                        <strong>Motif:</strong><br>
+                        <small>{{ rdv.motif|truncatechars:50 }}</small>
+                        {% else %}
+                        <em class="text-muted">Motif non spécifié</em>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-2">
+                        <span class="status-badge status-{{ rdv.statut|lower }}">
+                            {% if rdv.statut == 'EN_ATTENTE' %}
+                            <i class="fas fa-clock me-1"></i>En attente
+                            {% elif rdv.statut == 'CONFIRME' %}
+                            <i class="fas fa-check me-1"></i>Confirmé
+                            {% elif rdv.statut == 'TERMINE' %}
+                            <i class="fas fa-check-circle me-1"></i>Terminé
+                            {% elif rdv.statut == 'ANNULE' %}
+                            <i class="fas fa-times me-1"></i>Annulé
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="col-md-2">
+                        {% if rdv.statut == 'EN_ATTENTE' %}
+                        <button class="btn btn-sm btn-outline-danger" onclick="annulerRdv({{ rdv.id }})">
+                            <i class="fas fa-times me-1"></i>Annuler
+                        </button>
+                        {% elif rdv.statut == 'TERMINE' %}
+                        <a href="{% url 'mon_dossier_medical' %}" class="btn btn-sm btn-outline-info">
+                            <i class="fas fa-file-medical me-1"></i>Dossier
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Pagination -->
+            {% if rdv_page.has_other_pages %}
+            <nav aria-label="Navigation des pages">
+                <ul class="pagination justify-content-center">
+                    {% if rdv_page.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link"
+                            href="?page={{ rdv_page.previous_page_number }}{% if statut_filtre != 'tous' %}&statut={{ statut_filtre }}{% endif %}">
+                            Précédent
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in rdv_page.paginator.page_range %}
+                    {% if rdv_page.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                    {% elif num > rdv_page.number|add:'-3' and num < rdv_page.number|add:'3' %} <li class="page-item">
+                        <a class="page-link"
+                            href="?page={{ num }}{% if statut_filtre != 'tous' %}&statut={{ statut_filtre }}{% endif %}">
+                            {{ num }}
+                        </a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if rdv_page.has_next %}
+                        <li class="page-item">
+                            <a class="page-link"
+                                href="?page={{ rdv_page.next_page_number }}{% if statut_filtre != 'tous' %}&statut={{ statut_filtre }}{% endif %}">
+                                Suivant
+                            </a>
+                        </li>
+                        {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">Aucun rendez-vous trouvé</h4>
+                <p class="text-muted">Vous n'avez pas encore de rendez-vous avec ce filtre.</p>
+                <a href="{% url 'prendre_rdv' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Prendre votre premier rendez-vous
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function annulerRdv(rdvId) {
+        if (confirm('Êtes-vous sûr de vouloir annuler ce rendez-vous ?')) {
+            // Implémenter la logique d'annulation
+            fetch(`/patient/annuler-rdv/${rdvId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Erreur lors de l\'annulation du rendez-vous');
+                    }
+                });
+        }
+    }
+</script>
+{% endblock %}

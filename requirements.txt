@@ -5,3 +5,15 @@ cryptography==45.0.4
 django-axes==6.3.0
 django-security==0.20.0
 django-auditlog==2.4.0
+
+# Dépendances HTTPS et sécurité avancée
+django-sslserver==0.22
+pyOpenSSL==23.3.0
+django-redis==5.4.0
+django-prometheus==2.3.1
+gunicorn[gevent]==21.2.0
+
+# Outils de sécurité et monitoring
+requests[security]==2.31.0
+python-dotenv==1.0.0
+whitenoise==6.6.0

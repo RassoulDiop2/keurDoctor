@@ -26,12 +26,34 @@ urlpatterns = [
     path('patient/', views.patient_dashboard, name='patient_dashboard'),
     path('compte/', views.default_dashboard, name='default_dashboard'),
 
+    # Nouvelles fonctionnalités médecin
+    path('medecin/patients/', views.liste_patients_medecin, name='liste_patients_medecin'),
+    path('medecin/calendrier/', views.calendrier_medecin, name='calendrier_medecin'),
+    path('medecin/creer-dossier/', views.creer_dossier_medical, name='creer_dossier_medical'),
+    
+    # Actions sur les rendez-vous médecin
+    path('medecin/rdv/<int:rdv_id>/confirmer/', views.confirmer_rdv_medecin, name='confirmer_rdv_medecin'),
+    path('medecin/rdv/<int:rdv_id>/annuler/', views.annuler_rdv_medecin, name='annuler_rdv_medecin'),
+    path('medecin/rdv/<int:rdv_id>/terminer/', views.terminer_rdv_medecin, name='terminer_rdv_medecin'),
+    
+    # Nouvelles fonctionnalités patient
+    path('patient/prendre-rdv/', views.prendre_rdv, name='prendre_rdv'),
+    path('patient/mon-dossier/', views.mon_dossier_medical, name='mon_dossier_medical'),
+    path('patient/historique-rdv/', views.historique_rdv_patient, name='historique_rdv_patient'),
+    path('patient/annuler-rdv/<int:rdv_id>/', views.annuler_rdv_patient, name='annuler_rdv_patient'),
+    
+    # Nouvelles fonctionnalités admin
+    path('administration/statistiques-detaillees/', views.statistiques_detaillees, name='statistiques_detaillees'),
+
     # Actions rapides admin métier
     path('administration/debloquer/<int:user_id>/', views.debloquer_utilisateur, name='debloquer_utilisateur'),
     path('administration/alerte-lue/<int:alerte_id>/', views.marquer_alerte_lue, name='marquer_alerte_lue'),
     path('administration/definir-role/<int:user_id>/', views.definir_role_utilisateur, name='definir_role_utilisateur'),
     path('administration/sync-keycloak/<int:user_id>/', views.synchroniser_utilisateur_keycloak, name='synchroniser_utilisateur_keycloak'),
     path('administration/sync-keycloak-all/', views.synchroniser_tous_utilisateurs_keycloak, name='synchroniser_tous_utilisateurs_keycloak'),
+    path('administration/sync-groupes-django/', views.synchroniser_groupes_django_tous, name='synchroniser_groupes_django_tous'),
+    path('administration/verifier-groupes/', views.verifier_synchronisation_groupes, name='verifier_synchronisation_groupes'),
+    path('administration/statistiques/', views.admin_stats, name='admin_stats'),
 
     # Profil utilisateur
     path('profil/', views.profile_view, name='profile'),
@@ -68,9 +90,11 @@ urlpatterns = [
     # Méthodes d'authentification
     path('authentification/methodes/', views.methodes_authentification, name='methodes_authentification'),
 
+    # Sécurité HTTPS
+    path('administration/securite/https/', views.https_status_view, name='https_status'),
+
     # Statistiques admin
     path('administration/statistiques/', views.admin_stats, name='admin_stats'),
-
 
 ]
 urlpatterns += [

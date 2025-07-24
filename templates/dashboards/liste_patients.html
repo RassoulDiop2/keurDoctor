@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}Mes Patients - KeurDoctor{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-users"></i> Mes Patients</h2>
+                <a href="{% url 'medecin_dashboard' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Retour au dashboard
+                </a>
+            </div>
+
+            <!-- Statistiques rapides -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ patients.count }}</h3>
+                            <p class="mb-0">Patients suivis</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ rdv_cette_semaine }}</h3>
+                            <p class="mb-0">RDV cette semaine</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ rdv_ce_mois }}</h3>
+                            <p class="mb-0">RDV ce mois</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ rdv_en_attente }}</h3>
+                            <p class="mb-0">RDV en attente</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Liste des patients -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-list"></i> Liste des patients</h5>
+                        <a href="{% url 'creer_dossier_medical' %}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Nouveau dossier
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if patients %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>Email</th>
+                                    <th>Dernière visite</th>
+                                    <th>Prochain RDV</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for patient in patients %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div
+                                                class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                                {{ patient.utilisateur.prenom|first }}{{ patient.utilisateur.nom|first
+                                                }}
+                                            </div>
+                                            <div>
+                                                <strong>{{ patient.utilisateur.prenom }} {{ patient.utilisateur.nom
+                                                    }}</strong><br>
+                                                <small class="text-muted">
+                                                    {% if patient.date_naissance %}
+                                                    {{ patient.date_naissance|timesince }}
+                                                    {% else %}
+                                                    Âge non renseigné
+                                                    {% endif %}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ patient.utilisateur.email }}</td>
+                                    <td>
+                                        {% if patient.derniere_visite %}
+                                        {{ patient.derniere_visite|date:"d/m/Y" }}
+                                        {% else %}
+                                        <span class="text-muted">Aucune visite</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if patient.prochain_rdv %}
+                                        <span class="badge bg-success">{{ patient.prochain_rdv|date:"d/m/Y H:i"
+                                            }}</span>
+                                        {% else %}
+                                        <span class="text-muted">Aucun RDV</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if patient.prochain_rdv %}
+                                        <span class="badge bg-success">Actif</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">Inactif</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                                onclick="voirDossier({{ patient.id }})">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-success"
+                                                onclick="nouveauRdv({{ patient.id }})">
+                                                <i class="fas fa-calendar-plus"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-info"
+                                                onclick="contactPatient({{ patient.id }})">
+                                                <i class="fas fa-envelope"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                        <h5>Aucun patient</h5>
+                        <p class="text-muted">Les patients avec qui vous avez des rendez-vous apparaîtront ici.</p>
+                        <a href="{% url 'creer_dossier_medical' %}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Créer un nouveau dossier
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour les détails du patient -->
+<div class="modal fade" id="patientModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Dossier Patient</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Contenu chargé dynamiquement -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" onclick="modifierDossier()">Modifier</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .avatar-sm {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+</style>
+
+<script>
+    function voirDossier(patientId) {
+        // Charger les détails du patient via AJAX
+        fetch(`/medecin/patient/${patientId}/dossier/`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('modalBody').innerHTML = data.html;
+                    new bootstrap.Modal(document.getElementById('patientModal')).show();
+                } else {
+                    alert('Erreur lors du chargement du dossier');
+                }
+            });
+    }
+
+    function nouveauRdv(patientId) {
+        // Rediriger vers la page de création de RDV avec le patient sélectionné
+        window.location.href = `/medecin/nouveau-rdv/${patientId}/`;
+    }
+
+    function contactPatient(patientId) {
+        // Ouvrir la modal de contact
+        alert('Fonction de contact en développement');
+    }
+
+    function modifierDossier() {
+        // Rediriger vers la page de modification
+        alert('Fonction de modification en développement');
+    }
+</script>
+{% endblock %}

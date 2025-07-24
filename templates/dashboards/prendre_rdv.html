@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block title %}Prendre Rendez-vous - KeurDoctor{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-calendar-plus"></i> Prendre un Rendez-vous</h2>
+                <a href="{% url 'patient_dashboard' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Retour au dashboard
+                </a>
+            </div>
+
+            <div class="row">
+                <!-- Formulaire de prise de RDV -->
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Nouveau rendez-vous</h5>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" action="{% url 'prendre_rdv' %}">
+                                {% csrf_token %}
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="medecin" class="form-label">Médecin *</label>
+                                        <select class="form-select" id="medecin_id" name="medecin_id" required>
+                                            <option value="">Choisir un médecin</option>
+                                            {% for medecin in medecins %}
+                                            <option value="{{ medecin.id }}">
+                                                Dr {{ medecin.utilisateur.prenom }} {{ medecin.utilisateur.nom }}
+                                                {% if medecin.specialites.all %}
+                                                - {{ medecin.specialites.first.nom }}
+                                                {% else %}
+                                                - Médecine générale
+                                                {% endif %}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="date_rdv" class="form-label">Date souhaitée *</label>
+                                        <input type="date" class="form-control" id="date_rdv" name="date_rdv"
+                                            min="{{ date_min }}" max="{{ date_max }}" required>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="heure_rdv" class="form-label">Heure souhaitée *</label>
+                                        <select class="form-select" id="heure_rdv" name="heure_rdv" required>
+                                            <option value="">Choisir une heure</option>
+                                            <option value="08:00">08:00</option>
+                                            <option value="08:30">08:30</option>
+                                            <option value="09:00">09:00</option>
+                                            <option value="09:30">09:30</option>
+                                            <option value="10:00">10:00</option>
+                                            <option value="10:30">10:30</option>
+                                            <option value="11:00">11:00</option>
+                                            <option value="11:30">11:30</option>
+                                            <option value="14:00">14:00</option>
+                                            <option value="14:30">14:30</option>
+                                            <option value="15:00">15:00</option>
+                                            <option value="15:30">15:30</option>
+                                            <option value="16:00">16:00</option>
+                                            <option value="16:30">16:30</option>
+                                            <option value="17:00">17:00</option>
+                                            <option value="17:30">17:30</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="motif" class="form-label">Motif de consultation</label>
+                                        <select class="form-select" id="motif" name="motif">
+                                            <option value="">Motif général</option>
+                                            <option value="Consultation générale">Consultation générale</option>
+                                            <option value="Contrôle médical">Contrôle médical</option>
+                                            <option value="Vaccination">Vaccination</option>
+                                            <option value="Bilan de santé">Bilan de santé</option>
+                                            <option value="Suivi chronique">Suivi maladie chronique</option>
+                                            <option value="Urgence">Urgence</option>
+                                            <option value="Autre">Autre</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description des symptômes
+                                        (optionnel)</label>
+                                    <textarea class="form-control" id="description" name="description" rows="3"
+                                        placeholder="Décrivez brièvement vos symptômes ou la raison de votre visite..."></textarea>
+                                </div>
+
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="urgence" name="urgence">
+                                    <label class="form-check-label" for="urgence">
+                                        Marquer comme urgent
+                                    </label>
+                                </div>
+
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-calendar-check"></i> Demander le rendez-vous
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Informations et historique -->
+                <div class="col-md-4">
+                    <!-- Mes prochains RDV -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h6 class="mb-0">Mes prochains rendez-vous</h6>
+                        </div>
+                        <div class="card-body">
+                            {% if mes_rdv_futurs %}
+                            {% for rdv in mes_rdv_futurs %}
+                            <div class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded">
+                                <div>
+                                    <small class="text-muted">{{ rdv.date_rdv|date:"d/m/Y" }}</small><br>
+                                    <strong>{{ rdv.date_rdv|time:"H:i" }}</strong><br>
+                                    <small>Dr {{ rdv.medecin.utilisateur.prenom }} {{ rdv.medecin.utilisateur.nom
+                                        }}</small>
+                                </div>
+                                <span class="badge badge-{{ rdv.statut|lower }}">{{ rdv.get_statut_display }}</span>
+                            </div>
+                            {% endfor %}
+                            {% else %}
+                            <p class="text-muted"><small>Aucun rendez-vous programmé</small></p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Informations pratiques -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">Informations pratiques</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-info">
+                                <small>
+                                    <i class="fas fa-info-circle"></i>
+                                    <strong>Important :</strong><br>
+                                    • Les rendez-vous sont confirmés par le médecin<br>
+                                    • Vous recevrez une notification de confirmation<br>
+                                    • En cas d'urgence, contactez directement le cabinet
+                                </small>
+                            </div>
+
+                            <h6>Médecins disponibles :</h6>
+                            {% for medecin in medecins %}
+                            <div class="mb-2">
+                                <strong>Dr {{ medecin.utilisateur.prenom }} {{ medecin.utilisateur.nom }}</strong><br>
+                                <small class="text-muted">
+                                    {% if medecin.specialites.all %}
+                                    {{ medecin.specialites.first.nom }}
+                                    {% else %}
+                                    Médecine générale
+                                    {% endif %}
+                                </small><br>
+                                {% if medecin.telephone %}
+                                <small><i class="fas fa-phone"></i> {{ medecin.telephone }}</small>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages d'alerte -->
+            {% if messages %}
+            <div class="mt-3">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .badge-programme {
+        background-color: #17a2b8;
+    }
+
+    .badge-confirme {
+        background-color: #28a745;
+    }
+
+    .badge-annule {
+        background-color: #dc3545;
+    }
+
+    .badge-termine {
+        background-color: #6c757d;
+    }
+</style>
+
+<script>
+    // Auto-définir la date minimum à aujourd'hui
+    document.addEventListener('DOMContentLoaded', function () {
+        const dateInput = document.getElementById('date');
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+
+        // Logique pour filtrer les heures disponibles selon le médecin choisi
+        // (à implémenter avec AJAX si nécessaire)
+    });
+</script>
+{% endblock %}

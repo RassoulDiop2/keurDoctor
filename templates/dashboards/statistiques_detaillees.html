@@ -1,0 +1,385 @@
+{% extends "base.html" %}
+
+{% block title %}Statistiques Détaillées - KeurDoctor{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-chart-bar"></i> Statistiques Détaillées</h2>
+                <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Retour au dashboard
+                </a>
+            </div>
+
+            <!-- Métriques générales -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h3>{{ stats.total_utilisateurs }}</h3>
+                                    <p class="mb-0">Utilisateurs totaux</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-users fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h3>{{ stats.total_medecins }}</h3>
+                                    <p class="mb-0">Médecins</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-user-md fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h3>{{ stats.total_patients }}</h3>
+                                    <p class="mb-0">Patients</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-user-injured fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h3>{{ stats.total_rdv }}</h3>
+                                    <p class="mb-0">Rendez-vous</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-calendar-alt fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graphiques et analyses -->
+            <div class="row mb-4">
+                <!-- Évolution des inscriptions -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Évolution des inscriptions (30 derniers jours)</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="inscriptionsChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Répartition par rôle -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Répartition des utilisateurs</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="rolesChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistiques détaillées par catégorie -->
+            <div class="row mb-4">
+                <!-- Activité des médecins -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Médecins les plus actifs</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if medecins_actifs %}
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Médecin</th>
+                                            <th>Spécialité</th>
+                                            <th>RDV ce mois</th>
+                                            <th>Patients</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for medecin in medecins_actifs %}
+                                        <tr>
+                                            <td>Dr {{ medecin.user.get_full_name|default:medecin.user.username }}</td>
+                                            <td>{{ medecin.specialite|default:"Généraliste" }}</td>
+                                            <td><span class="badge bg-primary">{{ medecin.rdv_ce_mois }}</span></td>
+                                            <td><span class="badge bg-success">{{ medecin.nombre_patients }}</span></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <p class="text-muted">Aucune donnée d'activité disponible</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistiques des rendez-vous -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Rendez-vous par statut</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-6 mb-3">
+                                    <h4 class="text-info">{{ stats.rdv_programmes }}</h4>
+                                    <p class="mb-0">Programmés</p>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <h4 class="text-success">{{ stats.rdv_confirmes }}</h4>
+                                    <p class="mb-0">Confirmés</p>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <h4 class="text-secondary">{{ stats.rdv_termines }}</h4>
+                                    <p class="mb-0">Terminés</p>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <h4 class="text-danger">{{ stats.rdv_annules }}</h4>
+                                    <p class="mb-0">Annulés</p>
+                                </div>
+                            </div>
+                            <canvas id="rdvStatusChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tableaux de données -->
+            <div class="row mb-4">
+                <!-- Utilisateurs récents -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Dernières inscriptions</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if utilisateurs_recents %}
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Utilisateur</th>
+                                            <th>Rôle</th>
+                                            <th>Date</th>
+                                            <th>Statut</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for user in utilisateurs_recents %}
+                                        <tr>
+                                            <td>{{ user.get_full_name|default:user.username }}</td>
+                                            <td>
+                                                {% if user.groups.all %}
+                                                {% for group in user.groups.all %}
+                                                <span class="badge bg-secondary">{{ group.name }}</span>
+                                                {% endfor %}
+                                                {% else %}
+                                                <span class="badge bg-warning">Aucun rôle</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ user.date_joined|date:"d/m/Y" }}</td>
+                                            <td>
+                                                {% if user.is_active %}
+                                                <span class="badge bg-success">Actif</span>
+                                                {% else %}
+                                                <span class="badge bg-danger">Inactif</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <p class="text-muted">Aucun utilisateur récent</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alertes de sécurité -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Alertes de sécurité récentes</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if alertes_recentes %}
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Type</th>
+                                            <th>Utilisateur</th>
+                                            <th>Date</th>
+                                            <th>Statut</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for alerte in alertes_recentes %}
+                                        <tr>
+                                            <td>
+                                                <span class="badge bg-warning">{{ alerte.get_type_alerte_display
+                                                    }}</span>
+                                            </td>
+                                            <td>{{ alerte.utilisateur.username }}</td>
+                                            <td>{{ alerte.date_creation|date:"d/m/Y H:i" }}</td>
+                                            <td>
+                                                {% if alerte.resolu %}
+                                                <span class="badge bg-success">Résolu</span>
+                                                {% else %}
+                                                <span class="badge bg-danger">En cours</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <p class="text-muted">Aucune alerte récente</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Métriques de performance -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Métriques de performance système</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 text-center">
+                                    <h4 class="text-primary">{{ stats.temps_reponse_moyen|default:"N/A" }}ms</h4>
+                                    <p class="mb-0">Temps de réponse moyen</p>
+                                </div>
+                                <div class="col-md-3 text-center">
+                                    <h4 class="text-success">{{ stats.taux_disponibilite|default:"99.9" }}%</h4>
+                                    <p class="mb-0">Taux de disponibilité</p>
+                                </div>
+                                <div class="col-md-3 text-center">
+                                    <h4 class="text-info">{{ stats.connexions_actives|default:"0" }}</h4>
+                                    <p class="mb-0">Connexions actives</p>
+                                </div>
+                                <div class="col-md-3 text-center">
+                                    <h4 class="text-warning">{{ stats.espace_stockage|default:"N/A" }}GB</h4>
+                                    <p class="mb-0">Espace utilisé</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script pour les graphiques -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Graphique des inscriptions
+    const ctxInscriptions = document.getElementById('inscriptionsChart').getContext('2d');
+    new Chart(ctxInscriptions, {
+        type: 'line',
+        data: {
+            labels: {{ inscriptions_labels| safe }},
+        datasets: [{
+            label: 'Inscriptions',
+            data: {{ inscriptions_data| safe }},
+        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        tension: 0.1
+        }]
+    },
+        options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+    // Graphique répartition par rôle
+    const ctxRoles = document.getElementById('rolesChart').getContext('2d');
+    new Chart(ctxRoles, {
+        type: 'doughnut',
+        data: {
+            labels: ['Médecins', 'Patients', 'Administrateurs'],
+            datasets: [{
+                data: [{{ stats.total_medecins }}, {{ stats.total_patients }}, {{ stats.total_admins |default: 1 }}],
+        backgroundColor: [
+        'rgba(54, 162, 235, 0.8)',
+        'rgba(255, 99, 132, 0.8)',
+        'rgba(255, 205, 86, 0.8)'
+    ]
+        }]
+    },
+        options: {
+        responsive: true
+    }
+});
+
+    // Graphique statut des RDV
+    const ctxRdvStatus = document.getElementById('rdvStatusChart').getContext('2d');
+    new Chart(ctxRdvStatus, {
+        type: 'bar',
+        data: {
+            labels: ['Programmés', 'Confirmés', 'Terminés', 'Annulés'],
+            datasets: [{
+                label: 'Nombre de RDV',
+                data: [{{ stats.rdv_programmes }}, {{ stats.rdv_confirmes }}, {{ stats.rdv_termines }}, {{ stats.rdv_annules }}],
+        backgroundColor: [
+        'rgba(23, 162, 184, 0.8)',
+        'rgba(40, 167, 69, 0.8)',
+        'rgba(108, 117, 125, 0.8)',
+        'rgba(220, 53, 69, 0.8)'
+    ]
+        }]
+    },
+        options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

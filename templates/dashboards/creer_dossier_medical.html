@@ -1,0 +1,325 @@
+{% extends "base.html" %}
+
+{% block title %}Créer/Modifier Dossier Médical - KeurDoctor{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-file-medical-alt"></i>
+                    {% if dossier %}Modifier{% else %}Créer{% endif %} Dossier Médical</h2>
+                <a href="{% url 'medecin_dashboard' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Retour au dashboard
+                </a>
+            </div>
+
+            <div class="row">
+                <!-- Informations patient -->
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Patient</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-user-circle fa-3x text-muted"></i>
+                            </div>
+                            <h5 class="text-center">{{ patient.user.get_full_name|default:patient.user.username }}</h5>
+
+                            <div class="patient-info">
+                                {% if patient.date_naissance %}
+                                <p><strong>Âge:</strong> {{ patient.age }} ans</p>
+                                <p><strong>Date de naissance:</strong> {{ patient.date_naissance|date:"d/m/Y" }}</p>
+                                {% endif %}
+
+                                <p><strong>Email:</strong> {{ patient.user.email|default:"Non renseigné" }}</p>
+                                <p><strong>Téléphone:</strong> {{ patient.telephone|default:"Non renseigné" }}</p>
+
+                                {% if patient.groupe_sanguin %}
+                                <p><strong>Groupe sanguin:</strong>
+                                    <span class="badge bg-danger">{{ patient.groupe_sanguin }}</span>
+                                </p>
+                                {% endif %}
+                            </div>
+
+                            <!-- Alertes importantes -->
+                            {% if patient.allergies %}
+                            <div class="alert alert-danger py-2">
+                                <strong><i class="fas fa-exclamation-triangle"></i> Allergies:</strong><br>
+                                {{ patient.allergies }}
+                            </div>
+                            {% endif %}
+
+                            {% if patient.antecedents_medicaux %}
+                            <div class="alert alert-warning py-2">
+                                <strong><i class="fas fa-history"></i> Antécédents:</strong><br>
+                                {{ patient.antecedents_medicaux }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Historique récent -->
+                    {% if dossiers_precedents %}
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">Historique récent</h6>
+                        </div>
+                        <div class="card-body">
+                            {% for dossier_prec in dossiers_precedents %}
+                            <div class="mb-2 p-2 bg-light rounded">
+                                <small class="text-muted">{{ dossier_prec.date_creation|date:"d/m/Y" }}</small><br>
+                                <strong>{{ dossier_prec.motif_consultation|default:"Consultation" }}</strong><br>
+                                {% if dossier_prec.diagnostic %}
+                                <small class="text-primary">{{ dossier_prec.diagnostic|truncatechars:50 }}</small>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Formulaire dossier médical -->
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Dossier médical</h5>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" action="{% url 'creer_dossier_medical' %}">
+                                {% csrf_token %}
+                                {% if patient %}
+                                <input type="hidden" name="patient_id" value="{{ patient.id }}">
+                                {% endif %}
+                                {% if dossier %}
+                                <input type="hidden" name="dossier_id" value="{{ dossier.id }}">
+                                {% endif %}
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="motif_consultation" class="form-label">Motif de consultation
+                                            *</label>
+                                        <input type="text" class="form-control" id="motif_consultation"
+                                            name="motif_consultation"
+                                            value="{{ dossier.motif_consultation|default:'' }}" required
+                                            placeholder="Ex: Douleur abdominale, Contrôle...">
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="date_consultation" class="form-label">Date de consultation</label>
+                                        <input type="date" class="form-control" id="date_consultation"
+                                            name="date_consultation"
+                                            value="{{ dossier.date_creation|date:'Y-m-d'|default:today }}">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="symptomes" class="form-label">Symptômes</label>
+                                    <textarea class="form-control" id="symptomes" name="symptomes" rows="3"
+                                        placeholder="Décrivez les symptômes observés ou rapportés par le patient...">{{ dossier.symptomes|default:'' }}</textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="examen_clinique" class="form-label">Examen clinique</label>
+                                    <textarea class="form-control" id="examen_clinique" name="examen_clinique" rows="4"
+                                        placeholder="Résultats de l'examen physique, signes vitaux, observations...">{{ dossier.examen_clinique|default:'' }}</textarea>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="diagnostic" class="form-label">Diagnostic *</label>
+                                        <textarea class="form-control" id="diagnostic" name="diagnostic" rows="3"
+                                            required
+                                            placeholder="Diagnostic principal et/ou différentiel...">{{ dossier.diagnostic|default:'' }}</textarea>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="traitement" class="form-label">Traitement prescrit</label>
+                                        <textarea class="form-control" id="traitement" name="traitement" rows="3"
+                                            placeholder="Médicaments, posologie, recommandations...">{{ dossier.traitement|default:'' }}</textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Recommandations et suivi -->
+                                <div class="mb-3">
+                                    <label for="recommandations" class="form-label">Recommandations et suivi</label>
+                                    <textarea class="form-control" id="recommandations" name="recommandations" rows="3"
+                                        placeholder="Conseils, mesures préventives, date de prochain RDV...">{{ dossier.recommandations|default:'' }}</textarea>
+                                </div>
+
+                                <!-- Notes additionnelles -->
+                                <div class="mb-3">
+                                    <label for="notes" class="form-label">Notes additionnelles</label>
+                                    <textarea class="form-control" id="notes" name="notes" rows="2"
+                                        placeholder="Observations particulières, commentaires...">{{ dossier.notes|default:'' }}</textarea>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="checkbox" id="rdv_suivi"
+                                                name="rdv_suivi">
+                                            <label class="form-check-label" for="rdv_suivi">
+                                                Programmer un rendez-vous de suivi
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="checkbox" id="envoyer_rapport"
+                                                name="envoyer_rapport">
+                                            <label class="form-check-label" for="envoyer_rapport">
+                                                Envoyer le rapport au patient
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Boutons d'action -->
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        {% if dossier %}
+                                        <button type="submit" name="action" value="update" class="btn btn-primary">
+                                            <i class="fas fa-save"></i> Mettre à jour le dossier
+                                        </button>
+                                        {% else %}
+                                        <button type="submit" name="action" value="create" class="btn btn-success">
+                                            <i class="fas fa-plus"></i> Créer le dossier
+                                        </button>
+                                        {% endif %}
+
+                                        <button type="submit" name="action" value="save_draft"
+                                            class="btn btn-outline-secondary">
+                                            <i class="fas fa-file-alt"></i> Sauvegarder brouillon
+                                        </button>
+                                    </div>
+
+                                    <div>
+                                        {% if dossier %}
+                                        <button type="button" class="btn btn-outline-info" onclick="previewDossier()">
+                                            <i class="fas fa-eye"></i> Aperçu
+                                        </button>
+                                        <button type="button" class="btn btn-outline-primary" onclick="printDossier()">
+                                            <i class="fas fa-print"></i> Imprimer
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages d'alerte -->
+            {% if messages %}
+            <div class="mt-3">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal aperçu -->
+<div class="modal fade" id="previewModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Aperçu du dossier médical</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="previewContent">
+                <!-- Contenu généré dynamiquement -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" onclick="printDossier()">Imprimer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .patient-info p {
+        margin-bottom: 0.5rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .card-header h5 {
+        margin: 0;
+    }
+
+    @media print {
+        .container {
+            max-width: 100%;
+        }
+
+        .btn,
+        .card-header {
+            display: none !important;
+        }
+    }
+</style>
+
+<script>
+    function previewDossier() {
+        // Collecter les données du formulaire
+        const motif = document.getElementById('motif_consultation').value;
+        const symptomes = document.getElementById('symptomes').value;
+        const examen = document.getElementById('examen_clinique').value;
+        const diagnostic = document.getElementById('diagnostic').value;
+        const traitement = document.getElementById('traitement').value;
+        const recommandations = document.getElementById('recommandations').value;
+        const notes = document.getElementById('notes').value;
+
+        // Générer l'aperçu
+        const previewHtml = `
+        <div class="text-center mb-4">
+            <h3>Dossier Médical</h3>
+            <h4>{{ patient.user.get_full_name|default:patient.user.username }}</h4>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <strong>Motif:</strong> ${motif}<br>
+                <strong>Date:</strong> ${new Date().toLocaleDateString('fr-FR')}
+            </div>
+            <div class="col-md-6">
+                <strong>Médecin:</strong> Dr {{ user.get_full_name|default:user.username }}
+            </div>
+        </div>
+        <hr>
+        ${symptomes ? `<p><strong>Symptômes:</strong><br>${symptomes}</p>` : ''}
+        ${examen ? `<p><strong>Examen clinique:</strong><br>${examen}</p>` : ''}
+        <p><strong>Diagnostic:</strong><br>${diagnostic}</p>
+        ${traitement ? `<p><strong>Traitement:</strong><br>${traitement}</p>` : ''}
+        ${recommandations ? `<p><strong>Recommandations:</strong><br>${recommandations}</p>` : ''}
+        ${notes ? `<p><strong>Notes:</strong><br>${notes}</p>` : ''}
+    `;
+
+        document.getElementById('previewContent').innerHTML = previewHtml;
+        new bootstrap.Modal(document.getElementById('previewModal')).show();
+    }
+
+    function printDossier() {
+        window.print();
+    }
+
+    // Sauvegarde automatique en brouillon toutes les 5 minutes
+    setInterval(function () {
+        // Implémenter la sauvegarde automatique via AJAX
+    }, 300000); // 5 minutes
+</script>
+{% endblock %}

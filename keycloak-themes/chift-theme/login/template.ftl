@@ -76,8 +76,24 @@
         html, body {
           height: 100%;
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          background-color: var(--gray-50);
+          background: linear-gradient(135deg, #e3f0ff 0%, #f5f7fa 60%, #dbeafe 100%);
           color: var(--gray-900);
+          position: relative;
+        }
+
+        /* Image médicale subtile en bas à droite */
+        body::after {
+          content: '';
+          position: fixed;
+          right: 0;
+          bottom: 0;
+          width: 340px;
+          height: 240px;
+          background: url('${url.resourcesPath}/img/medical-bg.svg') no-repeat right bottom;
+          background-size: contain;
+          opacity: 0.13;
+          pointer-events: none;
+          z-index: 0;
         }
 
         /* Structure principale - Flexbox pour centrage */
@@ -94,7 +110,8 @@
           align-items: center;
           justify-content: center;
           padding: 2rem 1rem;
-          background-color: var(--gray-50);
+          background: transparent;
+          min-height: 100vh;
         }
 
         /* Carte de connexion responsive */
@@ -103,9 +120,17 @@
           max-width: 28rem;
           background: var(--white);
           border:none;
-          border-radius: 0.75rem;
-          box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
-          padding: 2.5rem;
+          border-radius: 1.2rem;
+          box-shadow: 0 8px 32px rgba(25, 118, 210, 0.13);
+          padding: 2.5rem 2rem;
+          animation: fadeInUp 0.7s cubic-bezier(.23,1.01,.32,1) both;
+          position: relative;
+          z-index: 1;
+        }
+
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(40px); }
+          to { opacity: 1; transform: translateY(0); }
         }
 
         /* Header avec logo */

@@ -73,7 +73,7 @@
 
                         <#if realm.resetPasswordAllowed>
                             <div class="kc-form-options">
-                                <a tabindex="5" href="${url.loginResetCredentialsUrl}">Mot de passe oublié?</a>
+                                <a tabindex="5" href="http://localhost:8080/realms/KeurDoctorSecure/login-actions/reset-credentials?client_id=django-KDclient">Mot de passe oublié?</a>
                             </div>
                         </#if>
 

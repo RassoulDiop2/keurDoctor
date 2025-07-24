@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} - KeurDoctor{% endblock %}
+
+{% block content %}
+<style>
+    .header-section {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+    }
+
+    .dossier-card {
+        background: white;
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .info-section {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .consultation-card {
+        background: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid #28a745;
+    }
+
+    .no-data {
+        text-align: center;
+        padding: 3rem;
+        color: #6c757d;
+    }
+
+    .medical-icon {
+        font-size: 3rem;
+        color: #28a745;
+        margin-bottom: 1rem;
+    }
+</style>
+
+<div class="header-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1><i class="fas fa-file-medical me-3"></i>{{ title }}</h1>
+                <p class="mb-0">Consultez vos informations médicales et l'historique de vos consultations</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <a href="{% url 'patient_dashboard' %}" class="btn btn-light">
+                    <i class="fas fa-arrow-left me-2"></i>Retour au dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <!-- Informations patient -->
+        <div class="col-md-4">
+            <div class="dossier-card">
+                <h5><i class="fas fa-user me-2"></i>Informations personnelles</h5>
+                <hr>
+                <div class="mb-3">
+                    <strong>Nom complet:</strong><br>
+                    {{ patient.utilisateur.prenom }} {{ patient.utilisateur.nom }}
+                </div>
+                <div class="mb-3">
+                    <strong>Email:</strong><br>
+                    {{ patient.utilisateur.email }}
+                </div>
+                {% if patient.date_naissance %}
+                <div class="mb-3">
+                    <strong>Date de naissance:</strong><br>
+                    {{ patient.date_naissance|date:"d/m/Y" }}
+                </div>
+                {% endif %}
+                {% if patient.numero_securite_sociale %}
+                <div class="mb-3">
+                    <strong>Numéro de dossier:</strong><br>
+                    {{ patient.numero_securite_sociale }}
+                </div>
+                {% endif %}
+                <div class="mb-0">
+                    <strong>Inscription:</strong><br>
+                    {{ patient.utilisateur.date_creation|date:"d/m/Y" }}
+                </div>
+            </div>
+
+            <!-- Actions rapides -->
+            <div class="dossier-card">
+                <h6><i class="fas fa-tools me-2"></i>Actions rapides</h6>
+                <hr>
+                <a href="{% url 'prendre_rdv' %}" class="btn btn-primary w-100 mb-2">
+                    <i class="fas fa-calendar-plus me-2"></i>Prendre un RDV
+                </a>
+                <a href="{% url 'historique_rdv_patient' %}" class="btn btn-outline-info w-100">
+                    <i class="fas fa-history me-2"></i>Historique RDV
+                </a>
+            </div>
+        </div>
+
+        <!-- Dossier médical -->
+        <div class="col-md-8">
+            {% if dossier %}
+            <div class="dossier-card">
+                <h5><i class="fas fa-file-medical-alt me-2"></i>Dossier médical</h5>
+                <hr>
+
+                <div class="info-section">
+                    <h6><i class="fas fa-info-circle me-2"></i>Statut du dossier</h6>
+                    <span
+                        class="badge {% if dossier.statut == 'actif' %}bg-success{% else %}bg-secondary{% endif %} fs-6">
+                        {{ dossier.get_statut_display|default:dossier.statut|capfirst }}
+                    </span>
+                    <p class="mt-2 mb-0">
+                        <small class="text-muted">
+                            Créé le {{ dossier.date_creation|date:"d/m/Y à H:i" }}
+                            {% if dossier.date_modification %}
+                            • Modifié le {{ dossier.date_modification|date:"d/m/Y à H:i" }}
+                            {% endif %}
+                        </small>
+                    </p>
+                </div>
+
+                {% if dossier.notes_importantes %}
+                <div class="info-section">
+                    <h6><i class="fas fa-sticky-note me-2"></i>Notes importantes</h6>
+                    <div class="bg-light p-3 rounded">
+                        {{ dossier.notes_importantes|linebreaks }}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if dossier.allergies %}
+                <div class="info-section">
+                    <h6><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Allergies</h6>
+                    <div class="alert alert-warning">
+                        {{ dossier.allergies|linebreaks }}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if dossier.antecedents_medicaux %}
+                <div class="info-section">
+                    <h6><i class="fas fa-history me-2"></i>Antécédents médicaux</h6>
+                    <div class="bg-light p-3 rounded">
+                        {{ dossier.antecedents_medicaux|linebreaks }}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if dossier.traitements_en_cours %}
+                <div class="info-section">
+                    <h6><i class="fas fa-pills me-2"></i>Traitements en cours</h6>
+                    <div class="bg-light p-3 rounded">
+                        {{ dossier.traitements_en_cours|linebreaks }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="dossier-card">
+                <div class="no-data">
+                    <i class="fas fa-file-medical medical-icon"></i>
+                    <h4>Aucun dossier médical</h4>
+                    <p>Votre dossier médical n'a pas encore été créé par un médecin.</p>
+                    <p class="text-muted">Il sera automatiquement créé lors de votre première consultation.</p>
+                    <a href="{% url 'prendre_rdv' %}" class="btn btn-primary">
+                        <i class="fas fa-calendar-plus me-2"></i>Prendre un rendez-vous
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Historique des consultations -->
+            <div class="dossier-card">
+                <h5><i class="fas fa-stethoscope me-2"></i>Historique des consultations</h5>
+                <hr>
+
+                {% if consultations %}
+                {% for consultation in consultations|slice:":5" %}
+                <div class="consultation-card">
+                    <div class="row align-items-center">
+                        <div class="col-md-4">
+                            <h6 class="mb-1">
+                                <i class="fas fa-user-md me-2"></i>
+                                Dr. {{ consultation.medecin.utilisateur.prenom }} {{
+                                consultation.medecin.utilisateur.nom }}
+                            </h6>
+                            {% if consultation.medecin.specialites.all %}
+                            <small class="text-muted">
+                                {{ consultation.medecin.specialites.first.nom }}
+                            </small>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <div class="fw-bold">{{ consultation.date_rdv|date:"d/m/Y" }}</div>
+                                <small class="text-muted">{{ consultation.date_rdv|date:"H:i" }}</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            {% if consultation.motif %}
+                            <strong>Motif:</strong><br>
+                            <small>{{ consultation.motif|truncatechars:40 }}</small>
+                            {% else %}
+                            <em class="text-muted">Consultation générale</em>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-2">
+                            <span class="badge bg-success">
+                                <i class="fas fa-check-circle me-1"></i>Terminé
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                {% if consultations.count > 5 %}
+                <div class="text-center mt-3">
+                    <a href="{% url 'historique_rdv_patient' %}?statut=TERMINE" class="btn btn-outline-primary">
+                        <i class="fas fa-eye me-2"></i>Voir toutes les consultations ({{ consultations.count }})
+                    </a>
+                </div>
+                {% endif %}
+                {% else %}
+                <div class="no-data">
+                    <i class="fas fa-stethoscope medical-icon"></i>
+                    <h5>Aucune consultation</h5>
+                    <p>Vous n'avez pas encore eu de consultation terminée.</p>
+                    <a href="{% url 'prendre_rdv' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-calendar-plus me-2"></i>Prendre votre premier rendez-vous
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

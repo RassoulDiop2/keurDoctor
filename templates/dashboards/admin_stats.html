@@ -1,50 +1,206 @@
 {% extends 'base.html' %}
 {% block title %}Statistiques - KeurDoctor{% endblock %}
 {% block content %}
+<style>
+    .stats-header {
+        font-size: 2.1rem;
+        font-weight: 700;
+        color: #1976d2;
+        margin-bottom: 1.5rem;
+        letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .stat-card {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 4px 18px rgba(25, 118, 210, 0.08);
+        padding: 1.5rem 1rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        min-height: 110px;
+        transition: box-shadow 0.2s;
+    }
+
+    .stat-card:hover {
+        box-shadow: 0 8px 32px rgba(25, 118, 210, 0.18);
+    }
+
+    .stat-icon {
+        font-size: 2.5rem;
+        color: #1976d2;
+        background: #e3f2fd;
+        border-radius: 50%;
+        padding: 16px;
+        margin-right: 10px;
+    }
+
+    .stat-value {
+        font-size: 2.1rem;
+        font-weight: 700;
+        color: #1976d2;
+        margin-bottom: 0.2rem;
+    }
+
+    .stat-label {
+        font-size: 1.1rem;
+        color: #333;
+        font-weight: 500;
+    }
+
+    .filter-bar {
+        background: #f5f7fa;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 8px rgba(25, 118, 210, 0.04);
+    }
+
+    .table thead {
+        background: #1976d2;
+        color: #fff;
+    }
+
+    .table tbody tr:hover {
+        background: #e3f2fd;
+    }
+
+    .card-graph {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 4px 18px rgba(25, 118, 210, 0.08);
+        padding: 1.5rem 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .card-graph .card-header {
+        background: none;
+        color: #1976d2;
+        font-weight: 600;
+        font-size: 1.1rem;
+        border-bottom: none;
+        margin-bottom: 1rem;
+    }
+
+    .return-btn {
+        background: linear-gradient(135deg, #1976d2, #1565c0);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 12px 24px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 3px 12px rgba(25, 118, 210, 0.25);
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 1000;
+    }
+
+    .return-btn:hover {
+        background: linear-gradient(135deg, #1565c0, #0d47a1);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 18px rgba(25, 118, 210, 0.35);
+        color: white;
+        text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+        .stat-card {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
 <div class="container mt-4">
-    <h2 class="mb-4"><i class="fas fa-chart-bar"></i> Statistiques & Activité récente</h2>
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">Utilisateurs</h5>
-                    <p class="display-5">{{ users_count }}</p>
+    <div class="stats-header">
+        <i class="fas fa-chart-bar"></i> Statistiques & Activité récente
+    </div>
+
+    <!-- Bouton retour au dashboard -->
+    <a href="{% url 'admin_dashboard' %}" class="return-btn">
+        <i class="fas fa-arrow-left"></i> Retour au Dashboard
+    </a>
+
+    <div class="row mb-4 g-3">
+        <div class="col-md-3 col-6">
+            <div class="stat-card">
+                <span class="stat-icon"><i class="fas fa-users"></i></span>
+                <div>
+                    <div class="stat-value">{{ users_count }}</div>
+                    <div class="stat-label">Utilisateurs</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">Médecins</h5>
-                    <p class="display-5">{{ medecins_count }}</p>
+        <div class="col-md-3 col-6">
+            <div class="stat-card">
+                <span class="stat-icon"><i class="fas fa-user-md"></i></span>
+                <div>
+                    <div class="stat-value">{{ medecins_count }}</div>
+                    <div class="stat-label">Médecins</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">Patients</h5>
-                    <p class="display-5">{{ patients_count }}</p>
+        <div class="col-md-3 col-6">
+            <div class="stat-card">
+                <span class="stat-icon"><i class="fas fa-user-injured"></i></span>
+                <div>
+                    <div class="stat-value">{{ patients_count }}</div>
+                    <div class="stat-label">Patients</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">Rendez-vous</h5>
-                    <p class="display-5">{{ rdv_count }}</p>
+        <div class="col-md-3 col-6">
+            <div class="stat-card">
+                <span class="stat-icon"><i class="fas fa-calendar-check"></i></span>
+                <div>
+                    <div class="stat-value">{{ rdv_count }}</div>
+                    <div class="stat-label">Rendez-vous</div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row">
+    <!-- Filtres -->
+    <div class="filter-bar row mb-4 g-3 align-items-end">
+        <div class="col-md-4">
+            <label for="periode" class="form-label"><i class="fas fa-calendar-alt"></i> Période :</label>
+            <select id="periode" class="form-select">
+                <option value="mois">Ce mois</option>
+                <option value="annee">Cette année</option>
+                <option value="all">Tout le temps</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="role" class="form-label"><i class="fas fa-user-tag"></i> Rôle :</label>
+            <select id="role" class="form-select">
+                <option value="all">Tous</option>
+                <option value="medecin">Médecins</option>
+                <option value="patient">Patients</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <button id="refreshBtn" class="btn btn-primary w-100">
+                <i class="fas fa-sync-alt"></i> Actualiser maintenant
+            </button>
+        </div>
+    </div>
+    <div class="row g-3">
         <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
+            <div class="card-graph">
+                <div class="card-header bg-primary text-white rounded-top">
                     <i class="fas fa-users"></i> Derniers utilisateurs inscrits
                 </div>
                 <div class="card-body p-0">
-                    <table class="table table-striped mb-0">
+                    <table class="table table-hover mb-0">
                         <thead>
                             <tr>
                                 <th>Email</th>
@@ -70,12 +226,12 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-header bg-success text-white">
+            <div class="card-graph">
+                <div class="card-header bg-success text-white rounded-top">
                     <i class="fas fa-calendar-check"></i> Derniers rendez-vous
                 </div>
                 <div class="card-body p-0">
-                    <table class="table table-striped mb-0">
+                    <table class="table table-hover mb-0">
                         <thead>
                             <tr>
                                 <th>Médecin</th>
@@ -101,19 +257,334 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12">
-            <div class="card mb-4">
-                <div class="card-header bg-info text-white">
-                    <i class="fas fa-chart-pie"></i> Statistiques graphiques (à venir)
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="card-graph">
+                <div class="card-header">
+                    <i class="fas fa-chart-line"></i> Évolution des utilisateurs & rendez-vous
                 </div>
                 <div class="card-body">
-                    <canvas id="statsChart" height="100"></canvas>
-                    <p class="text-muted mt-2">Des graphiques interactifs seront ajoutés ici (évolution, répartition,
-                        etc.).</p>
+                    <canvas id="evolutionChart" height="120"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card-graph">
+                <div class="card-header" style="color:#ff9800;">
+                    <i class="fas fa-chart-pie"></i> Répartition par rôle
+                </div>
+                <div class="card-body">
+                    <canvas id="repartitionChart" height="120"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row g-3">
+        <div class="col-12">
+            <div class="card-graph">
+                <div class="card-header" style="color:#6c757d;">
+                    <i class="fas fa-trophy"></i> Top Médecins (par nombre de rendez-vous)
+                </div>
+                <div class="card-body">
+                    <canvas id="topMedecinsChart" height="100"></canvas>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Données réelles provenant de Django
+    const evolutionData = {
+        labels: {{ evolution_months| safe }},
+    datasets: [
+        {
+            label: 'Nouveaux Utilisateurs',
+            data: {{ evolution_users| safe }},
+        borderColor: '#1976d2',
+        backgroundColor: 'rgba(25, 118, 210, 0.1)',
+        fill: true,
+        tension: 0.3 
+            },
+        {
+            label: 'Nouveaux Rendez-vous',
+            data: {{ evolution_rdv| safe }},
+        borderColor: '#43a047',
+        backgroundColor: 'rgba(67, 160, 71, 0.1)',
+        fill: true,
+        tension: 0.3 
+            }
+    ]
+    };
+
+    const repartitionData = {
+        labels: {{ repartition_labels| safe }},
+    datasets: [{
+        data: {{ repartition_data| safe }},
+        backgroundColor: ['#ff9800', '#1976d2', '#6c757d'],
+        borderWidth: 2,
+        borderColor: '#fff'
+        }]
+    };
+
+    const topMedecinsData = {
+        labels: {{ top_medecins_labels| safe }},
+    datasets: [{
+        label: 'Nombre de Rendez-vous',
+        data: {{ top_medecins_data| safe }},
+        backgroundColor: [
+        '#1976d2',
+        '#1565c0',
+        '#0d47a1',
+        '#42a5f5',
+        '#64b5f6'
+    ],
+        borderColor: '#fff',
+        borderWidth: 1
+        }]
+    };
+
+    // Variables pour stocker les instances des graphiques
+    let evolutionChart, repartitionChart, topMedecinsChart;
+
+    // Fonction pour initialiser les graphiques
+    function initCharts() {
+        // Graphique évolution
+        evolutionChart = new Chart(document.getElementById('evolutionChart'), {
+            type: 'line',
+            data: evolutionData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: {
+                        display: true,
+                        text: 'Évolution mensuelle'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        // Graphique répartition
+        repartitionChart = new Chart(document.getElementById('repartitionChart'), {
+            type: 'doughnut',
+            data: repartitionData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: {
+                        display: true,
+                        text: 'Répartition des utilisateurs'
+                    }
+                }
+            }
+        });
+
+        // Graphique top médecins
+        topMedecinsChart = new Chart(document.getElementById('topMedecinsChart'), {
+            type: 'bar',
+            data: topMedecinsData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Top 5 Médecins par activité'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Fonction pour mettre à jour les données des graphiques
+    function updateCharts() {
+        const refreshBtn = document.getElementById('refreshBtn');
+        const originalText = refreshBtn.innerHTML;
+
+        // Animation du bouton pendant la mise à jour
+        refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mise à jour...';
+        refreshBtn.disabled = true;
+
+        fetch(window.location.href, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Mise à jour du graphique évolution
+                evolutionChart.data.datasets[0].data = data.evolution_users;
+                evolutionChart.data.datasets[1].data = data.evolution_rdv;
+                evolutionChart.update('none');
+
+                // Mise à jour du graphique répartition
+                repartitionChart.data.datasets[0].data = data.repartition_data;
+                repartitionChart.update('none');
+
+                // Mise à jour du graphique top médecins
+                topMedecinsChart.data.labels = data.top_medecins_labels;
+                topMedecinsChart.data.datasets[0].data = data.top_medecins_data;
+                topMedecinsChart.update('none');
+
+                // Mise à jour des compteurs avec animation
+                animateCounter(document.querySelectorAll('.stat-value')[0], data.users_count);
+                animateCounter(document.querySelectorAll('.stat-value')[1], data.medecins_count);
+                animateCounter(document.querySelectorAll('.stat-value')[2], data.patients_count);
+                animateCounter(document.querySelectorAll('.stat-value')[3], data.rdv_count);
+
+                // Afficher notification de succès
+                showNotification('Données mises à jour avec succès!', 'success');
+
+                // Remettre le bouton en état normal
+                setTimeout(() => {
+                    refreshBtn.innerHTML = originalText;
+                    refreshBtn.disabled = false;
+                }, 1000);
+
+                console.log('Graphiques mis à jour automatiquement');
+            })
+            .catch(error => {
+                console.error('Erreur lors de la mise à jour:', error);
+                showNotification('Erreur lors de la mise à jour', 'error');
+
+                // Remettre le bouton en état normal
+                refreshBtn.innerHTML = originalText;
+                refreshBtn.disabled = false;
+            });
+    }
+
+    // Fonction d'animation pour les compteurs
+    function animateCounter(element, targetValue) {
+        const currentValue = parseInt(element.textContent);
+        const increment = (targetValue - currentValue) / 30;
+        let counter = currentValue;
+
+        const timer = setInterval(() => {
+            counter += increment;
+            if ((increment > 0 && counter >= targetValue) || (increment < 0 && counter <= targetValue)) {
+                element.textContent = targetValue;
+                clearInterval(timer);
+            } else {
+                element.textContent = Math.floor(counter);
+            }
+        }, 50);
+    }
+
+    // Fonction pour afficher des notifications
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} notification`;
+        notification.innerHTML = `
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+            ${message}
+        `;
+        notification.style.cssText = `
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1002;
+            min-width: 300px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border: none;
+            border-radius: 8px;
+        `;
+
+        document.body.appendChild(notification);
+
+        // Retirer la notification après 3 secondes
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+
+    // Fonction pour gérer les filtres
+    function handleFilters() {
+        const periodeSelect = document.getElementById('periode');
+        const roleSelect = document.getElementById('role');
+        const refreshBtn = document.getElementById('refreshBtn');
+
+        periodeSelect.addEventListener('change', updateCharts);
+        roleSelect.addEventListener('change', updateCharts);
+        refreshBtn.addEventListener('click', updateCharts);
+    }
+
+    // Initialisation au chargement de la page
+    document.addEventListener('DOMContentLoaded', function () {
+        initCharts();
+        handleFilters();
+
+        // Mise à jour automatique toutes les 30 secondes
+        const autoRefreshInterval = setInterval(updateCharts, 30000);
+
+        // Indicateur de mise à jour automatique avec compteur
+        const indicator = document.createElement('div');
+        indicator.id = 'autoRefreshIndicator';
+        indicator.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            z-index: 1001;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            cursor: pointer;
+        `;
+        document.body.appendChild(indicator);
+
+        // Compteur pour l'indicateur
+        let countdown = 30;
+        function updateIndicator() {
+            indicator.innerHTML = `<i class="fas fa-sync-alt"></i> Auto-refresh: ${countdown}s`;
+            countdown--;
+            if (countdown < 0) countdown = 30;
+        }
+
+        updateIndicator();
+        const countdownTimer = setInterval(updateIndicator, 1000);
+
+        // Clic sur l'indicateur pour désactiver/activer l'auto-refresh
+        let autoRefreshEnabled = true;
+        indicator.addEventListener('click', function () {
+            autoRefreshEnabled = !autoRefreshEnabled;
+            if (autoRefreshEnabled) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = setInterval(updateCharts, 30000);
+                indicator.style.background = '#28a745';
+                countdown = 30;
+            } else {
+                clearInterval(autoRefreshInterval);
+                indicator.style.background = '#6c757d';
+                indicator.innerHTML = '<i class="fas fa-pause"></i> Auto-refresh désactivé';
+            }
+        });
+    });
+</script>
+
+<!-- Bouton retour au dashboard (position fixe en bas à droite) -->
+<a href="{% url 'admin_dashboard' %}" class="return-btn">
+    <i class="fas fa-arrow-left"></i> Retour au Dashboard
+</a>
+
 {% endblock %}
