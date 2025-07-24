@@ -7511,3 +7511,417 @@ INFO 2025-07-23 23:13:25,310 basehttp - Broken pipe from ('127.0.0.1', 55341)
 INFO 2025-07-23 23:13:30,793 basehttp "GET /medecin/ HTTP/1.1" 200 8641
 WARNING 2025-07-23 23:13:31,432 log Not Found: /favicon.ico
 INFO 2025-07-23 23:13:31,437 basehttp - Broken pipe from ('127.0.0.1', 55349)
+INFO 2025-07-24 20:13:12,584 autoreload Watching for file changes with StatReloader
+INFO 2025-07-24 20:13:38,008 basehttp "GET /medecin/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:13:38,120 basehttp "GET / HTTP/1.1" 200 18926
+ERROR 2025-07-24 20:13:38,506 models Erreur lors du logging d'audit: Cannot assign "<SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x000001D1CE054F50>>": "AuditLog.utilisateur" must be a "Utilisateur" instance.
+WARNING 2025-07-24 20:13:38,776 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:13:38,790 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:13:39,308 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:13:39,887 basehttp "GET /admin/login/?next=/admin/comptes/utilisateur/ HTTP/1.1" 200 4261
+INFO 2025-07-24 20:13:40,421 basehttp "GET /static/admin/css/base.css HTTP/1.1" 200 22120
+INFO 2025-07-24 20:13:40,452 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 200 16565
+INFO 2025-07-24 20:13:40,489 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 200 1653
+INFO 2025-07-24 20:13:40,514 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2808
+INFO 2025-07-24 20:13:40,516 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+INFO 2025-07-24 20:13:40,567 basehttp "GET /static/admin/css/login.css HTTP/1.1" 200 951
+INFO 2025-07-24 20:13:40,581 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+ERROR 2025-07-24 20:13:40,773 models Erreur lors du logging d'audit: Cannot assign "<SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x000001D1CE1A8170>>": "AuditLog.utilisateur" must be a "Utilisateur" instance.
+WARNING 2025-07-24 20:13:40,776 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:13:40,787 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:14:03,524 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-24 20:14:07,787 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-24 20:14:10,497 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-24 20:14:11,840 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-24 20:14:13,186 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-24 20:14:14,290 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-24 20:14:15,570 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-24 20:14:30,108 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-24 20:14:59,487 basehttp "GET / HTTP/1.1" 200 18926
+INFO 2025-07-24 20:15:16,195 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:15:41,972 views Utilisateur admin0@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-24 20:15:41,977 views Utilisateur admin0@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-24 20:15:41,980 views Utilisateur admin0@keurdoctor.com retiré du groupe patients
+INFO 2025-07-24 20:15:42,004 views Utilisateur admin0@keurdoctor.com ajouté au groupe administrateurs
+DEBUG 2025-07-24 20:15:42,450 auth_backends Claims complets pour None: {'sub': 'c13cb737-0f6c-487f-acad-057919467ee9', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Admin DIOP', 'preferred_username': 'admin0@keurdoctor.com', 'given_name': 'Admin', 'family_name': 'DIOP', 'email': 'admin0@keurdoctor.com'}
+DEBUG 2025-07-24 20:15:42,450 auth_backends Rôles realm trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-24 20:15:42,451 auth_backends Rôles extraits pour None: ['offline_access', 'admin', 'default-roles-keurdoctorsecure', 'uma_authorization']
+INFO 2025-07-24 20:15:42,468 views Utilisateur admin0@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-24 20:15:42,473 views Utilisateur admin0@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-24 20:15:42,479 views Utilisateur admin0@keurdoctor.com retiré du groupe patients
+INFO 2025-07-24 20:15:42,483 views Utilisateur admin0@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-24 20:15:42,528 auth_backends Champ role_autorise synchronisé: admin0@keurdoctor.com -> admin (groupe: administrateurs)
+INFO 2025-07-24 20:15:42,550 views Utilisateur admin0@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-24 20:15:42,553 views Utilisateur admin0@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-24 20:15:42,558 views Utilisateur admin0@keurdoctor.com retiré du groupe patients
+INFO 2025-07-24 20:15:42,562 views Utilisateur admin0@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-24 20:15:42,621 basehttp "GET /oidc/callback/?state=FJvqg8ODT3eAmarRXjjz9ejLMDxcDEvG&session_state=aede4c06-42b3-4323-97e9-743879699b4a&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=7ede8380-dfcb-49ba-8b55-9e8323980f3f.aede4c06-42b3-4323-97e9-743879699b4a.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-24 20:15:42,820 views Utilisateur staff/admin détecté: None
+INFO 2025-07-24 20:15:42,821 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:15:43,100 basehttp "GET /administration/ HTTP/1.1" 200 9743
+INFO 2025-07-24 20:15:43,914 basehttp "GET /static/images/admin-bg.jpg HTTP/1.1" 200 2640098
+WARNING 2025-07-24 20:15:44,195 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:15:44,196 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:15:49,674 basehttp "GET /administration/securite/ HTTP/1.1" 200 40636
+INFO 2025-07-24 20:15:57,099 basehttp "POST /administration/alerte-lue/344/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:15:57,323 basehttp "GET /administration/securite/ HTTP/1.1" 200 39907
+WARNING 2025-07-24 20:15:57,705 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:15:57,709 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:16:16,738 basehttp "GET /administration/ HTTP/1.1" 200 9455
+INFO 2025-07-24 20:16:20,854 basehttp "GET /admin/ HTTP/1.1" 200 12183
+INFO 2025-07-24 20:16:20,947 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2025-07-24 20:16:20,988 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2025-07-24 20:16:20,989 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+INFO 2025-07-24 20:16:21,019 basehttp "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 200 392
+INFO 2025-07-24 20:16:21,021 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+WARNING 2025-07-24 20:16:21,226 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:16:21,227 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:16:24,033 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 19386
+INFO 2025-07-24 20:16:24,117 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 200 6878
+INFO 2025-07-24 20:16:24,135 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2025-07-24 20:16:24,202 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 200 8076
+INFO 2025-07-24 20:16:24,214 basehttp "GET /static/admin/js/core.js HTTP/1.1" 200 6208
+INFO 2025-07-24 20:16:24,273 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+INFO 2025-07-24 20:16:24,282 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2025-07-24 20:16:24,331 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 9777
+INFO 2025-07-24 20:16:24,348 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2025-07-24 20:16:24,364 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+INFO 2025-07-24 20:16:24,502 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-24 20:16:24,544 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+INFO 2025-07-24 20:16:24,558 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2025-07-24 20:16:24,560 basehttp "GET /static/admin/img/icon-no.svg HTTP/1.1" 200 560
+INFO 2025-07-24 20:16:24,665 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2025-07-24 20:16:24,665 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+INFO 2025-07-24 20:16:24,677 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+ERROR 2025-07-24 20:17:28,897 log OIDC callback state not found in session `oidc_states`!
+Traceback (most recent call last):
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\django\views\generic\base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+  File "H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\KDenv\Lib\site-packages\mozilla_django_oidc\views.py", line 102, in get
+    raise SuspiciousOperation(msg)
+django.core.exceptions.SuspiciousOperation: OIDC callback state not found in session `oidc_states`!
+WARNING 2025-07-24 20:17:28,901 basehttp "GET /oidc/callback/?state=8oYxPDXLuU6rSb3YUiW8tHFJQ3BLkz9o&session_state=aede4c06-42b3-4323-97e9-743879699b4a&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=6c43491f-42f5-4d14-b312-b4d4c07641b5.aede4c06-42b3-4323-97e9-743879699b4a.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 400 90226
+INFO 2025-07-24 20:17:30,734 basehttp "GET /admin/ HTTP/1.1" 200 12051
+INFO 2025-07-24 20:17:33,381 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 19386
+INFO 2025-07-24 20:17:33,689 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-24 20:17:47,890 basehttp "POST /admin/comptes/utilisateur/ HTTP/1.1" 200 11844
+INFO 2025-07-24 20:17:47,997 basehttp "GET /static/admin/js/cancel.js HTTP/1.1" 200 884
+INFO 2025-07-24 20:17:54,098 basehttp "POST /admin/comptes/utilisateur/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:17:54,290 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 16205
+INFO 2025-07-24 20:17:54,542 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-24 20:18:33,257 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:18:33,396 basehttp "GET / HTTP/1.1" 200 18926
+ERROR 2025-07-24 20:18:33,556 models Erreur lors du logging d'audit: Cannot assign "<SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x000001D1CE307890>>": "AuditLog.utilisateur" must be a "Utilisateur" instance.
+WARNING 2025-07-24 20:18:33,593 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:18:33,647 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:18:36,070 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:18:57,156 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe administrateurs
+INFO 2025-07-24 20:18:57,159 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe medecins
+INFO 2025-07-24 20:18:57,163 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe patients
+INFO 2025-07-24 20:18:57,174 views Utilisateur rassoulmouhamd2@gmail.com ajouté au groupe patients
+DEBUG 2025-07-24 20:18:57,208 auth_backends Claims complets pour None: {'sub': 'c911f60e-80b9-4e85-ba90-0e2750202a67', 'email_verified': True, 'realm_access': {'roles': ['patient', 'offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Loly DIOP', 'preferred_username': 'rassoulmouhamd2@gmail.com', 'given_name': 'Loly', 'family_name': 'DIOP', 'email': 'rassoulmouhamd2@gmail.com'}
+DEBUG 2025-07-24 20:18:57,209 auth_backends Rôles realm trouvés: ['patient', 'offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-24 20:18:57,209 auth_backends Rôles extraits pour None: ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'patient']
+INFO 2025-07-24 20:18:57,224 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe administrateurs
+INFO 2025-07-24 20:18:57,229 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe medecins
+INFO 2025-07-24 20:18:57,235 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe patients
+INFO 2025-07-24 20:18:57,239 views Utilisateur rassoulmouhamd2@gmail.com ajouté au groupe patients
+INFO 2025-07-24 20:18:57,268 auth_backends Champ role_autorise synchronisé: rassoulmouhamd2@gmail.com -> patient (groupe: patients)
+INFO 2025-07-24 20:18:57,288 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe administrateurs
+INFO 2025-07-24 20:18:57,291 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe medecins
+INFO 2025-07-24 20:18:57,296 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe patients
+INFO 2025-07-24 20:18:57,305 views Utilisateur rassoulmouhamd2@gmail.com ajouté au groupe patients
+INFO 2025-07-24 20:18:57,373 basehttp "GET /oidc/callback/?state=FLpHGhy1ir0INBpsQ1Z9oDtJTube6zlq&session_state=0c49d978-a06c-4965-8f61-3ab4bcf1900e&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=4c7b2e99-2395-4a00-80d4-f37fa168f3b0.0c49d978-a06c-4965-8f61-3ab4bcf1900e.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-24 20:18:57,650 views Utilisateur: None, Groupes: ['patients']
+INFO 2025-07-24 20:18:57,652 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:18:58,011 basehttp "GET /patient/ HTTP/1.1" 200 7296
+INFO 2025-07-24 20:18:58,262 basehttp "GET /static/images/patient-bg.jpg HTTP/1.1" 200 1002697
+WARNING 2025-07-24 20:18:58,691 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:18:58,696 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:19:03,171 basehttp "GET /patient/mon-dossier/ HTTP/1.1" 200 7441
+WARNING 2025-07-24 20:19:03,487 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:19:03,488 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:19:13,574 basehttp "GET /patient/ HTTP/1.1" 200 7296
+WARNING 2025-07-24 20:19:13,842 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:19:13,843 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:19:15,467 basehttp "GET /patient/prendre-rdv/ HTTP/1.1" 200 13639
+WARNING 2025-07-24 20:19:15,870 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:19:15,871 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:19:19,663 basehttp "GET /patient/ HTTP/1.1" 200 7296
+WARNING 2025-07-24 20:19:20,036 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:19:20,037 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:19:23,000 basehttp "GET /patient/historique-rdv/ HTTP/1.1" 200 9661
+WARNING 2025-07-24 20:19:23,357 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:19:23,358 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:27:15,358 basehttp "GET /patient/historique-rdv/?statut=CONFIRME HTTP/1.1" 200 8374
+WARNING 2025-07-24 20:27:15,657 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:27:15,658 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:27:17,178 basehttp "GET /patient/historique-rdv/?statut=EN_ATTENTE HTTP/1.1" 200 9661
+WARNING 2025-07-24 20:27:17,452 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:27:17,453 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:27:20,483 basehttp "GET /patient/historique-rdv/?statut=tous HTTP/1.1" 200 9661
+WARNING 2025-07-24 20:27:20,888 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:27:20,889 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:27:22,397 basehttp "GET /patient/historique-rdv/?statut=CONFIRME HTTP/1.1" 200 8374
+WARNING 2025-07-24 20:27:22,773 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:27:22,774 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:27:24,372 basehttp "GET /patient/historique-rdv/?statut=TERMINE HTTP/1.1" 200 8374
+WARNING 2025-07-24 20:27:24,667 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:27:24,669 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:27:26,187 basehttp "GET /patient/historique-rdv/?statut=ANNULE HTTP/1.1" 200 8374
+WARNING 2025-07-24 20:27:26,492 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:27:26,493 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:27:28,890 basehttp "GET /patient/historique-rdv/?statut=EN_ATTENTE HTTP/1.1" 200 9661
+WARNING 2025-07-24 20:27:29,177 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:27:29,178 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:27:30,857 basehttp "GET /patient/historique-rdv/?statut=tous HTTP/1.1" 200 9661
+WARNING 2025-07-24 20:27:31,120 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:27:31,121 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:27:32,927 basehttp "GET /patient/historique-rdv/?statut=TERMINE HTTP/1.1" 200 8374
+WARNING 2025-07-24 20:27:33,183 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:27:33,185 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:27:34,508 basehttp "GET /patient/historique-rdv/?statut=ANNULE HTTP/1.1" 200 8374
+WARNING 2025-07-24 20:27:34,775 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:27:34,776 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:27:48,008 basehttp "GET /patient/prendre-rdv/ HTTP/1.1" 200 16204
+WARNING 2025-07-24 20:27:48,674 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:27:48,676 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:29:52,736 basehttp "POST /patient/prendre-rdv/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:29:53,032 basehttp "GET /patient/ HTTP/1.1" 200 7296
+WARNING 2025-07-24 20:29:53,595 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:29:53,597 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:30:05,334 basehttp "GET /patient/mon-dossier/ HTTP/1.1" 200 7441
+WARNING 2025-07-24 20:30:05,765 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:30:05,766 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:30:11,720 basehttp "GET /patient/historique-rdv/ HTTP/1.1" 200 11331
+WARNING 2025-07-24 20:30:12,206 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:30:12,209 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:30:22,693 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:30:22,871 basehttp "GET / HTTP/1.1" 200 18926
+ERROR 2025-07-24 20:30:23,181 models Erreur lors du logging d'audit: Cannot assign "<SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x000001D1CE2D9940>>": "AuditLog.utilisateur" must be a "Utilisateur" instance.
+WARNING 2025-07-24 20:30:23,264 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:30:23,268 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:30:25,009 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:30:49,364 views Utilisateur mouharassoulmd@gmail.com retiré du groupe administrateurs
+INFO 2025-07-24 20:30:49,371 views Utilisateur mouharassoulmd@gmail.com retiré du groupe medecins
+INFO 2025-07-24 20:30:49,377 views Utilisateur mouharassoulmd@gmail.com retiré du groupe patients
+INFO 2025-07-24 20:30:49,396 views Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins
+DEBUG 2025-07-24 20:30:49,581 auth_backends Claims complets pour None: {'sub': '3315b06f-e71b-4290-a14d-ad32814c551e', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']}, 'name': 'Dr.Moustapha DIOP', 'preferred_username': 'mouharassoulmd@gmail.com', 'given_name': 'Dr.Moustapha', 'family_name': 'DIOP', 'email': 'mouharassoulmd@gmail.com'}
+DEBUG 2025-07-24 20:30:49,585 auth_backends Rôles realm trouvés: ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']
+INFO 2025-07-24 20:30:49,596 auth_backends Rôles extraits pour None: ['offline_access', 'medecin', 'default-roles-keurdoctorsecure', 'uma_authorization']
+INFO 2025-07-24 20:30:49,629 views Utilisateur mouharassoulmd@gmail.com retiré du groupe administrateurs
+INFO 2025-07-24 20:30:49,639 views Utilisateur mouharassoulmd@gmail.com retiré du groupe medecins
+INFO 2025-07-24 20:30:49,650 views Utilisateur mouharassoulmd@gmail.com retiré du groupe patients
+INFO 2025-07-24 20:30:49,665 views Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins
+INFO 2025-07-24 20:30:50,031 auth_backends Champ role_autorise synchronisé: mouharassoulmd@gmail.com -> medecin (groupe: médecins)
+INFO 2025-07-24 20:30:50,069 views Utilisateur mouharassoulmd@gmail.com retiré du groupe administrateurs
+INFO 2025-07-24 20:30:50,092 views Utilisateur mouharassoulmd@gmail.com retiré du groupe medecins
+INFO 2025-07-24 20:30:50,110 views Utilisateur mouharassoulmd@gmail.com retiré du groupe patients
+INFO 2025-07-24 20:30:50,127 views Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins
+INFO 2025-07-24 20:30:50,260 basehttp "GET /oidc/callback/?state=VvZwy9WQ3VeehvGwQPx0hDoXOQ0ypUX8&session_state=d2b9c1fb-9403-488b-8380-b0d43966c527&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=5e428c95-8fd9-4867-9c2f-45ba438f3a0a.d2b9c1fb-9403-488b-8380-b0d43966c527.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-24 20:30:50,603 views Utilisateur: None, Groupes: ['medecins', 'médecins']
+INFO 2025-07-24 20:30:50,610 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:30:51,004 basehttp "GET /medecin/ HTTP/1.1" 200 9066
+INFO 2025-07-24 20:30:51,225 basehttp "GET /static/images/medecin.jpg HTTP/1.1" 200 273925
+WARNING 2025-07-24 20:30:51,589 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:30:51,590 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:30:59,496 basehttp "GET /medecin/calendrier/ HTTP/1.1" 200 12469
+INFO 2025-07-24 20:31:27,857 basehttp "GET /medecin/ HTTP/1.1" 200 9066
+WARNING 2025-07-24 20:31:28,598 log Not Found: /favicon.ico
+INFO 2025-07-24 20:31:28,601 basehttp - Broken pipe from ('127.0.0.1', 60386)
+INFO 2025-07-24 20:32:29,079 basehttp "GET /medecin/patients/ HTTP/1.1" 200 11375
+INFO 2025-07-24 20:32:52,422 basehttp "GET /medecin/creer-dossier/?patient=4 HTTP/1.1" 200 13366
+WARNING 2025-07-24 20:32:52,897 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:32:52,900 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:34:27,926 basehttp "GET /medecin/ HTTP/1.1" 200 9066
+WARNING 2025-07-24 20:34:28,564 log Not Found: /favicon.ico
+INFO 2025-07-24 20:34:28,566 basehttp - Broken pipe from ('127.0.0.1', 60370)
+INFO 2025-07-24 20:44:15,861 views Utilisateur dr.ndiaye@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-24 20:44:15,864 views Utilisateur dr.ndiaye@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-24 20:44:15,867 views Utilisateur dr.ndiaye@keurdoctor.com retiré du groupe patients
+INFO 2025-07-24 20:44:15,872 views Utilisateur dr.ndiaye@keurdoctor.com ajouté au groupe medecins
+INFO 2025-07-24 20:44:15,997 views Utilisateur dr.ba@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-24 20:44:16,002 views Utilisateur dr.ba@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-24 20:44:16,005 views Utilisateur dr.ba@keurdoctor.com retiré du groupe patients
+INFO 2025-07-24 20:44:16,008 views Utilisateur dr.ba@keurdoctor.com ajouté au groupe medecins
+INFO 2025-07-24 20:44:16,045 views Utilisateur dr.sarr@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-24 20:44:16,049 views Utilisateur dr.sarr@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-24 20:44:16,054 views Utilisateur dr.sarr@keurdoctor.com retiré du groupe patients
+INFO 2025-07-24 20:44:16,056 views Utilisateur dr.sarr@keurdoctor.com ajouté au groupe medecins
+INFO 2025-07-24 20:44:16,109 views Utilisateur dr.diallo@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-24 20:44:16,112 views Utilisateur dr.diallo@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-24 20:44:16,115 views Utilisateur dr.diallo@keurdoctor.com retiré du groupe patients
+INFO 2025-07-24 20:44:16,120 views Utilisateur dr.diallo@keurdoctor.com ajouté au groupe medecins
+INFO 2025-07-24 20:44:16,165 views Utilisateur dr.fall@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-24 20:44:16,172 views Utilisateur dr.fall@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-24 20:44:16,174 views Utilisateur dr.fall@keurdoctor.com retiré du groupe patients
+INFO 2025-07-24 20:44:16,177 views Utilisateur dr.fall@keurdoctor.com ajouté au groupe medecins
+INFO 2025-07-24 20:44:43,512 views Utilisateur dr.fall@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-24 20:44:43,521 views Utilisateur dr.fall@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-24 20:44:43,524 views Utilisateur dr.fall@keurdoctor.com retiré du groupe patients
+INFO 2025-07-24 20:44:43,533 views Utilisateur dr.fall@keurdoctor.com ajouté au groupe medecins
+INFO 2025-07-24 20:45:50,772 autoreload Watching for file changes with StatReloader
+INFO 2025-07-24 20:46:00,954 basehttp "GET /medecin/ HTTP/1.1" 200 9066
+INFO 2025-07-24 20:46:04,164 basehttp "GET /medecin/ HTTP/1.1" 200 9066
+WARNING 2025-07-24 20:46:04,412 log Not Found: /favicon.ico
+INFO 2025-07-24 20:46:04,415 basehttp - Broken pipe from ('127.0.0.1', 62843)
+INFO 2025-07-24 20:46:05,900 basehttp "GET /medecin/ HTTP/1.1" 200 9066
+INFO 2025-07-24 20:46:07,918 basehttp "GET /medecin/ HTTP/1.1" 200 9066
+WARNING 2025-07-24 20:46:08,123 log Not Found: /favicon.ico
+INFO 2025-07-24 20:46:08,124 basehttp - Broken pipe from ('127.0.0.1', 62850)
+INFO 2025-07-24 20:46:09,096 basehttp "GET /medecin/ HTTP/1.1" 200 9066
+INFO 2025-07-24 20:46:10,942 basehttp "GET /medecin/ HTTP/1.1" 200 9066
+WARNING 2025-07-24 20:46:11,183 log Not Found: /favicon.ico
+INFO 2025-07-24 20:46:11,184 basehttp - Broken pipe from ('127.0.0.1', 62855)
+INFO 2025-07-24 20:46:12,552 basehttp "GET /medecin/ HTTP/1.1" 200 9066
+INFO 2025-07-24 20:46:14,066 basehttp "GET /medecin/ HTTP/1.1" 200 9066
+INFO 2025-07-24 20:46:15,625 basehttp "GET /medecin/ HTTP/1.1" 200 9066
+WARNING 2025-07-24 20:46:15,874 log Not Found: /favicon.ico
+INFO 2025-07-24 20:46:15,875 basehttp - Broken pipe from ('127.0.0.1', 62860)
+INFO 2025-07-24 20:46:21,122 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:46:21,206 basehttp "GET / HTTP/1.1" 200 18926
+ERROR 2025-07-24 20:46:21,358 models Erreur lors du logging d'audit: Cannot assign "<SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x000001D1CE2EBB10>>": "AuditLog.utilisateur" must be a "Utilisateur" instance.
+WARNING 2025-07-24 20:46:21,466 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:46:21,469 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:46:23,519 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:46:43,343 views Utilisateur mouharassoulmd@gmail.com retiré du groupe administrateurs
+INFO 2025-07-24 20:46:43,349 views Utilisateur mouharassoulmd@gmail.com retiré du groupe medecins
+INFO 2025-07-24 20:46:43,353 views Utilisateur mouharassoulmd@gmail.com retiré du groupe patients
+INFO 2025-07-24 20:46:43,364 views Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins
+DEBUG 2025-07-24 20:46:43,388 auth_backends Claims complets pour None: {'sub': '3315b06f-e71b-4290-a14d-ad32814c551e', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']}, 'name': 'Dr.Moustapha DIOP', 'preferred_username': 'mouharassoulmd@gmail.com', 'given_name': 'Dr.Moustapha', 'family_name': 'DIOP', 'email': 'mouharassoulmd@gmail.com'}
+DEBUG 2025-07-24 20:46:43,388 auth_backends Rôles realm trouvés: ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']
+INFO 2025-07-24 20:46:43,389 auth_backends Rôles extraits pour None: ['offline_access', 'medecin', 'default-roles-keurdoctorsecure', 'uma_authorization']
+INFO 2025-07-24 20:46:43,402 views Utilisateur mouharassoulmd@gmail.com retiré du groupe administrateurs
+INFO 2025-07-24 20:46:43,405 views Utilisateur mouharassoulmd@gmail.com retiré du groupe medecins
+INFO 2025-07-24 20:46:43,409 views Utilisateur mouharassoulmd@gmail.com retiré du groupe patients
+INFO 2025-07-24 20:46:43,413 views Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins
+INFO 2025-07-24 20:46:43,436 auth_backends Champ role_autorise synchronisé: mouharassoulmd@gmail.com -> medecin (groupe: médecins)
+INFO 2025-07-24 20:46:43,452 views Utilisateur mouharassoulmd@gmail.com retiré du groupe administrateurs
+INFO 2025-07-24 20:46:43,456 views Utilisateur mouharassoulmd@gmail.com retiré du groupe medecins
+INFO 2025-07-24 20:46:43,460 views Utilisateur mouharassoulmd@gmail.com retiré du groupe patients
+INFO 2025-07-24 20:46:43,465 views Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins
+INFO 2025-07-24 20:46:43,488 basehttp "GET /oidc/callback/?state=qW0tIABEkiCVZ2l3JaNqEN4sM074nmw8&session_state=8a9681bf-06b8-4e67-a448-c2ffc75ede90&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=1f71bf7e-1037-435d-ba6b-b42922398df3.8a9681bf-06b8-4e67-a448-c2ffc75ede90.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-24 20:46:43,668 views Utilisateur: None, Groupes: ['medecins', 'médecins']
+INFO 2025-07-24 20:46:43,669 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:46:43,902 basehttp "GET /medecin/ HTTP/1.1" 200 9066
+WARNING 2025-07-24 20:46:44,269 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:46:44,270 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:46:48,716 basehttp "GET /medecin/ HTTP/1.1" 200 9066
+WARNING 2025-07-24 20:46:49,029 log Not Found: /favicon.ico
+INFO 2025-07-24 20:46:49,032 basehttp - Broken pipe from ('127.0.0.1', 62870)
+INFO 2025-07-24 20:46:50,389 basehttp "GET /medecin/ HTTP/1.1" 200 9066
+WARNING 2025-07-24 20:46:50,603 log Not Found: /favicon.ico
+INFO 2025-07-24 20:46:50,604 basehttp - Broken pipe from ('127.0.0.1', 62899)
+INFO 2025-07-24 20:47:01,793 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:47:01,895 basehttp "GET / HTTP/1.1" 200 18926
+ERROR 2025-07-24 20:47:02,008 models Erreur lors du logging d'audit: Cannot assign "<SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x000001D1CE2EA1C0>>": "AuditLog.utilisateur" must be a "Utilisateur" instance.
+WARNING 2025-07-24 20:47:02,033 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:47:02,036 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:47:04,169 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:47:52,528 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe administrateurs
+INFO 2025-07-24 20:47:52,531 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe medecins
+INFO 2025-07-24 20:47:52,535 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe patients
+INFO 2025-07-24 20:47:52,547 views Utilisateur rassoulmouhamd2@gmail.com ajouté au groupe patients
+DEBUG 2025-07-24 20:47:52,574 auth_backends Claims complets pour None: {'sub': 'c911f60e-80b9-4e85-ba90-0e2750202a67', 'email_verified': True, 'realm_access': {'roles': ['patient', 'offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Loly DIOP', 'preferred_username': 'rassoulmouhamd2@gmail.com', 'given_name': 'Loly', 'family_name': 'DIOP', 'email': 'rassoulmouhamd2@gmail.com'}
+DEBUG 2025-07-24 20:47:52,575 auth_backends Rôles realm trouvés: ['patient', 'offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-24 20:47:52,576 auth_backends Rôles extraits pour None: ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'patient']
+INFO 2025-07-24 20:47:52,587 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe administrateurs
+INFO 2025-07-24 20:47:52,592 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe medecins
+INFO 2025-07-24 20:47:52,596 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe patients
+INFO 2025-07-24 20:47:52,599 views Utilisateur rassoulmouhamd2@gmail.com ajouté au groupe patients
+INFO 2025-07-24 20:47:52,620 auth_backends Champ role_autorise synchronisé: rassoulmouhamd2@gmail.com -> patient (groupe: patients)
+INFO 2025-07-24 20:47:52,634 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe administrateurs
+INFO 2025-07-24 20:47:52,638 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe medecins
+INFO 2025-07-24 20:47:52,643 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe patients
+INFO 2025-07-24 20:47:52,647 views Utilisateur rassoulmouhamd2@gmail.com ajouté au groupe patients
+INFO 2025-07-24 20:47:52,690 basehttp "GET /oidc/callback/?state=zrDo1xU0jx7npWmP6G5jNiRMLTLlIrmH&session_state=d79155f3-baf1-49fd-b17a-6492c6593804&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=78f1b682-045c-4697-8549-00d890a7131e.d79155f3-baf1-49fd-b17a-6492c6593804.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-24 20:47:52,904 views Utilisateur: None, Groupes: ['patients']
+INFO 2025-07-24 20:47:52,905 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:47:53,178 basehttp "GET /patient/ HTTP/1.1" 200 8139
+WARNING 2025-07-24 20:47:53,620 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:47:53,621 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:48:07,832 basehttp "GET /patient/prendre-rdv/ HTTP/1.1" 200 17182
+WARNING 2025-07-24 20:48:08,125 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:48:08,127 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:49:43,088 basehttp "POST /patient/prendre-rdv/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:49:43,411 basehttp "GET /patient/ HTTP/1.1" 200 8139
+WARNING 2025-07-24 20:49:43,733 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:49:43,735 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:49:50,086 basehttp "GET /patient/mon-dossier/ HTTP/1.1" 200 10061
+WARNING 2025-07-24 20:49:50,362 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:49:50,364 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:50:00,892 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:50:00,964 basehttp "GET / HTTP/1.1" 200 18926
+ERROR 2025-07-24 20:50:01,178 models Erreur lors du logging d'audit: Cannot assign "<SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x000001D1CE4C05F0>>": "AuditLog.utilisateur" must be a "Utilisateur" instance.
+WARNING 2025-07-24 20:50:01,210 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:50:01,314 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 20:50:03,254 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:50:15,584 views Utilisateur mouharassoulmd@gmail.com retiré du groupe administrateurs
+INFO 2025-07-24 20:50:15,588 views Utilisateur mouharassoulmd@gmail.com retiré du groupe medecins
+INFO 2025-07-24 20:50:15,592 views Utilisateur mouharassoulmd@gmail.com retiré du groupe patients
+INFO 2025-07-24 20:50:15,603 views Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins
+DEBUG 2025-07-24 20:50:15,622 auth_backends Claims complets pour None: {'sub': '3315b06f-e71b-4290-a14d-ad32814c551e', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']}, 'name': 'Dr.Moustapha DIOP', 'preferred_username': 'mouharassoulmd@gmail.com', 'given_name': 'Dr.Moustapha', 'family_name': 'DIOP', 'email': 'mouharassoulmd@gmail.com'}
+DEBUG 2025-07-24 20:50:15,622 auth_backends Rôles realm trouvés: ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']
+INFO 2025-07-24 20:50:15,623 auth_backends Rôles extraits pour None: ['offline_access', 'medecin', 'default-roles-keurdoctorsecure', 'uma_authorization']
+INFO 2025-07-24 20:50:15,635 views Utilisateur mouharassoulmd@gmail.com retiré du groupe administrateurs
+INFO 2025-07-24 20:50:15,639 views Utilisateur mouharassoulmd@gmail.com retiré du groupe medecins
+INFO 2025-07-24 20:50:15,642 views Utilisateur mouharassoulmd@gmail.com retiré du groupe patients
+INFO 2025-07-24 20:50:15,646 views Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins
+INFO 2025-07-24 20:50:15,664 auth_backends Champ role_autorise synchronisé: mouharassoulmd@gmail.com -> medecin (groupe: médecins)
+INFO 2025-07-24 20:50:15,681 views Utilisateur mouharassoulmd@gmail.com retiré du groupe administrateurs
+INFO 2025-07-24 20:50:15,685 views Utilisateur mouharassoulmd@gmail.com retiré du groupe medecins
+INFO 2025-07-24 20:50:15,688 views Utilisateur mouharassoulmd@gmail.com retiré du groupe patients
+INFO 2025-07-24 20:50:15,692 views Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins
+INFO 2025-07-24 20:50:15,712 basehttp "GET /oidc/callback/?state=ArIM5kTbArY6PuK5bzqTYRI7JuFE6NAW&session_state=fd0a0231-9c50-4582-9f59-bde427c2c1e3&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=fd35d3e3-803f-4b8e-89c5-29d2327e0cdb.fd0a0231-9c50-4582-9f59-bde427c2c1e3.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-24 20:50:15,934 views Utilisateur: None, Groupes: ['medecins', 'médecins']
+INFO 2025-07-24 20:50:15,935 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-24 20:50:16,176 basehttp "GET /medecin/ HTTP/1.1" 200 9491
+WARNING 2025-07-24 20:50:16,531 log Not Found: /favicon.ico
+WARNING 2025-07-24 20:50:16,532 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 22:06:39,848 autoreload Watching for file changes with StatReloader
+INFO 2025-07-24 22:09:04,277 basehttp "GET /medecin/ HTTP/1.1" 302 0
+INFO 2025-07-24 22:09:04,311 basehttp "GET / HTTP/1.1" 200 18926
+ERROR 2025-07-24 22:09:04,674 models Erreur lors du logging d'audit: Cannot assign "<SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x000001D1CE158D70>>": "AuditLog.utilisateur" must be a "Utilisateur" instance.
+WARNING 2025-07-24 22:09:04,771 log Not Found: /favicon.ico
+WARNING 2025-07-24 22:09:05,036 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 22:09:07,815 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-24 22:09:29,058 views Utilisateur mouharassoulmd@gmail.com retiré du groupe administrateurs
+INFO 2025-07-24 22:09:29,064 views Utilisateur mouharassoulmd@gmail.com retiré du groupe medecins
+INFO 2025-07-24 22:09:29,070 views Utilisateur mouharassoulmd@gmail.com retiré du groupe patients
+INFO 2025-07-24 22:09:29,088 views Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins
+DEBUG 2025-07-24 22:09:29,154 auth_backends Claims complets pour None: {'sub': '3315b06f-e71b-4290-a14d-ad32814c551e', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']}, 'name': 'Dr.Moustapha DIOP', 'preferred_username': 'mouharassoulmd@gmail.com', 'given_name': 'Dr.Moustapha', 'family_name': 'DIOP', 'email': 'mouharassoulmd@gmail.com'}
+DEBUG 2025-07-24 22:09:29,155 auth_backends Rôles realm trouvés: ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']
+INFO 2025-07-24 22:09:29,156 auth_backends Rôles extraits pour None: ['offline_access', 'medecin', 'default-roles-keurdoctorsecure', 'uma_authorization']
+INFO 2025-07-24 22:09:29,182 views Utilisateur mouharassoulmd@gmail.com retiré du groupe administrateurs
+INFO 2025-07-24 22:09:29,189 views Utilisateur mouharassoulmd@gmail.com retiré du groupe medecins
+INFO 2025-07-24 22:09:29,195 views Utilisateur mouharassoulmd@gmail.com retiré du groupe patients
+INFO 2025-07-24 22:09:29,201 views Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins
+INFO 2025-07-24 22:09:29,256 auth_backends Champ role_autorise synchronisé: mouharassoulmd@gmail.com -> medecin (groupe: médecins)
+INFO 2025-07-24 22:09:29,299 views Utilisateur mouharassoulmd@gmail.com retiré du groupe administrateurs
+INFO 2025-07-24 22:09:29,311 views Utilisateur mouharassoulmd@gmail.com retiré du groupe medecins
+INFO 2025-07-24 22:09:29,322 views Utilisateur mouharassoulmd@gmail.com retiré du groupe patients
+INFO 2025-07-24 22:09:29,328 views Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins
+INFO 2025-07-24 22:09:29,470 basehttp "GET /oidc/callback/?state=R10pB1vmHC1JcVFZLxKOgJnPtFwodkfC&session_state=dbfb8ee5-3915-4503-9e13-80506efe63b7&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=8ddb4d31-3fcf-41f9-8884-3f8c56cdcc11.dbfb8ee5-3915-4503-9e13-80506efe63b7.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-24 22:09:29,854 views Utilisateur: None, Groupes: ['medecins', 'médecins']
+INFO 2025-07-24 22:09:29,856 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-24 22:09:30,253 basehttp "GET /medecin/ HTTP/1.1" 200 9491
+WARNING 2025-07-24 22:09:30,842 log Not Found: /favicon.ico
+WARNING 2025-07-24 22:09:30,843 basehttp "GET /favicon.ico HTTP/1.1" 404 18030
+INFO 2025-07-24 22:17:23,742 autoreload Watching for file changes with StatReloader
+INFO 2025-07-24 22:17:57,691 basehttp "GET /medecin/ HTTP/1.1" 200 9491
+WARNING 2025-07-24 22:17:58,576 log Not Found: /favicon.ico
+INFO 2025-07-24 22:17:58,578 basehttp - Broken pipe from ('127.0.0.1', 53716)
+INFO 2025-07-24 22:18:00,432 basehttp "GET /medecin/ HTTP/1.1" 200 9491
+WARNING 2025-07-24 22:18:01,027 log Not Found: /favicon.ico
+INFO 2025-07-24 22:18:01,029 basehttp - Broken pipe from ('127.0.0.1', 53720)
+INFO 2025-07-24 22:23:52,617 autoreload Watching for file changes with StatReloader
+INFO 2025-07-24 22:24:04,941 basehttp "GET /medecin/ HTTP/1.1" 200 9140
+WARNING 2025-07-24 22:24:05,585 log Not Found: /favicon.ico
+INFO 2025-07-24 22:24:05,587 basehttp - Broken pipe from ('127.0.0.1', 53861)
