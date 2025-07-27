@@ -57,6 +57,33 @@
             background-color: #0d5bba;
         }
 
+        /* Styles pour le dropdown RFID */
+        .dropdown-menu {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            padding: 0.5rem 0;
+            margin-top: 0.5rem;
+        }
+
+        .dropdown-item {
+            padding: 0.7rem 1.2rem;
+            color: var(--dark-text);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .dropdown-item i {
+            width: 20px;
+            text-align: center;
+        }
+
         .hero-section {
             position: relative;
             min-height: calc(100vh - 70px);
@@ -261,11 +288,35 @@
                     </form>
                     {% else %}
                     <a href="{% url 'oidc_authentication_init' %}" class="btn btn-primary btn-login me-2">
-                        <i class="fas fa-sign-in-alt me-1"></i> Connexion
+                        <i class="fas fa-sign-in-alt me-1"></i> Connexion Classique
                     </a>
-                    <a href="{% url 'patient_rfid_login' %}" class="btn btn-outline-info btn-login me-2">
-                        <i class="fas fa-id-card me-1"></i> RFID Patients
-                    </a>
+                    <!-- Dropdown pour connexion RFID -->
+                    <div class="dropdown d-inline-block me-2">
+                        <button class="btn btn-outline-info btn-login dropdown-toggle" type="button" id="rfidDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-id-card me-1"></i> Connecter via RFID
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="rfidDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'universal_rfid_login' %}">
+                                    <i class="fas fa-qrcode me-2"></i> Accès RFID Universel
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'patient_rfid_login' %}">
+                                    <i class="fas fa-user me-2"></i> Patient RFID (avec OTP)
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'medecin_rfid_login' %}">
+                                    <i class="fas fa-user-md me-2"></i> Médecin RFID (avec OTP)
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                     <a href="{% url 'licence' %}" class="btn btn-outline-success btn-login">
                         <i class="fas fa-user-plus me-1"></i> Inscription
                     </a>

@@ -345,44 +345,117 @@
             btn.addEventListener('click', function () {
                 const fieldName = btn.getAttribute('data-field');
                 btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>En attente...';
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Scan en cours...';
 
-                fetch('/administration/scan-rfid/')
+                // Fonction pour récupérer le token CSRF
+                function getCSRFToken() {
+                    const token = document.querySelector('[name=csrfmiddlewaretoken]');
+                    if (token) {
+                        return token.value;
+                    }
+                    // Fallback: chercher dans les cookies
+                    const cookies = document.cookie.split(';');
+                    for (let cookie of cookies) {
+                        const [name, value] = cookie.trim().split('=');
+                        if (name === 'csrftoken') {
+                            return value;
+                        }
+                    }
+                    return null;
+                }
+
+                const csrfToken = getCSRFToken();
+                if (!csrfToken) {
+                    console.error('Token CSRF non trouvé');
+                    btn.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i>Erreur';
+                    btn.disabled = false;
+                    return;
+                }
+
+                // Utiliser la nouvelle API spécialement conçue pour la création d'utilisateur
+                fetch('/api/scan-rfid-user-creation/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({})
+                })
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
                             document.getElementById(fieldName).value = data.uid;
-                            btn.innerHTML = '<i class="fas fa-check me-1"></i>Scanné';
+                            btn.innerHTML = '<i class="fas fa-check me-1"></i>Carte scannée !';
                             btn.classList.remove('btn-outline-primary');
                             btn.classList.add('btn-success');
+
+                            // Afficher un message de succès avec l'UID
+                            const successAlert = document.createElement('div');
+                            successAlert.className = 'alert alert-success alert-dismissible fade show mt-2';
+                            successAlert.innerHTML = `
+                                <i class="fas fa-check-circle me-2"></i>
+                                <strong>Carte RFID attribuée !</strong> ${data.message}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            `;
+                            btn.parentElement.parentElement.appendChild(successAlert);
+
                             setTimeout(() => {
                                 btn.innerHTML = '<i class="fas fa-qrcode me-1"></i>Scanner';
                                 btn.classList.remove('btn-success');
                                 btn.classList.add('btn-outline-primary');
-                            }, 2000);
+                                if (successAlert.parentElement) {
+                                    successAlert.remove();
+                                }
+                            }, 5000);
                         } else {
                             btn.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i>Erreur';
                             btn.classList.remove('btn-outline-primary');
                             btn.classList.add('btn-danger');
-                            alert('Erreur : ' + data.error);
+
+                            // Afficher une alerte d'erreur détaillée
+                            const errorAlert = document.createElement('div');
+                            errorAlert.className = 'alert alert-danger alert-dismissible fade show mt-2';
+                            errorAlert.innerHTML = `
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <strong>Erreur de scan :</strong> ${data.error}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            `;
+                            btn.parentElement.parentElement.appendChild(errorAlert);
+
                             setTimeout(() => {
                                 btn.innerHTML = '<i class="fas fa-qrcode me-1"></i>Scanner';
                                 btn.classList.remove('btn-danger');
                                 btn.classList.add('btn-outline-primary');
-                            }, 3000);
+                                if (errorAlert.parentElement) {
+                                    errorAlert.remove();
+                                }
+                            }, 5000);
                         }
                         btn.disabled = false;
                     })
                     .catch(err => {
+                        console.error('Erreur de communication:', err);
                         btn.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i>Erreur';
                         btn.classList.remove('btn-outline-primary');
                         btn.classList.add('btn-danger');
-                        alert('Erreur de communication avec Arduino');
+
+                        const errorAlert = document.createElement('div');
+                        errorAlert.className = 'alert alert-danger alert-dismissible fade show mt-2';
+                        errorAlert.innerHTML = `
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Erreur de communication</strong> avec le dispositif IoT. Vérifiez la connexion.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        `;
+                        btn.parentElement.parentElement.appendChild(errorAlert);
+
                         setTimeout(() => {
                             btn.innerHTML = '<i class="fas fa-qrcode me-1"></i>Scanner';
                             btn.classList.remove('btn-danger');
                             btn.classList.add('btn-outline-primary');
-                        }, 3000);
+                            if (errorAlert.parentElement) {
+                                errorAlert.remove();
+                            }
+                        }, 5000);
                         btn.disabled = false;
                     });
             });

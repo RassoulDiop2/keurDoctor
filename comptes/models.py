@@ -347,7 +347,7 @@ class AuditLog(models.Model):
     url_accedee = models.CharField(max_length=500, blank=True)
     donnees_consultees = models.TextField(blank=True, help_text="Données consultées (chiffrées)")
     niveau_risque = models.CharField(max_length=20, choices=NiveauRisque.choices, default=NiveauRisque.MOYEN)
-    session_id = models.CharField(max_length=100, blank=True)
+    session_id = models.CharField(max_length=100, blank=True, null=True)
     est_suspect = models.BooleanField(default=False)
     
     class Meta:
@@ -372,8 +372,15 @@ class AuditLog(models.Model):
             if donnees_consultees:
                 donnees_chiffrees = EncryptionManager.encrypt_data(str(donnees_consultees))
             
+            # ✅ CORRECTION: Vérifier si l'utilisateur est authentifié
+            user_to_log = None
+            if utilisateur and hasattr(utilisateur, 'is_authenticated') and utilisateur.is_authenticated:
+                # S'assurer que c'est une instance d'Utilisateur et non AnonymousUser
+                if hasattr(utilisateur, 'email') and not utilisateur.__class__.__name__ == 'AnonymousUser':
+                    user_to_log = utilisateur
+            
             cls.objects.create(
-                utilisateur=utilisateur,
+                utilisateur=user_to_log,  # ✅ Sera None pour les utilisateurs anonymes
                 type_action=type_action,
                 description=description,
                 adresse_ip=request.META.get('REMOTE_ADDR', ''),
@@ -384,8 +391,8 @@ class AuditLog(models.Model):
                 session_id=request.session.session_key if request.session else '',
             )
         except Exception as e:
-            # En cas d'erreur, logger quand même
-            logger.error(f"Erreur lors du logging d'audit: {e}")
+            # En cas d'erreur, logger quand même mais avec plus de détails
+            logger.error(f"Erreur lors du logging d'audit: {e} - Utilisateur: {type(utilisateur).__name__}")
     
     @classmethod
     def detecter_anomalies(cls, heures=24):
@@ -421,6 +428,7 @@ class RFIDCard(models.Model):
     card_uid = models.CharField(max_length=64, unique=True, help_text="Identifiant unique de la carte RFID")
     date_enregistrement = models.DateTimeField(auto_now_add=True)
     actif = models.BooleanField(default=True)
+    access_direct = models.BooleanField(default=False, help_text="Permet l'accès direct au dashboard sans OTP")
 
     class Meta:
         verbose_name = "Carte RFID utilisateur"
@@ -428,7 +436,7 @@ class RFIDCard(models.Model):
         ordering = ['-date_enregistrement']
 
     def __str__(self):
-        return f"{self.card_uid} ({self.utilisateur.email})"
+        return f"{self.card_uid} ({self.utilisateur.email}) - {'Accès direct' if self.access_direct else 'Avec OTP'}"
 
 
 # ===== NOUVEAUX MODÈLES POUR LES FONCTIONNALITÉS MÉDICALES =====

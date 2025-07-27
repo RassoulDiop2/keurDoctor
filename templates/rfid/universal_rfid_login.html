@@ -1,0 +1,346 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Connexion RFID - KeurDoctor{% endblock %}
+
+{% block content %}
+<style>
+    .rfid-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    .rfid-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        padding: 3rem;
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+        backdrop-filter: blur(10px);
+    }
+
+    .rfid-icon {
+        font-size: 4rem;
+        color: #007bff;
+        margin-bottom: 2rem;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        50% {
+            transform: scale(1.1);
+            opacity: 0.7;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .rfid-title {
+        color: #333;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        font-size: 2rem;
+    }
+
+    .rfid-description {
+        color: #666;
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    .rfid-status {
+        padding: 1rem;
+        border-radius: 10px;
+        margin: 1rem 0;
+        font-weight: 600;
+    }
+
+    .status-waiting {
+        background: #e3f2fd;
+        color: #1976d2;
+        border: 2px solid #90caf9;
+    }
+
+    .status-success {
+        background: #e8f5e8;
+        color: #2e7d32;
+        border: 2px solid #81c784;
+    }
+
+    .status-error {
+        background: #ffebee;
+        color: #c62828;
+        border: 2px solid #ef5350;
+    }
+
+    .btn-rfid {
+        background: linear-gradient(45deg, #007bff, #0056b3);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+    }
+
+    .btn-rfid:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.6);
+        color: white;
+    }
+
+    .rfid-animation {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 2rem;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #007bff, #0056b3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .rfid-wave {
+        position: absolute;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        animation: rfid-wave 2s infinite;
+    }
+
+    .rfid-wave:nth-child(1) {
+        width: 40px;
+        height: 40px;
+        animation-delay: 0s;
+    }
+
+    .rfid-wave:nth-child(2) {
+        width: 60px;
+        height: 60px;
+        animation-delay: 0.5s;
+    }
+
+    .rfid-wave:nth-child(3) {
+        width: 80px;
+        height: 80px;
+        animation-delay: 1s;
+    }
+
+    @keyframes rfid-wave {
+        0% {
+            transform: scale(0);
+            opacity: 1;
+        }
+
+        100% {
+            transform: scale(2);
+            opacity: 0;
+        }
+    }
+
+    .back-link {
+        position: absolute;
+        top: 2rem;
+        left: 2rem;
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .back-link:hover {
+        color: #ffd700;
+        transform: translateX(-5px);
+    }
+</style>
+
+<div class="rfid-container">
+    <a href="{% url 'home' %}" class="back-link">
+        <i class="fas fa-arrow-left me-2"></i>Retour à l'accueil
+    </a>
+
+    <div class="rfid-card">
+        <div class="rfid-animation">
+            <i class="fas fa-id-card" style="font-size: 2rem; color: white; z-index: 10;"></i>
+            <div class="rfid-wave"></div>
+            <div class="rfid-wave"></div>
+            <div class="rfid-wave"></div>
+        </div>
+
+        <h1 class="rfid-title">Connexion RFID</h1>
+        <p class="rfid-description">
+            Approchez votre carte RFID du lecteur. Après reconnaissance, vous recevrez un code OTP par email pour
+            finaliser votre connexion sécurisée.
+        </p>
+
+        <div id="rfid-status" class="rfid-status status-waiting">
+            <i class="fas fa-radio me-2"></i>
+            En attente de votre carte RFID...
+        </div>
+
+        <button id="start-scan" class="btn btn-rfid">
+            <i class="fas fa-play me-2"></i>Démarrer le scan
+        </button>
+
+        <div class="mt-4">
+            <small class="text-muted">
+                <i class="fas fa-info-circle me-1"></i>
+                Votre carte vous donne accès direct à votre dashboard sans saisir de mot de passe.
+            </small>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let isScanning = false;
+        let scanInterval = null;
+
+        const startBtn = document.getElementById('start-scan');
+        const statusDiv = document.getElementById('rfid-status');
+
+        function updateStatus(message, type) {
+            statusDiv.className = `rfid-status status-${type}`;
+            statusDiv.innerHTML = message;
+        }
+
+        function startScanning() {
+            if (isScanning) return;
+
+            isScanning = true;
+            startBtn.disabled = true;
+            startBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Arrêter le scan';
+
+            updateStatus('<i class="fas fa-search me-2"></i>Recherche de carte RFID en cours...', 'waiting');
+
+            // Scanner toutes les 2 secondes
+            scanInterval = setInterval(scanForCard, 2000);
+
+            // Arrêter automatiquement après 30 secondes
+            setTimeout(() => {
+                if (isScanning) {
+                    stopScanning();
+                    updateStatus('<i class="fas fa-clock me-2"></i>Temps de scan expiré. Cliquez pour recommencer.', 'error');
+                }
+            }, 30000);
+
+            // Permettre d'arrêter manuellement
+            startBtn.onclick = stopScanning;
+        }
+
+        function stopScanning() {
+            isScanning = false;
+            startBtn.disabled = false;
+            startBtn.innerHTML = '<i class="fas fa-play me-2"></i>Démarrer le scan';
+            startBtn.onclick = startScanning;
+
+            if (scanInterval) {
+                clearInterval(scanInterval);
+                scanInterval = null;
+            }
+
+            if (statusDiv.className.includes('status-waiting')) {
+                updateStatus('<i class="fas fa-radio me-2"></i>En attente de votre carte RFID...', 'waiting');
+            }
+        }
+
+        function scanForCard() {
+            fetch('/comptes/api/rfid-direct-auth/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value || getCookie('csrftoken')
+                },
+                body: JSON.stringify({ scan_request: true })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        stopScanning();
+                        updateStatus(
+                            `                .then(data => {
+                    if (data.success) {
+                        stopScanning();
+                        updateStatus(
+                            `< i class= "fas fa-check-circle me-2" ></i > Carte reconnue! Code OTP envoyé par email...`,
+                            'success'
+                        );
+                        
+                        // Redirection vers la page OTP après 2 secondes
+                        setTimeout(() => {
+                            window.location.href = data.redirect_url;
+                        }, 2000);
+                    } else if (data.message && data.message !== 'Aucune carte détectée') {
+                        stopScanning();
+                        updateStatus(
+                            `< i class= "fas fa-exclamation-triangle me-2" ></i > ${ data.message }`,
+                            'error'
+                        );
+                    }
+                    // Si pas de carte détectée, continuer le scan silencieusement
+                })`,
+                            'success'
+                        );
+
+                        // Redirection après 2 secondes
+                        setTimeout(() => {
+                            window.location.href = data.redirect_url;
+                        }, 2000);
+                    } else if (data.message && data.message !== 'Aucune carte détectée') {
+                        stopScanning();
+                        updateStatus(
+                            `<i class="fas fa-exclamation-triangle me-2"></i>${data.message}`,
+                            'error'
+                        );
+                    }
+                    // Si pas de carte détectée, continuer le scan silencieusement
+                })
+                .catch(error => {
+                    console.error('Erreur de scan:', error);
+                    // En cas d'erreur, continuer le scan sans afficher d'erreur
+                });
+        }
+
+        // Fonction utilitaire pour récupérer le token CSRF
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Démarrer automatiquement le scan au chargement de la page
+        setTimeout(startScanning, 1000);
+
+        startBtn.onclick = startScanning;
+    });
+</script>
+
+{% csrf_token %}
+{% endblock %}

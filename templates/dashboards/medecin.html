@@ -116,10 +116,12 @@
                         {% if mes_rdv_futurs %}
                         {% for rdv in mes_rdv_futurs %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Patient : <strong>{{ rdv.patient.utilisateur.prenom }} {{ rdv.patient.utilisateur.nom
-                                }}</strong>
-                            <span class="badge bg-primary">{{ rdv.date_rdv|date:"d/m/Y" }} - {{ rdv.date_rdv|time:"H:i"
-                                }}</span>
+                            Patient : <strong>{{ rdv.patient.utilisateur.prenom }}
+                                {{ rdv.patient.utilisateur.nom }}
+                            </strong>
+                            <span class="badge bg-primary">{{ rdv.date_rdv|date:"d/m/Y" }} -
+                                {{ rdv.date_rdv|time:"H:i" }}
+                            </span>
                         </li>
                         {% endfor %}
                         {% else %}

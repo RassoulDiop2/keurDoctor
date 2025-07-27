@@ -22,7 +22,7 @@
                         </div>
                         <div class="card-body">
                             <p><strong>Nom complet:</strong><br>
-                                {{ patient.user.get_full_name|default:"Non renseigné" }}</p>
+                                {{ patient.utilisateur.prenom }} {{ patient.utilisateur.nom }}</p>
 
                             {% if patient.date_naissance %}
                             <p><strong>Date de naissance:</strong><br>
@@ -30,7 +30,7 @@
                             {% endif %}
 
                             <p><strong>Email:</strong><br>
-                                {{ patient.user.email|default:"Non renseigné" }}</p>
+                                {{ patient.utilisateur.email|default:"Non renseigné" }}</p>
 
                             <p><strong>Téléphone:</strong><br>
                                 {{ patient.telephone|default:"Non renseigné" }}</p>
@@ -85,79 +85,62 @@
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">Historique médical</h5>
-                                <small class="text-muted">{{ dossiers|length }} consultation(s)</small>
+                                <small class="text-muted">{{ consultations|length }} consultation(s)</small>
                             </div>
                         </div>
                         <div class="card-body">
-                            {% if dossiers %}
+                            {% if consultations %}
                             <div class="timeline">
-                                {% for dossier in dossiers %}
+                                {% for consultation in consultations %}
                                 <div class="timeline-item mb-4">
                                     <div class="card border-left-primary">
                                         <div class="card-header bg-light">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div>
-                                                    <h6 class="mb-0">{{ dossier.date_creation|date:"d/m/Y" }}</h6>
+                                                    <h6 class="mb-0">{{ consultation.date_rdv|date:"d/m/Y" }}</h6>
                                                     <small class="text-muted">
-                                                        Dr {{
-                                                        dossier.medecin.user.get_full_name|default:dossier.medecin.user.username
-                                                        }}
+                                                        Dr {{ consultation.medecin.utilisateur.prenom }} {{
+                                                        consultation.medecin.utilisateur.nom }}
                                                     </small>
                                                 </div>
                                                 <button class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse"
-                                                    data-bs-target="#dossier{{ dossier.id }}">
+                                                    data-bs-target="#consultation{{ consultation.id }}">
                                                     <i class="fas fa-eye"></i> Voir détails
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="collapse" id="dossier{{ dossier.id }}">
+                                        <div class="collapse" id="consultation{{ consultation.id }}">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <h6>Motif de consultation</h6>
-                                                        <p>{{ dossier.motif_consultation|default:"Non spécifié" }}</p>
+                                                        <p>{{ consultation.motif|default:"Non spécifié" }}</p>
 
-                                                        {% if dossier.symptomes %}
-                                                        <h6>Symptômes</h6>
-                                                        <p>{{ dossier.symptomes }}</p>
-                                                        {% endif %}
+                                                        <h6>Statut</h6>
+                                                        <p><span class="badge bg-success">{{
+                                                                consultation.get_statut_display }}</span></p>
 
-                                                        {% if dossier.examen_clinique %}
-                                                        <h6>Examen clinique</h6>
-                                                        <p>{{ dossier.examen_clinique }}</p>
+                                                        {% if consultation.notes %}
+                                                        <h6>Notes</h6>
+                                                        <p>{{ consultation.notes }}</p>
                                                         {% endif %}
                                                     </div>
                                                     <div class="col-md-6">
-                                                        {% if dossier.diagnostic %}
-                                                        <h6>Diagnostic</h6>
-                                                        <div class="alert alert-info py-2">
-                                                            {{ dossier.diagnostic }}
-                                                        </div>
-                                                        {% endif %}
+                                                        <h6>Heure</h6>
+                                                        <p>{{ consultation.heure_rdv }}</p>
 
-                                                        {% if dossier.traitement %}
-                                                        <h6>Traitement prescrit</h6>
-                                                        <div class="alert alert-success py-2">
-                                                            {{ dossier.traitement }}
-                                                        </div>
-                                                        {% endif %}
-
-                                                        {% if dossier.notes %}
-                                                        <h6>Notes additionnelles</h6>
-                                                        <p><small>{{ dossier.notes }}</small></p>
-                                                        {% endif %}
+                                                        <h6>Durée</h6>
+                                                        <p>{{ consultation.duree|default:"30" }} minutes</p>
                                                     </div>
                                                 </div>
 
-                                                {% if dossier.date_modification != dossier.date_creation %}
                                                 <div class="mt-3 pt-3 border-top">
                                                     <small class="text-muted">
-                                                        <i class="fas fa-edit"></i>
-                                                        Dernière modification: {{ dossier.date_modification|date:"d/m/Y
-                                                        à H:i" }}
+                                                        <i class="fas fa-calendar"></i>
+                                                        Rendez-vous pris le: {{ consultation.date_creation|date:"d/m/Y à
+                                                        H:i" }}
                                                     </small>
                                                 </div>
-                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
@@ -181,7 +164,7 @@
             </div>
 
             <!-- Statistiques personnelles -->
-            {% if dossiers %}
+            {% if consultations %}
             <div class="row mt-4">
                 <div class="col-12">
                     <div class="card">
@@ -192,25 +175,26 @@
                             <div class="row text-center">
                                 <div class="col-md-3">
                                     <div class="stat-item">
-                                        <h4 class="text-primary">{{ dossiers|length }}</h4>
+                                        <h4 class="text-primary">{{ consultations|length }}</h4>
                                         <p class="mb-0">Consultations</p>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="stat-item">
-                                        <h4 class="text-success">{{ medecins_differents|length }}</h4>
+                                        <h4 class="text-success">{{ medecins_differents|length|default:"N/A" }}</h4>
                                         <p class="mb-0">Médecins consultés</p>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="stat-item">
-                                        <h4 class="text-info">{{ dernier_rdv_date|default:"N/A" }}</h4>
+                                        <h4 class="text-info">{{ consultations.0.date_rdv|date:"d/m/Y"|default:"N/A" }}
+                                        </h4>
                                         <p class="mb-0">Dernière consultation</p>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="stat-item">
-                                        <h4 class="text-warning">{{ prochain_rdv_date|default:"N/A" }}</h4>
+                                        <h4 class="text-warning">N/A</h4>
                                         <p class="mb-0">Prochain RDV</p>
                                     </div>
                                 </div>

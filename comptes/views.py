@@ -18,12 +18,15 @@ import logging
 import requests
 import uuid
 import random
+import string
 from django.conf import settings
 from django.utils import timezone
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.contrib.auth.models import Group
 from django.contrib.admin.views.decorators import staff_member_required
+from django.db.models.signals import post_save
+from comptes.keycloak_auto_sync import auto_sync_user_to_keycloak
 
 
 logger = logging.getLogger(__name__)
@@ -913,7 +916,7 @@ def mon_dossier_medical(request):
             'consultations': consultations,
             'title': 'Mon Dossier Médical'
         }
-        return render(request, 'dashboards/dossier_medical.html', context)
+        return render(request, 'dashboards/mon_dossier_medical.html', context)
     except PatientNew.DoesNotExist:
         messages.error(request, "Profil patient non trouvé")
         return redirect('patient_dashboard')
@@ -1383,6 +1386,8 @@ def create_keycloak_user_with_role(utilisateur, role, password):
         search_resp = requests.get(search_url, headers=headers)
         
         user_exists = False
+        user_id = None
+        
         if search_resp.status_code == 200 and search_resp.json():
             # L'utilisateur existe déjà, on le met à jour
             user_id = search_resp.json()[0]['id']
@@ -1410,163 +1415,174 @@ def create_keycloak_user_with_role(utilisateur, role, password):
                 return False
                 
             logger.info(f"Utilisateur {utilisateur.email} mis à jour dans Keycloak")
-            
+        
         if not user_exists:
             # L'utilisateur n'existe pas, on le crée
             logger.info(f"Création de l'utilisateur {utilisateur.email} dans Keycloak...")
             
-        user_data = {
-            "username": utilisateur.email,
-            "email": utilisateur.email,
-            "firstName": utilisateur.prenom,
-            "lastName": utilisateur.nom,
-            "enabled": True,
-            "emailVerified": True,
-            "attributes": {
-                "keycloak_id": [str(utilisateur.keycloak_id)],
-                "role": [role]
+            user_data = {
+                "username": utilisateur.email,
+                "email": utilisateur.email,
+                "firstName": utilisateur.prenom,
+                "lastName": utilisateur.nom,
+                "enabled": True,
+                "emailVerified": True,
+                "attributes": {
+                    "keycloak_id": [str(utilisateur.keycloak_id)],
+                    "role": [role]
+                }
             }
-        }
-                
-        url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users"
-        response = requests.post(url, json=user_data, headers=headers, timeout=10)
-                
-        if response.status_code != 201:
-            logger.error(f"Erreur création Keycloak: {response.status_code} - {response.text}")
-            return False
-
-        # Récupérer l'ID de l'utilisateur créé
-        search_resp = requests.get(search_url, headers=headers)
-        if search_resp.status_code != 200 or not search_resp.json():
-            logger.error("Utilisateur créé mais impossible de le retrouver pour l'affectation du mot de passe/groupe.")
-            return False
-        user_id = search_resp.json()[0]['id']
-
-        logger.info(f"Utilisateur {utilisateur.email} créé dans Keycloak")
+                    
+            url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users"
+            response = requests.post(url, json=user_data, headers=headers, timeout=10)
+                    
+            if response.status_code == 409:
+                # Conflit - l'utilisateur existe déjà, essayer de le récupérer
+                logger.warning(f"Conflit détecté pour {utilisateur.email}, tentative de récupération...")
+                search_resp2 = requests.get(search_url, headers=headers)
+                if search_resp2.status_code == 200 and search_resp2.json():
+                    user_id = search_resp2.json()[0]['id']
+                    user_exists = True
+                    logger.info(f"Utilisateur {utilisateur.email} récupéré après conflit")
+                else:
+                    logger.error(f"Impossible de récupérer l'utilisateur après conflit: {utilisateur.email}")
+                    return False
+            elif response.status_code != 201:
+                logger.error(f"Erreur création Keycloak: {response.status_code} - {response.text}")
+                return False
+            else:
+                # Récupérer l'ID de l'utilisateur créé
+                search_resp = requests.get(search_url, headers=headers)
+                if search_resp.status_code != 200 or not search_resp.json():
+                    logger.error("Utilisateur créé mais impossible de le retrouver pour l'affectation du mot de passe/groupe.")
+                    return False
+                user_id = search_resp.json()[0]['id']
+                logger.info(f"Utilisateur {utilisateur.email} créé dans Keycloak")
 
         # Définir le mot de passe fourni (pour les utilisateurs nouveaux et existants)
-        password_payload = {
-            "type": "password",
-            "value": password,
-            "temporary": True  # L'utilisateur devra changer son mot de passe à la première connexion
-        }
-        pwd_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/reset-password"
-        pwd_resp = requests.put(pwd_url, json=password_payload, headers=headers)
-        if pwd_resp.status_code not in (204, 200):
-            logger.error(f"Erreur lors de l'affectation du mot de passe: {pwd_resp.status_code} - {pwd_resp.text}")
-            return False
+        if user_id:
+            password_payload = {
+                "type": "password",
+                "value": password,
+                "temporary": True  # L'utilisateur devra changer son mot de passe à la première connexion
+            }
+            pwd_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/reset-password"
+            pwd_resp = requests.put(pwd_url, json=password_payload, headers=headers)
+            if pwd_resp.status_code not in (204, 200):
+                logger.error(f"Erreur lors de l'affectation du mot de passe: {pwd_resp.status_code} - {pwd_resp.text}")
+                return False
 
-        # Ajouter l'utilisateur au groupe approprié
-        group_mapping = {
-            'admin': 'administrateurs',
-            'medecin': 'medecins', 
-            'patient': 'patients'
-        }
-        group_name = group_mapping.get(role, role)
-        
-        logger.info(f"[SYNC] Tentative d'ajout de {utilisateur.email} au groupe '{group_name}' dans Keycloak")
-        
-        # Chercher l'ID du groupe
-        group_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/groups"
-        group_resp = requests.get(group_url, headers=headers)
-        
-        if group_resp.status_code == 200:
-            groups = group_resp.json()
-            logger.info(f"Groupes disponibles dans Keycloak: {[g['name'] for g in groups]}")
+            # Ajouter l'utilisateur au groupe approprié
+            group_mapping = {
+                'admin': 'administrateurs',
+                'medecin': 'medecins', 
+                'patient': 'patients'
+            }
+            group_name = group_mapping.get(role, role)
             
-            group_id = next((g['id'] for g in groups if g['name'] == group_name), None)
+            logger.info(f"[SYNC] Tentative d'ajout de {utilisateur.email} au groupe '{group_name}' dans Keycloak")
             
-            if group_id:
-                logger.info(f"Groupe '{group_name}' trouvé avec ID: {group_id}")
+            # Chercher l'ID du groupe
+            group_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/groups"
+            group_resp = requests.get(group_url, headers=headers)
+            
+            if group_resp.status_code == 200:
+                groups = group_resp.json()
+                logger.info(f"Groupes disponibles dans Keycloak: {[g['name'] for g in groups]}")
                 
-                # Vérifier si l'utilisateur est déjà dans le groupe
-                user_groups_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/groups"
-                user_groups_resp = requests.get(user_groups_url, headers=headers)
+                group_id = next((g['id'] for g in groups if g['name'] == group_name), None)
                 
-                if user_groups_resp.status_code == 200:
-                    user_groups = user_groups_resp.json()
-                    user_group_names = [g['name'] for g in user_groups]
-                    logger.info(f"Groupes actuels de {utilisateur.email}: {user_group_names}")
+                if group_id:
+                    logger.info(f"Groupe '{group_name}' trouvé avec ID: {group_id}")
                     
-                    if group_name not in user_group_names:
-                        # Ajouter l'utilisateur au groupe
-                        add_group_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/groups/{group_id}"
-                        add_group_resp = requests.put(add_group_url, headers=headers)
-
-                        if add_group_resp.status_code in (204, 200):
-                            logger.info(f"[SYNC] Utilisateur {utilisateur.email} ajouté au groupe {group_name} dans Keycloak")
-                        else:
-                            logger.error(f"[SYNC] Erreur lors de l'ajout au groupe: {add_group_resp.status_code} - {add_group_resp.text}")
-                    else:
-                        logger.info(f"[SYNC] Utilisateur {utilisateur.email} est déjà dans le groupe {group_name}")
-                else:
-                    logger.error(f"[SYNC] Erreur lors de la récupération des groupes de l'utilisateur: {user_groups_resp.status_code}")
-            else:
-                logger.warning(f"[SYNC] Groupe '{group_name}' introuvable dans Keycloak. Groupes disponibles: {[g['name'] for g in groups]}")
-                
-                # Essayer de créer le groupe s'il n'existe pas
-                logger.info(f"Tentative de création du groupe '{group_name}'...")
-                create_group_data = {
-                    "name": group_name,
-                    "attributes": {
-                        "description": [f"Groupe pour les {group_name}"]
-                    }
-                }
-                create_group_resp = requests.post(group_url, json=create_group_data, headers=headers)
-                
-                if create_group_resp.status_code in (201, 409):  # 409 = groupe existe déjà
-                    logger.info(f"[SYNC] Groupe '{group_name}' créé ou existe déjà")
+                    # Vérifier si l'utilisateur est déjà dans le groupe
+                    user_groups_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/groups"
+                    user_groups_resp = requests.get(user_groups_url, headers=headers)
                     
-                    # Récupérer l'ID du groupe nouvellement créé
-                    group_resp2 = requests.get(group_url, headers=headers)
-                    if group_resp2.status_code == 200:
-                        groups2 = group_resp2.json()
-                        group_id2 = next((g['id'] for g in groups2 if g['name'] == group_name), None)
+                    if user_groups_resp.status_code == 200:
+                        user_groups = user_groups_resp.json()
+                        user_group_names = [g['name'] for g in user_groups]
+                        logger.info(f"Groupes actuels de {utilisateur.email}: {user_group_names}")
                         
-                        if group_id2:
-                            add_group_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/groups/{group_id2}"
+                        if group_name not in user_group_names:
+                            # Ajouter l'utilisateur au groupe
+                            add_group_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/groups/{group_id}"
                             add_group_resp = requests.put(add_group_url, headers=headers)
-                            
-                            if add_group_resp.status_code in (204, 200):
-                                logger.info(f"[SYNC] Utilisateur {utilisateur.email} ajouté au groupe {group_name} nouvellement créé")
-                            else:
-                                logger.error(f"[SYNC] Erreur lors de l'ajout au groupe nouvellement créé: {add_group_resp.status_code}")
-                        else:
-                            logger.error(f"[SYNC] Impossible de récupérer l'ID du groupe '{group_name}' nouvellement créé")
-                    else:
-                        logger.error(f"[SYNC] Erreur lors de la récupération des groupes après création: {group_resp2.status_code}")
-                else:
-                    logger.error(f"[SYNC] Erreur lors de la création du groupe: {create_group_resp.status_code} - {create_group_resp.text}")
-        else:
-            logger.error(f"[SYNC] Impossible de récupérer la liste des groupes Keycloak: {group_resp.status_code} - {group_resp.text}")
 
-        # Attribuer le rôle Keycloak (realm role) à l'utilisateur
-        role_mapping = {
-            'admin': 'admin',
-            'medecin': 'medecin',
-            'patient': 'patient'
-        }
-        role_name = role_mapping.get(role)
-        if role_name:
-            # 1. Récupérer l'ID du rôle
-            roles_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/roles/{role_name}"
-            role_resp = requests.get(roles_url, headers=headers)
-            if role_resp.status_code == 200:
-                role_data = role_resp.json()
-                role_id = role_data['id']
-                # 2. Attribuer le rôle à l'utilisateur
-                assign_role_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/role-mappings/realm"
-                payload = [{
-                    "id": role_id,
-                    "name": role_name
-                }]
-                assign_resp = requests.post(assign_role_url, json=payload, headers=headers)
-                if assign_resp.status_code in (204, 200):
-                    logger.info(f"[SYNC] Rôle '{role_name}' attribué à {utilisateur.email} dans Keycloak")
+                            if add_group_resp.status_code in (204, 200):
+                                logger.info(f"[SYNC] Utilisateur {utilisateur.email} ajouté au groupe {group_name} dans Keycloak")
+                            else:
+                                logger.error(f"[SYNC] Erreur lors de l'ajout au groupe: {add_group_resp.status_code} - {add_group_resp.text}")
+                        else:
+                            logger.info(f"[SYNC] Utilisateur {utilisateur.email} est déjà dans le groupe {group_name}")
+                    else:
+                        logger.error(f"[SYNC] Erreur lors de la récupération des groupes de l'utilisateur: {user_groups_resp.status_code}")
                 else:
-                    logger.error(f"[SYNC] Erreur lors de l'attribution du rôle: {assign_resp.status_code} - {assign_resp.text}")
+                    logger.warning(f"[SYNC] Groupe '{group_name}' introuvable dans Keycloak. Groupes disponibles: {[g['name'] for g in groups]}")
+                    
+                    # Essayer de créer le groupe s'il n'existe pas
+                    logger.info(f"Tentative de création du groupe '{group_name}'...")
+                    create_group_data = {
+                        "name": group_name,
+                        "attributes": {
+                            "description": [f"Groupe pour les {group_name}"]
+                        }
+                    }
+                    create_group_resp = requests.post(group_url, json=create_group_data, headers=headers)
+                    
+                    if create_group_resp.status_code in (201, 409):  # 409 = groupe existe déjà
+                        logger.info(f"[SYNC] Groupe '{group_name}' créé ou existe déjà")
+                        
+                        # Récupérer l'ID du groupe nouvellement créé
+                        group_resp2 = requests.get(group_url, headers=headers)
+                        if group_resp2.status_code == 200:
+                            groups2 = group_resp2.json()
+                            group_id2 = next((g['id'] for g in groups2 if g['name'] == group_name), None)
+                            
+                            if group_id2:
+                                add_group_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/groups/{group_id2}"
+                                add_group_resp = requests.put(add_group_url, headers=headers)
+                                
+                                if add_group_resp.status_code in (204, 200):
+                                    logger.info(f"[SYNC] Utilisateur {utilisateur.email} ajouté au groupe {group_name} nouvellement créé")
+                                else:
+                                    logger.error(f"[SYNC] Erreur lors de l'ajout au groupe nouvellement créé: {add_group_resp.status_code}")
+                            else:
+                                logger.error(f"[SYNC] Impossible de récupérer l'ID du groupe '{group_name}' nouvellement créé")
+                        else:
+                            logger.error(f"[SYNC] Erreur lors de la récupération des groupes après création: {group_resp2.status_code}")
+                    else:
+                        logger.error(f"[SYNC] Erreur lors de la création du groupe: {create_group_resp.status_code} - {create_group_resp.text}")
             else:
-                logger.error(f"[SYNC] Impossible de récupérer le rôle '{role_name}' dans Keycloak: {role_resp.status_code}")
+                logger.error(f"[SYNC] Impossible de récupérer la liste des groupes Keycloak: {group_resp.status_code} - {group_resp.text}")
+
+            # Attribuer le rôle Keycloak (realm role) à l'utilisateur
+            role_mapping = {
+                'admin': 'admin',
+                'medecin': 'medecin',
+                'patient': 'patient'
+            }
+            role_name = role_mapping.get(role)
+            if role_name:
+                # 1. Récupérer l'ID du rôle
+                roles_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/roles/{role_name}"
+                role_resp = requests.get(roles_url, headers=headers)
+                if role_resp.status_code == 200:
+                    role_data = role_resp.json()
+                    role_id = role_data['id']
+                    # 2. Attribuer le rôle à l'utilisateur
+                    assign_role_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/role-mappings/realm"
+                    payload = [{
+                        "id": role_id,
+                        "name": role_name
+                    }]
+                    assign_resp = requests.post(assign_role_url, json=payload, headers=headers)
+                    if assign_resp.status_code in (204, 200):
+                        logger.info(f"[SYNC] Rôle '{role_name}' attribué à {utilisateur.email} dans Keycloak")
+                    else:
+                        logger.error(f"[SYNC] Erreur lors de l'attribution du rôle: {assign_resp.status_code} - {assign_resp.text}")
+                else:
+                    logger.error(f"[SYNC] Impossible de récupérer le rôle '{role_name}' dans Keycloak: {role_resp.status_code}")
 
         logger.info(f"Utilisateur {utilisateur.email} synchronisé avec succès dans Keycloak avec le rôle {role}")
         return True
@@ -1939,6 +1955,16 @@ def simuler_acces_direct_url(request, url_cible):
     </body>
     </html>
     """)
+
+def generate_unique_rfid_uid():
+    """Génère un UID RFID unique au format hexadécimal (8 caractères)"""
+    while True:
+        # Générer un UID de 4 bytes en hexadécimal (8 caractères)
+        uid = ''.join(random.choices(string.hexdigits.upper(), k=8))
+        # Vérifier que cet UID n'existe pas déjà
+        if not RFIDCard.objects.filter(card_uid=uid).exists():
+            return uid
+
 @role_required('admin')
 def create_user_view(request):
     """Vue pour la création d'utilisateurs par l'administrateur"""
@@ -1949,7 +1975,15 @@ def create_user_view(request):
                 # Créer l'utilisateur
                 user = form.save(commit=False)
                 user.role_autorise = form.cleaned_data['role_autorise']
-                user.save()
+                
+                # Désactiver temporairement la synchronisation automatique
+                post_save.disconnect(auto_sync_user_to_keycloak, sender='comptes.Utilisateur')
+                
+                try:
+                    user.save()
+                finally:
+                    # Réactiver la synchronisation automatique
+                    post_save.connect(auto_sync_user_to_keycloak, sender='comptes.Utilisateur')
                 
                 # Assigner le groupe correspondant
                 from django.contrib.auth.models import Group
@@ -1977,10 +2011,16 @@ def create_user_view(request):
                         except Exception as e:
                             logger.error(f"Erreur lors de l'ajout de la spécialité: {e}")
                     
-                    # Ajouter les UIDs RFID si fournis
+                    # Créer la carte RFID si l'UID a été fourni lors du scan
                     if form.cleaned_data.get('rfid_uid'):
-                        # Gérer les cartes RFID séparément
-                        pass
+                        RFIDCard.objects.create(
+                            utilisateur=user,
+                            card_uid=form.cleaned_data.get('rfid_uid'),
+                            actif=True,
+                            access_direct=True  # Accès direct sans OTP pour les cartes créées par admin
+                        )
+                        logger.info(f"Carte RFID {form.cleaned_data.get('rfid_uid')} créée pour le médecin {user.email} avec accès direct")
+                    
                     if form.cleaned_data.get('badge_bleu_uid'):
                         # Gérer les badges séparément
                         pass
@@ -1991,10 +2031,16 @@ def create_user_view(request):
                         date_naissance=form.cleaned_data['date_naissance'],
                         numero_securite_sociale=form.cleaned_data.get('numero_dossier', '')  # Mapper numero_dossier vers numero_securite_sociale
                     )
-                    # Ajouter les UIDs RFID si fournis - les cartes RFID seront gérées séparément
+                    # Créer la carte RFID si l'UID a été fourni lors du scan par l'admin
                     if form.cleaned_data.get('rfid_uid'):
-                        # Gérer les cartes RFID séparément
-                        pass
+                        RFIDCard.objects.create(
+                            utilisateur=user,
+                            card_uid=form.cleaned_data.get('rfid_uid'),
+                            actif=True,
+                            access_direct=True  # Accès direct sans OTP pour les cartes créées par admin
+                        )
+                        logger.info(f"Carte RFID {form.cleaned_data.get('rfid_uid')} créée pour le patient {user.email} avec accès direct")
+                    
                     if form.cleaned_data.get('badge_bleu_uid'):
                         # Gérer les badges séparément
                         pass

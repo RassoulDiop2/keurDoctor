@@ -1,4 +1,4 @@
-import serial
+﻿import serial
 import json
 import time
 import logging
@@ -8,15 +8,73 @@ from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
+def lire_uid_rfid():
+    """
+    Fonction pour lire l'UID d'une carte RFID depuis Arduino.
+    Gère les erreurs de connexion et retourne None en cas d'échec.
+    """
+    port = 'COM6'
+    baudrate = 9600
+    timeout = 5
+    
+    try:
+        # Vérifier que le port est disponible
+        import serial.tools.list_ports
+        available_ports = [p.device for p in serial.tools.list_ports.comports()]
+        if port not in available_ports:
+            logger.warning(f"Port {port} non disponible. Ports disponibles: {available_ports}")
+            return None
+            
+        ser = serial.Serial(port, baudrate, timeout=timeout)
+        time.sleep(1)  # Attendre que la connexion s'établisse
+        
+        try:
+            start = time.time()
+            while time.time() - start < timeout:
+                if ser.in_waiting > 0:
+                    line = ser.readline().decode('utf-8').strip()
+                    if line:
+                        logger.info(f"Données reçues d'Arduino: {line}")
+                        
+                        # Essayer de parser en JSON d'abord
+                        if line.startswith('{'):
+                            try:
+                                data = json.loads(line)
+                                uid = data.get('uid') or data.get('card_uid')
+                                if uid:
+                                    logger.info(f"UID carte détecté: {uid}")
+                                    return uid
+                            except json.JSONDecodeError:
+                                logger.warning(f"Données JSON invalides: {line}")
+                        else:
+                            # Format texte simple
+                            if len(line) >= 8:  # Un UID doit avoir au moins 8 caractères
+                                logger.info(f"UID carte détecté: {line}")
+                                return line
+                
+                time.sleep(0.1)  # Éviter une boucle trop intensive
+                
+            logger.info("Timeout - Aucune carte détectée")
+            return None
+            
+        finally:
+            ser.close()
+            
+    except serial.SerialException as e:
+        logger.error(f"Erreur de connexion série sur {port}: {e}")
+        return None
+    except PermissionError as e:
+        logger.error(f"Erreur de permission pour le port {port}: {e}")
+        return None
+    except Exception as e:
+        logger.error(f"Erreur inattendue lors de la lecture RFID: {e}")
+        return None
+
+
 class ArduinoRFIDHandler:
     """Gestionnaire pour la communication avec Arduino RFID"""
     
     def __init__(self, port='COM3', baudrate=9600):
-        """
-        Initialise la connexion avec Arduino
-        port: Port série (COM3 sur Windows, /dev/ttyUSB0 sur Linux)
-        baudrate: Vitesse de communication
-        """
         self.port = port
         self.baudrate = baudrate
         self.serial_connection = None
@@ -51,11 +109,9 @@ class ArduinoRFIDHandler:
                 return None
         
         try:
-            # Lire une ligne depuis Arduino
             line = self.serial_connection.readline().decode('utf-8').strip()
             
             if line.startswith('{') and line.endswith('}'):
-                # Tenter de parser le JSON
                 try:
                     data = json.loads(line)
                     return data.get('card_uid')
@@ -63,7 +119,6 @@ class ArduinoRFIDHandler:
                     logger.warning(f"Données JSON invalides: {line}")
                     return None
             elif line.startswith('Carte détectée - UID: '):
-                # Format alternatif
                 uid = line.replace('Carte détectée - UID: ', '')
                 return uid
             else:
@@ -114,78 +169,7 @@ class ArduinoRFIDHandler:
         except Exception as e:
             logger.error(f"Erreur d'authentification RFID: {e}")
             return None, f"Erreur: {str(e)}"
-    
-    def run_continuous_reading(self, callback=None):
-        """Lecture continue des cartes RFID"""
-        logger.info("Démarrage de la lecture continue RFID")
-        
-        while self.is_connected:
-            card_uid = self.read_card_uid()
-            
-            if card_uid:
-                user, message = self.authenticate_user_by_rfid(card_uid)
-                
-                if callback:
-                    callback(user, message, card_uid)
-                else:
-                    if user:
-                        print(f"✅ Authentification réussie: {user.email}")
-                    else:
-                        print(f"❌ Échec: {message}")
-            
-            time.sleep(0.1)  # Petite pause pour éviter de surcharger
-
-
-def lire_uid_rfid():
-    # Adapter le port selon la config (ex: 'COM6' sous Windows)
-    port = 'COM6'
-    baudrate = 9600
-    timeout = 5
-    ser = serial.Serial(port, baudrate, timeout=timeout)
-    try:
-        start = time.time()
-        while time.time() - start < timeout:
-            line = ser.readline().decode('utf-8').strip()
-            if line:
-                # Supposons que l’Arduino envoie l’UID seul ou en JSON {"uid": ...}
-                if line.startswith('{'):
-                    import json
-                    data = json.loads(line)
-                    return data.get('uid')
-                else:
-                    return line
-        return None
-    finally:
-        ser.close()
-
-
-def test_arduino_connection():
-    """Fonction de test pour vérifier la connexion Arduino"""
-    handler = ArduinoRFIDHandler()
-    
-    if handler.connect():
-        print("✅ Connexion Arduino établie")
-        print("Présentez une carte RFID...")
-        
-        # Test pendant 30 secondes
-        start_time = time.time()
-        while time.time() - start_time < 30:
-            card_uid = handler.read_card_uid()
-            if card_uid:
-                print(f"📋 Carte détectée: {card_uid}")
-                user, message = handler.authenticate_user_by_rfid(card_uid)
-                if user:
-                    print(f"✅ Utilisateur authentifié: {user.email}")
-                else:
-                    print(f"❌ {message}")
-                break
-            time.sleep(0.1)
-        
-        handler.disconnect()
-    else:
-        print("❌ Impossible de se connecter à Arduino")
-        print("Vérifiez le port série et les connexions")
 
 
 if __name__ == "__main__":
-    test_arduino_connection() 
+    pass

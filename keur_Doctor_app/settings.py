@@ -157,6 +157,7 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': 'debug.log',
             'formatter': 'verbose',
+            'encoding': 'utf-8',  # Force UTF-8 encoding
         },
     },
     'formatters': {

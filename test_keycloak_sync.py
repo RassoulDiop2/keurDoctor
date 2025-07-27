@@ -1,9 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
-Script de test pour vérifier la synchronisation Keycloak
+Script pour tester et corriger la synchronisation Keycloak d'un utilisateur
 """
 import os
-import sys
 import django
 
 # Configuration Django
@@ -11,65 +10,134 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'keur_Doctor_app.settings')
 django.setup()
 
 from comptes.models import Utilisateur
-from comptes.views import create_keycloak_user_with_role
-import logging
+from comptes.keycloak_auto_sync import KeycloakSyncService
+import requests
+from django.conf import settings
 
-logger = logging.getLogger(__name__)
-
-def test_keycloak_sync():
-    """Test de la synchronisation Keycloak"""
-    
-    print("=== TEST DE SYNCHRONISATION KEYCLOAK ===")
-    
-    # Récupérer un utilisateur de test
+def get_keycloak_admin_token():
+    """Obtenir le token admin Keycloak"""
     try:
-        test_user = Utilisateur.objects.filter(role_autorise__isnull=False).first()
-        if not test_user:
-            print("❌ Aucun utilisateur avec un rôle défini trouvé")
-            return
-            
-        print(f"Utilisateur de test: {test_user.email} (rôle: {test_user.role_autorise})")
+        token_url = f"{settings.KEYCLOAK_SERVER_URL}/realms/master/protocol/openid-connect/token"
+        token_data = {
+            'grant_type': 'password',
+            'client_id': 'admin-cli',
+            'username': settings.KEYCLOAK_ADMIN_USER,
+            'password': settings.KEYCLOAK_ADMIN_PASSWORD
+        }
         
-        # Test de synchronisation
-        import secrets
-        import string
-        test_password = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(12))
+        response = requests.post(token_url, data=token_data, timeout=10)
+        if response.status_code == 200:
+            return response.json()['access_token']
+        else:
+            print(f"❌ Erreur token Keycloak: {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"❌ Erreur connexion Keycloak: {e}")
+        return None
+
+def check_user_in_keycloak(email, admin_token):
+    """Vérifier un utilisateur dans Keycloak"""
+    try:
+        headers = {'Authorization': f'Bearer {admin_token}'}
+        search_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users?email={email}&exact=true"
         
-        print(f"Tentative de synchronisation avec mot de passe: {test_password}")
-        
-        success = create_keycloak_user_with_role(test_user, test_user.role_autorise, test_password)
-        
+        response = requests.get(search_url, headers=headers, timeout=10)
+        if response.status_code == 200:
+            users = response.json()
+            if users:
+                user_data = users[0]
+                print(f"👤 Utilisateur Keycloak trouvé:")
+                print(f"   ID: {user_data.get('id')}")
+                print(f"   Username: {user_data.get('username')}")
+                print(f"   Email: {user_data.get('email', 'NON DÉFINI ❌')}")
+                print(f"   Prénom: {user_data.get('firstName', 'NON DÉFINI')}")
+                print(f"   Nom: {user_data.get('lastName', 'NON DÉFINI')}")
+                print(f"   Activé: {user_data.get('enabled')}")
+                print(f"   Email vérifié: {user_data.get('emailVerified')}")
+                return user_data
+            else:
+                print(f"❌ Utilisateur {email} non trouvé dans Keycloak")
+                return None
+        else:
+            print(f"❌ Erreur recherche Keycloak: {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"❌ Erreur vérification utilisateur: {e}")
+        return None
+
+def test_user_sync(email):
+    """Tester la synchronisation d'un utilisateur"""
+    print(f"🔍 TEST SYNCHRONISATION UTILISATEUR: {email}")
+    print("=" * 60)
+    
+    # 1. Vérifier l'utilisateur Django
+    try:
+        user = Utilisateur.objects.get(email=email)
+        print(f"👤 Utilisateur Django trouvé:")
+        print(f"   Email: {user.email}")
+        print(f"   Prénom: {user.prenom}")
+        print(f"   Nom: {user.nom}")
+        print(f"   Rôle: {user.role_autorise}")
+        print(f"   Actif: {user.est_actif}")
+    except Utilisateur.DoesNotExist:
+        print(f"❌ Utilisateur {email} non trouvé dans Django")
+        return
+    
+    # 2. Obtenir token admin Keycloak
+    print(f"\n🔑 Connexion à Keycloak...")
+    admin_token = get_keycloak_admin_token()
+    if not admin_token:
+        print("❌ Impossible d'obtenir le token admin Keycloak")
+        return
+    
+    # 3. Vérifier dans Keycloak
+    print(f"\n🔍 Vérification dans Keycloak...")
+    keycloak_user = check_user_in_keycloak(email, admin_token)
+    
+    # 4. Forcer la synchronisation si problème
+    if not keycloak_user or not keycloak_user.get('email'):
+        print(f"\n🔧 PROBLÈME DÉTECTÉ - Forçage de la synchronisation...")
+        success = KeycloakSyncService.ensure_user_complete_profile(user)
         if success:
-            print("✅ Synchronisation réussie!")
+            print("✅ Synchronisation forcée réussie!")
+            # Re-vérifier
+            print(f"\n🔍 Re-vérification après synchronisation...")
+            check_user_in_keycloak(email, admin_token)
         else:
-            print("❌ Échec de la synchronisation")
-            
-    except Exception as e:
-        print(f"❌ Erreur lors du test: {e}")
+            print("❌ Échec de la synchronisation forcée")
+    else:
+        print("✅ Utilisateur correctement synchronisé dans Keycloak")
 
-def check_keycloak_connection():
-    """Vérifier la connexion à Keycloak"""
+def main():
+    print("🔧 DIAGNOSTIC SYNCHRONISATION KEYCLOAK")
+    print("=" * 60)
     
-    print("\n=== VÉRIFICATION CONNEXION KEYCLOAK ===")
+    # Lister les utilisateurs récents
+    print("📋 Derniers utilisateurs créés:")
+    recent_users = Utilisateur.objects.order_by('-date_creation')[:5]
+    for i, user in enumerate(recent_users, 1):
+        print(f"{i}. {user.email} ({user.role_autorise}) - {user.date_creation}")
     
+    # Demander quel utilisateur tester
     try:
-        from comptes.views import get_keycloak_admin_token
-        from django.conf import settings
+        choice = input("\nEntrez le numéro de l'utilisateur à tester (ou email direct): ").strip()
         
-        print(f"URL Keycloak: {settings.KEYCLOAK_SERVER_URL}")
-        print(f"Realm: {settings.OIDC_REALM}")
-        
-        token = get_keycloak_admin_token(settings.KEYCLOAK_SERVER_URL)
-        
-        if token:
-            print("✅ Connexion à Keycloak réussie")
-            print(f"Token obtenu: {token[:20]}...")
+        if choice.isdigit():
+            idx = int(choice) - 1
+            if 0 <= idx < len(recent_users):
+                test_email = recent_users[idx].email
+            else:
+                print("❌ Numéro invalide")
+                return
         else:
-            print("❌ Impossible d'obtenir le token admin Keycloak")
-            
+            test_email = choice
+        
+        test_user_sync(test_email)
+        
+    except KeyboardInterrupt:
+        print("\n❌ Test annulé")
     except Exception as e:
-        print(f"❌ Erreur de connexion: {e}")
+        print(f"❌ Erreur: {e}")
 
 if __name__ == "__main__":
-    check_keycloak_connection()
-    test_keycloak_sync() 
+    main() 

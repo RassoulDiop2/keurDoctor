@@ -21,6 +21,13 @@ from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django import forms
 from django.contrib.auth.models import Group
+import logging
+
+logger = logging.getLogger(__name__)
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 class UtilisateurCreationForm(forms.ModelForm):
     ROLE_CHOICES = [
@@ -28,32 +35,64 @@ class UtilisateurCreationForm(forms.ModelForm):
         ('medecin', 'Médecin'),
         ('patient', 'Patient'),
     ]
-    role = forms.ChoiceField(choices=ROLE_CHOICES, label="Rôle")
+    role_autorise = forms.ChoiceField(choices=ROLE_CHOICES, label="Rôle")
+    password1 = forms.CharField(label="Mot de passe", widget=forms.PasswordInput)
+    password2 = forms.CharField(label="Confirmation mot de passe", widget=forms.PasswordInput)
 
     class Meta:
         model = Utilisateur
-        fields = ('email', 'prenom', 'nom', 'role', 'password')
+        fields = ('email', 'prenom', 'nom', 'role_autorise')
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Les mots de passe ne correspondent pas.")
+        return password2
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        role = self.cleaned_data['role']
-        # Ajout explicite des champs prénom et nom
-        user.prenom = self.cleaned_data['prenom']
-        user.nom = self.cleaned_data['nom']
+        role_autorise = self.cleaned_data['role_autorise']
+        password = self.cleaned_data['password1']
+        
+        # Définir le mot de passe
+        user.set_password(password)
+        
+        # ✅ NETTOYAGE AUTOMATIQUE DES DONNÉES
+        # Nettoyer le prénom (supprimer Dr., titres, etc.)
+        prenom = self.cleaned_data['prenom'].replace('Dr.', '').replace('Dr', '').strip()
+        nom = self.cleaned_data['nom'].strip()
+        
+        # S'assurer qu'il y a toujours un prénom et nom
+        user.prenom = prenom if prenom else 'Utilisateur'
+        user.nom = nom if nom else 'KeurDoctor'
+        user.role_autorise = role_autorise
+        
+        # ✅ CORRECTION EMAIL - S'assurer que l'email est bien défini
+        email = self.cleaned_data['email']
+        if not email:
+            raise forms.ValidationError("L'email est obligatoire")
+        user.email = email
+        # Note: Ce modèle n'utilise pas username (défini à None dans models.py)
+        
         if commit:
             user.save()
+            
+            # Gestion des groupes Django
             group_map = {
                 'admin': 'administrateurs',
                 'medecin': 'médecins',
                 'patient': 'patients',
             }
-            group_name = group_map[role]
+            group_name = group_map[role_autorise]
             group, _ = Group.objects.get_or_create(name=group_name)
             user.groups.clear()
             user.groups.add(group)
-            # Met à jour le champ role_autorise aussi
-            user.role_autorise = role
-            user.save()
+            
+            # ✅ LA SYNCHRONISATION KEYCLOAK SE FAIT AUTOMATIQUEMENT VIA SIGNALS
+            # Plus besoin d'appel manuel - le signal post_save se déclenche automatiquement
+            logger.info(f"✅ Utilisateur {user.email} créé avec rôle {role_autorise} - Synchronisation automatique en cours...")
+            
         return user
 
 class UtilisateurAdmin(UserAdmin):
@@ -80,7 +119,7 @@ class UtilisateurAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'prenom', 'nom', 'role', 'password1', 'password2'),
+            'fields': ('email', 'prenom', 'nom', 'role_autorise', 'password1', 'password2'),
         }),
     )
 

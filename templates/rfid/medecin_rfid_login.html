@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+{% block title %}Connexion Médecin - RFID & OTP{% endblock %}
+
+{% block content %}
+<style>
+    .auth-card {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+        border: none;
+    }
+
+    .auth-header {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        border-radius: 15px 15px 0 0;
+        padding: 25px;
+    }
+
+    .auth-method-card {
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .auth-method-card:hover {
+        border-color: #007bff;
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.1);
+    }
+
+    .auth-method-card.active {
+        border-color: #007bff;
+        background-color: #f8f9ff;
+    }
+
+    .method-icon {
+        font-size: 3rem;
+        color: #007bff;
+        margin-bottom: 15px;
+    }
+
+    .rfid-scanner {
+        border: 3px dashed #007bff;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        background: #f8f9ff;
+        transition: all 0.3s ease;
+    }
+
+    .rfid-scanner.scanning {
+        border-color: #28a745;
+        background: #f8fff8;
+        animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.05);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card auth-card">
+                <div class="card-header auth-header text-white text-center">
+                    <h3 class="mb-0">
+                        <i class="fas fa-user-md me-2"></i>
+                        Authentification Médecin
+                    </h3>
+                    <p class="mb-0 mt-2">Choisissez votre méthode de connexion sécurisée</p>
+                </div>
+
+                <div class="card-body p-4">
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    <!-- Sélection de la méthode d'authentification -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="auth-method-card p-4 text-center h-100" data-method="rfid">
+                                <div class="method-icon">
+                                    <i class="fas fa-id-card"></i>
+                                </div>
+                                <h5>Carte RFID + OTP</h5>
+                                <p class="text-muted">Authentification par carte RFID personnelle</p>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="auth_method" id="rfid_method"
+                                        value="rfid">
+                                    <label class="form-check-label" for="rfid_method">
+                                        Utiliser ma carte RFID
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="auth-method-card p-4 text-center h-100" data-method="classic">
+                                <div class="method-icon">
+                                    <i class="fas fa-key"></i>
+                                </div>
+                                <h5>Identifiants + OTP</h5>
+                                <p class="text-muted">Connexion classique avec mot de passe</p>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="auth_method" id="classic_method"
+                                        value="classic">
+                                    <label class="form-check-label" for="classic_method">
+                                        Utiliser mes identifiants
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formulaire d'authentification -->
+                    <form method="post" id="auth-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="auth_method" id="selected_method">
+
+                        <!-- Authentification RFID -->
+                        <div id="rfid-form" class="auth-form-section" style="display: none;">
+                            <div class="mb-3">
+                                <label for="email_rfid" class="form-label">
+                                    <i class="fas fa-envelope me-2"></i>Adresse email
+                                </label>
+                                <input type="email" class="form-control" id="email_rfid" name="email"
+                                    placeholder="votre.email@exemple.com" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-id-card me-2"></i>Carte RFID
+                                </label>
+                                <div class="rfid-scanner" id="rfid-scanner">
+                                    <i class="fas fa-wifi fa-2x text-primary mb-3"></i>
+                                    <h6>Scanner votre carte RFID</h6>
+                                    <p class="text-muted mb-3">Présentez votre carte sur le lecteur</p>
+                                    <button type="button" class="btn btn-primary" id="scan-rfid-btn">
+                                        <i class="fas fa-search me-2"></i>Démarrer le scan
+                                    </button>
+                                    <input type="hidden" name="card_uid" id="card_uid">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Authentification classique -->
+                        <div id="classic-form" class="auth-form-section" style="display: none;">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">
+                                    <i class="fas fa-user me-2"></i>Nom d'utilisateur (Email)
+                                </label>
+                                <input type="email" class="form-control" id="username" name="username"
+                                    placeholder="votre.email@exemple.com" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">
+                                    <i class="fas fa-lock me-2"></i>Mot de passe
+                                </label>
+                                <input type="password" class="form-control" id="password" name="password"
+                                    placeholder="••••••••" required>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg" id="submit-btn" disabled>
+                                <i class="fas fa-sign-in-alt me-2"></i>
+                                Se connecter
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <p class="text-muted mb-2">Autres options de connexion :</p>
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary me-2">
+                            <i class="fas fa-arrow-left me-1"></i>Retour
+                        </a>
+                        <a href="{% url 'methodes_authentification' %}" class="btn btn-outline-info">
+                            <i class="fas fa-info-circle me-1"></i>Aide
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const authMethodCards = document.querySelectorAll('.auth-method-card');
+        const authMethodRadios = document.querySelectorAll('input[name="auth_method"]');
+        const selectedMethodInput = document.getElementById('selected_method');
+        const submitBtn = document.getElementById('submit-btn');
+        const rfidForm = document.getElementById('rfid-form');
+        const classicForm = document.getElementById('classic-form');
+        const scanRfidBtn = document.getElementById('scan-rfid-btn');
+        const rfidScanner = document.getElementById('rfid-scanner');
+
+        // Gestion de la sélection de méthode
+        authMethodCards.forEach(card => {
+            card.addEventListener('click', function () {
+                const method = this.dataset.method;
+                const radio = document.getElementById(method + '_method');
+                radio.checked = true;
+                updateMethodSelection(method);
+            });
+        });
+
+        authMethodRadios.forEach(radio => {
+            radio.addEventListener('change', function () {
+                if (this.checked) {
+                    updateMethodSelection(this.value);
+                }
+            });
+        });
+
+        function updateMethodSelection(method) {
+            // Mettre à jour l'apparence des cartes
+            authMethodCards.forEach(card => {
+                card.classList.remove('active');
+                if (card.dataset.method === method) {
+                    card.classList.add('active');
+                }
+            });
+
+            // Mettre à jour les formulaires
+            selectedMethodInput.value = method;
+            rfidForm.style.display = method === 'rfid' ? 'block' : 'none';
+            classicForm.style.display = method === 'classic' ? 'block' : 'none';
+
+            // Activer le bouton de soumission
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = method === 'rfid'
+                ? '<i class="fas fa-id-card me-2"></i>Continuer avec RFID'
+                : '<i class="fas fa-key me-2"></i>Continuer avec identifiants';
+        }
+
+        // Gestion du scan RFID
+        scanRfidBtn.addEventListener('click', function () {
+            startRFIDScan();
+        });
+
+        function startRFIDScan() {
+            rfidScanner.classList.add('scanning');
+            scanRfidBtn.disabled = true;
+            scanRfidBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Scan en cours...';
+
+            // Simuler le scan RFID (remplacer par la vraie API)
+            fetch('/api/rfid-medecin-auth/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({
+                    card_uid: 'simulated_uid_' + Date.now()
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    rfidScanner.classList.remove('scanning');
+                    scanRfidBtn.disabled = false;
+
+                    if (data.success) {
+                        document.getElementById('card_uid').value = data.card_uid || 'detected';
+                        scanRfidBtn.innerHTML = '<i class="fas fa-check text-success me-2"></i>Carte détectée';
+                        scanRfidBtn.classList.remove('btn-primary');
+                        scanRfidBtn.classList.add('btn-success');
+                    } else {
+                        scanRfidBtn.innerHTML = '<i class="fas fa-search me-2"></i>Réessayer';
+                        showAlert('warning', data.message || 'Aucune carte détectée');
+                    }
+                })
+                .catch(error => {
+                    rfidScanner.classList.remove('scanning');
+                    scanRfidBtn.disabled = false;
+                    scanRfidBtn.innerHTML = '<i class="fas fa-search me-2"></i>Réessayer';
+                    showAlert('danger', 'Erreur de connexion au lecteur RFID');
+                });
+        }
+
+        function showAlert(type, message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+            <i class="fas fa-info-circle me-2"></i>
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+
+            const container = document.querySelector('.card-body');
+            container.insertBefore(alertDiv, container.firstChild);
+
+            // Auto-dismiss après 5 secondes
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+    });
+</script>
+{% endblock %}

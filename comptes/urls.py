@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 from comptes.views import user_management
 from .views import api_rfid_auth, enregistrer_rfid_view, enregistrer_rfid_admin_view, rfid_wait_view
-from .views_rfid import api_scan_rfid, patient_rfid_login, patient_rfid_otp
+from .views_rfid import api_scan_rfid, patient_rfid_login, patient_rfid_otp, api_scan_rfid_for_user_creation, api_rfid_direct_auth, universal_rfid_login, universal_rfid_otp, medecin_rfid_login, medecin_rfid_otp, api_rfid_medecin_auth
 
 urlpatterns = [
     # Page d'accueil
@@ -78,7 +78,9 @@ urlpatterns = [
     path('test/elevation/', views.simuler_elevation_privileges, name='simuler_elevation_privileges'),
     path('test/acces-direct/<str:url_cible>/', views.simuler_acces_direct_url, name='simuler_acces_direct_url'),
 
-    # RFID
+    # RFID Pages
+    path('rfid/login/', universal_rfid_login, name='universal_rfid_login'),
+    path('rfid/otp/', universal_rfid_otp, name='universal_rfid_otp'),
     path('rfid/enregistrer/', enregistrer_rfid_view, name='enregistrer_rfid'),
     path('rfid/enregistrer/<int:user_id>/', enregistrer_rfid_admin_view, name='enregistrer_rfid_admin'),
     path('rfid/attente/', rfid_wait_view, name='rfid_wait'),
@@ -86,6 +88,15 @@ urlpatterns = [
     # Authentification RFID pour patients
     path('patient/rfid/login/', views.patient_rfid_login, name='patient_rfid_login'),
     path('patient/rfid/otp/', views.patient_rfid_otp, name='patient_rfid_otp'),
+    
+    # Authentification RFID pour médecins  
+    path('medecin/rfid/login/', medecin_rfid_login, name='medecin_rfid_login'),
+    path('medecin/rfid/otp/', medecin_rfid_otp, name='medecin_rfid_otp'),
+    path('api/rfid-medecin-auth/', api_rfid_medecin_auth, name='api_rfid_medecin_auth'),
+    
+    # API RFID pour création d'utilisateur et authentification directe
+    path('api/scan-rfid-user-creation/', api_scan_rfid_for_user_creation, name='api_scan_rfid_user_creation'),
+    path('api/rfid-direct-auth/', api_rfid_direct_auth, name='api_rfid_direct_auth'),
     
     # Méthodes d'authentification
     path('authentification/methodes/', views.methodes_authentification, name='methodes_authentification'),
