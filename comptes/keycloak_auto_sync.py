@@ -185,7 +185,7 @@ class KeycloakSyncService:
                 password_data = {
                     "type": "password",
                     "value": "MotDePasseTemporaire123!",
-                    "temporary": True
+                    "temporary": False  # ✅ Mot de passe permanent - pas de changement forcé
                 }
                 
                 pwd_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/reset-password"

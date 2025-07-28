@@ -237,3 +237,1001 @@ INFO 2025-07-27 04:03:13,985 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1"
 INFO 2025-07-27 04:03:14,454 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
 WARNING 2025-07-27 04:03:14,903 log Not Found: /favicon.ico
 INFO 2025-07-27 04:03:14,905 basehttp - Broken pipe from ('127.0.0.1', 61009)
+INFO 2025-07-27 04:05:20,063 basehttp "GET /oidc/callback/?state=z2FUHJrCHnlE0iL9OLoE5KFQ6Bg8hBX6&session_state=8e4f6e81-5e32-4629-979c-f8d343b56b3e&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=17d70a4b-bef3-4620-be3a-a6bfc769de08.8e4f6e81-5e32-4629-979c-f8d343b56b3e.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-27 04:05:20,084 basehttp "GET / HTTP/1.1" 200 20978
+INFO 2025-07-27 04:05:27,430 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-27 04:05:27,881 keycloak_auto_sync 🧹 Données nettoyées: mouharassoulmd@gmail.com - Loly DIOP
+INFO 2025-07-27 04:05:27,912 views Utilisateur mouharassoulmd@gmail.com retiré du groupe administrateurs
+INFO 2025-07-27 04:05:27,918 views Utilisateur mouharassoulmd@gmail.com retiré du groupe medecins
+INFO 2025-07-27 04:05:27,925 views Utilisateur mouharassoulmd@gmail.com retiré du groupe patients
+INFO 2025-07-27 04:05:27,946 views Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins
+INFO 2025-07-27 04:05:27,947 models ✅ Groupes Django auto-synchronisés pour mouharassoulmd@gmail.com (rôle: medecin)
+INFO 2025-07-27 04:05:27,948 keycloak_auto_sync 🔧 Premier usage - Configuration automatique Keycloak...
+INFO 2025-07-27 04:05:28,318 keycloak_auto_sync 🎯 Setup Keycloak terminé - Rôles et groupes prêts
+INFO 2025-07-27 04:05:28,322 keycloak_auto_sync ✅ Setup Keycloak terminé
+INFO 2025-07-27 04:05:28,323 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: mouharassoulmd@gmail.com
+INFO 2025-07-27 04:05:28,848 keycloak_auto_sync 🎯 Utilisateur mouharassoulmd@gmail.com assigné au groupe 'médecins' dans Keycloak
+INFO 2025-07-27 04:05:28,899 keycloak_auto_sync 🎭 Rôles REALM assignés à mouharassoulmd@gmail.com: ['medecin', 'user', 'offline_access']
+INFO 2025-07-27 04:05:28,949 keycloak_auto_sync ✅ Profil ET groupes Keycloak mis à jour automatiquement: mouharassoulmd@gmail.com
+INFO 2025-07-27 04:05:28,951 keycloak_auto_sync [SUCCESS] Synchronisation COMPLETE reussie: mouharassoulmd@gmail.com
+INFO 2025-07-27 04:05:28,954 keycloak_auto_sync    Profil Keycloak cree/mis a jour
+INFO 2025-07-27 04:05:28,954 keycloak_auto_sync    Groupe assigne selon role: medecin
+INFO 2025-07-27 04:05:28,955 keycloak_auto_sync    Roles realm et client assignes
+INFO 2025-07-27 04:05:28,956 keycloak_auto_sync    Utilisateur peut maintenant se connecter!
+DEBUG 2025-07-27 04:05:28,957 auth_backends Claims complets pour None: {'sub': '9feb59ff-0a31-4e4f-9f30-e34a9a1517b1', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']}, 'name': 'Loly DIOP', 'preferred_username': 'mouharassoulmd@gmail.com', 'given_name': 'Loly', 'family_name': 'DIOP', 'email': 'mouharassoulmd@gmail.com'}
+DEBUG 2025-07-27 04:05:28,959 auth_backends Rôles realm trouvés: ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']
+INFO 2025-07-27 04:05:28,960 auth_backends Rôles extraits pour None: ['uma_authorization', 'default-roles-keurdoctorsecure', 'medecin', 'offline_access']
+INFO 2025-07-27 04:05:28,981 keycloak_auto_sync 🧹 Données nettoyées: mouharassoulmd@gmail.com - Loly DIOP
+INFO 2025-07-27 04:05:28,990 views Utilisateur mouharassoulmd@gmail.com retiré du groupe administrateurs
+INFO 2025-07-27 04:05:28,994 views Utilisateur mouharassoulmd@gmail.com retiré du groupe medecins
+INFO 2025-07-27 04:05:29,000 views Utilisateur mouharassoulmd@gmail.com retiré du groupe patients
+INFO 2025-07-27 04:05:29,005 views Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins
+INFO 2025-07-27 04:05:29,006 models ✅ Groupes Django auto-synchronisés pour mouharassoulmd@gmail.com (rôle: medecin)
+INFO 2025-07-27 04:05:29,007 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: mouharassoulmd@gmail.com
+INFO 2025-07-27 04:05:29,371 keycloak_auto_sync 🎯 Utilisateur mouharassoulmd@gmail.com assigné au groupe 'médecins' dans Keycloak
+INFO 2025-07-27 04:05:29,426 keycloak_auto_sync 🎭 Rôles REALM assignés à mouharassoulmd@gmail.com: ['medecin', 'user', 'offline_access']
+INFO 2025-07-27 04:05:29,483 keycloak_auto_sync ✅ Profil ET groupes Keycloak mis à jour automatiquement: mouharassoulmd@gmail.com
+INFO 2025-07-27 04:05:29,486 keycloak_auto_sync [SUCCESS] Synchronisation COMPLETE reussie: mouharassoulmd@gmail.com
+INFO 2025-07-27 04:05:29,487 keycloak_auto_sync    Profil Keycloak cree/mis a jour
+INFO 2025-07-27 04:05:29,488 keycloak_auto_sync    Groupe assigne selon role: medecin
+INFO 2025-07-27 04:05:29,488 keycloak_auto_sync    Roles realm et client assignes
+INFO 2025-07-27 04:05:29,493 keycloak_auto_sync    Utilisateur peut maintenant se connecter!
+INFO 2025-07-27 04:05:29,494 auth_backends Champ role_autorise synchronisé: mouharassoulmd@gmail.com -> medecin (groupe: médecins)
+INFO 2025-07-27 04:05:29,518 keycloak_auto_sync 🧹 Données nettoyées: mouharassoulmd@gmail.com - Loly DIOP
+INFO 2025-07-27 04:05:29,528 views Utilisateur mouharassoulmd@gmail.com retiré du groupe administrateurs
+INFO 2025-07-27 04:05:29,534 views Utilisateur mouharassoulmd@gmail.com retiré du groupe medecins
+INFO 2025-07-27 04:05:29,541 views Utilisateur mouharassoulmd@gmail.com retiré du groupe patients
+INFO 2025-07-27 04:05:29,546 views Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins
+INFO 2025-07-27 04:05:29,547 models ✅ Groupes Django auto-synchronisés pour mouharassoulmd@gmail.com (rôle: medecin)
+INFO 2025-07-27 04:05:29,548 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: mouharassoulmd@gmail.com
+INFO 2025-07-27 04:05:30,286 keycloak_auto_sync 🎯 Utilisateur mouharassoulmd@gmail.com assigné au groupe 'médecins' dans Keycloak
+INFO 2025-07-27 04:05:30,403 keycloak_auto_sync 🎭 Rôles REALM assignés à mouharassoulmd@gmail.com: ['medecin', 'user', 'offline_access']
+INFO 2025-07-27 04:05:30,481 keycloak_auto_sync ✅ Profil ET groupes Keycloak mis à jour automatiquement: mouharassoulmd@gmail.com
+INFO 2025-07-27 04:05:30,484 keycloak_auto_sync [SUCCESS] Synchronisation COMPLETE reussie: mouharassoulmd@gmail.com
+INFO 2025-07-27 04:05:30,487 keycloak_auto_sync    Profil Keycloak cree/mis a jour
+INFO 2025-07-27 04:05:30,494 keycloak_auto_sync    Groupe assigne selon role: medecin
+INFO 2025-07-27 04:05:30,498 keycloak_auto_sync    Roles realm et client assignes
+INFO 2025-07-27 04:05:30,500 keycloak_auto_sync    Utilisateur peut maintenant se connecter!
+INFO 2025-07-27 04:05:30,514 basehttp "GET /oidc/callback/?state=ppRug4qa82Z8nUHJXtT9bC0gHFJYc5OX&session_state=8e4f6e81-5e32-4629-979c-f8d343b56b3e&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=fed992f1-2ea3-4c9c-888c-1a7fdeb479ba.8e4f6e81-5e32-4629-979c-f8d343b56b3e.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-27 04:05:30,857 views Utilisateur: None, Groupes: ['médecins', 'medecins']
+INFO 2025-07-27 04:05:30,859 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-27 04:05:31,258 basehttp "GET /medecin/ HTTP/1.1" 200 8107
+INFO 2025-07-27 04:11:09,847 basehttp "GET / HTTP/1.1" 302 0
+INFO 2025-07-27 04:11:10,109 views Utilisateur: None, Groupes: ['médecins', 'medecins']
+INFO 2025-07-27 04:11:10,114 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-27 04:11:10,350 basehttp "GET /medecin/ HTTP/1.1" 200 8107
+INFO 2025-07-27 04:11:16,756 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-27 04:11:16,833 basehttp "GET / HTTP/1.1" 200 20978
+INFO 2025-07-27 04:11:27,519 basehttp "GET /licence/ HTTP/1.1" 200 8657
+INFO 2025-07-27 04:11:41,699 basehttp "POST /licence/ HTTP/1.1" 302 0
+INFO 2025-07-27 04:11:41,870 basehttp "GET /inscription/ HTTP/1.1" 200 13593
+INFO 2025-07-27 04:14:07,930 keycloak_auto_sync 🧹 Données nettoyées: sadikhniang010@gmail.com - Sadikh NIANG
+INFO 2025-07-27 04:14:07,940 keycloak_auto_sync 🔄 Création détectée - Synchronisation COMPLÈTE: sadikhniang010@gmail.com
+INFO 2025-07-27 04:14:08,281 keycloak_auto_sync ✅ Utilisateur Keycloak créé automatiquement: sadikhniang010@gmail.com
+INFO 2025-07-27 04:14:08,371 keycloak_auto_sync 🎯 Utilisateur sadikhniang010@gmail.com assigné au groupe 'patients' dans Keycloak
+INFO 2025-07-27 04:14:08,439 keycloak_auto_sync 🎭 Rôles REALM assignés à sadikhniang010@gmail.com: ['patient', 'user', 'offline_access']
+INFO 2025-07-27 04:14:08,748 keycloak_auto_sync 🎯 Utilisateur COMPLET créé/mis à jour dans Keycloak: sadikhniang010@gmail.com (rôle: None)
+INFO 2025-07-27 04:14:08,749 keycloak_auto_sync [SUCCESS] Synchronisation COMPLETE reussie: sadikhniang010@gmail.com
+INFO 2025-07-27 04:14:08,749 keycloak_auto_sync    Profil Keycloak cree/mis a jour
+INFO 2025-07-27 04:14:08,750 keycloak_auto_sync    Groupe assigne selon role: patient
+INFO 2025-07-27 04:14:08,750 keycloak_auto_sync    Roles realm et client assignes
+INFO 2025-07-27 04:14:08,751 keycloak_auto_sync    Utilisateur peut maintenant se connecter!
+INFO 2025-07-27 04:14:08,754 keycloak_auto_sync [SUCCESS] Synchronisation COMPLETE reussie: sadikhniang010@gmail.com
+INFO 2025-07-27 04:14:08,755 keycloak_auto_sync    Profil Keycloak cree/mis a jour
+INFO 2025-07-27 04:14:08,756 keycloak_auto_sync    Groupe assigne selon role: None
+INFO 2025-07-27 04:14:08,757 keycloak_auto_sync    Roles realm et client assignes
+INFO 2025-07-27 04:14:08,757 keycloak_auto_sync    Utilisateur peut maintenant se connecter!
+INFO 2025-07-27 04:14:09,059 views Utilisateur sadikhniang010@gmail.com existe déjà dans Keycloak, mise à jour...
+INFO 2025-07-27 04:14:09,095 views Utilisateur sadikhniang010@gmail.com mis à jour dans Keycloak
+INFO 2025-07-27 04:14:09,347 views [SYNC] Tentative d'ajout de sadikhniang010@gmail.com au groupe 'patients' dans Keycloak
+INFO 2025-07-27 04:14:09,371 views Groupes disponibles dans Keycloak: ['administrateurs', 'medecins', 'médecins', 'patients']
+INFO 2025-07-27 04:14:09,371 views Groupe 'patients' trouvé avec ID: 0cb1e7e0-3d69-4c2e-ae8b-cdbe346357d9
+INFO 2025-07-27 04:14:09,392 views Groupes actuels de sadikhniang010@gmail.com: ['patients']
+INFO 2025-07-27 04:14:09,392 views [SYNC] Utilisateur sadikhniang010@gmail.com est déjà dans le groupe patients
+INFO 2025-07-27 04:14:09,436 views [SYNC] Rôle 'patient' attribué à sadikhniang010@gmail.com dans Keycloak
+INFO 2025-07-27 04:14:09,437 views Utilisateur sadikhniang010@gmail.com synchronisé avec succès dans Keycloak avec le rôle patient
+INFO 2025-07-27 04:14:09,462 basehttp "POST /inscription/ HTTP/1.1" 302 0
+INFO 2025-07-27 04:14:09,630 basehttp "GET / HTTP/1.1" 200 20978
+INFO 2025-07-27 04:14:14,913 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-27 04:15:08,340 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-27 04:15:08,358 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-27 04:15:08,361 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-27 04:15:08,366 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-27 04:15:08,376 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-27 04:15:08,377 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-27 04:15:08,377 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-27 04:15:08,531 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-27 04:15:08,533 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-27 04:15:08,534 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+DEBUG 2025-07-27 04:15:08,534 auth_backends Claims complets pour None: {'sub': 'cb0dd49b-05e3-4647-9fc5-f139faa5b871', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Administrateur Systeme', 'preferred_username': 'admin', 'locale': 'en', 'given_name': 'Administrateur', 'family_name': 'Systeme', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-27 04:15:08,536 auth_backends Rôles realm trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-27 04:15:08,537 auth_backends Rôles extraits pour None: ['admin', 'uma_authorization', 'default-roles-keurdoctorsecure', 'offline_access']
+INFO 2025-07-27 04:15:08,544 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-27 04:15:08,550 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-27 04:15:08,554 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-27 04:15:08,558 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-27 04:15:08,561 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-27 04:15:08,562 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-27 04:15:08,563 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-27 04:15:08,771 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-27 04:15:08,772 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-27 04:15:08,772 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+INFO 2025-07-27 04:15:08,773 auth_backends Champ role_autorise synchronisé: admin@keurdoctor.com -> admin (groupe: administrateurs)
+INFO 2025-07-27 04:15:08,791 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-27 04:15:08,798 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-27 04:15:08,802 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-27 04:15:08,806 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-27 04:15:08,811 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-27 04:15:08,811 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-27 04:15:08,812 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-27 04:15:09,033 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-27 04:15:09,034 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-27 04:15:09,035 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+INFO 2025-07-27 04:15:09,039 basehttp - Broken pipe from ('127.0.0.1', 61476)
+INFO 2025-07-27 04:15:09,421 basehttp "GET /oidc/callback/?error=temporarily_unavailable&error_description=authentication_expired&state=ipZ1Ce6c9YCBXSfFHCdwmHlh1kFXPtsV&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure HTTP/1.1" 302 0
+INFO 2025-07-27 04:15:09,436 basehttp "GET / HTTP/1.1" 200 20978
+INFO 2025-07-27 04:15:18,005 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-27 04:15:18,237 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-27 04:15:18,258 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-27 04:15:18,262 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-27 04:15:18,266 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-27 04:15:18,274 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-27 04:15:18,274 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-27 04:15:18,274 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-27 04:15:18,383 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-27 04:15:18,384 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-27 04:15:18,386 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+DEBUG 2025-07-27 04:15:18,386 auth_backends Claims complets pour None: {'sub': 'cb0dd49b-05e3-4647-9fc5-f139faa5b871', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Administrateur Systeme', 'preferred_username': 'admin', 'locale': 'en', 'given_name': 'Administrateur', 'family_name': 'Systeme', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-27 04:15:18,387 auth_backends Rôles realm trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-27 04:15:18,387 auth_backends Rôles extraits pour None: ['admin', 'uma_authorization', 'default-roles-keurdoctorsecure', 'offline_access']
+INFO 2025-07-27 04:15:18,394 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-27 04:15:18,401 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-27 04:15:18,404 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-27 04:15:18,407 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-27 04:15:18,411 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-27 04:15:18,411 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-27 04:15:18,412 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-27 04:15:18,541 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-27 04:15:18,542 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-27 04:15:18,544 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+INFO 2025-07-27 04:15:18,545 auth_backends Champ role_autorise synchronisé: admin@keurdoctor.com -> admin (groupe: administrateurs)
+INFO 2025-07-27 04:15:18,558 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-27 04:15:18,564 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-27 04:15:18,568 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-27 04:15:18,572 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-27 04:15:18,576 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-27 04:15:18,576 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-27 04:15:18,577 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-27 04:15:18,858 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-27 04:15:18,859 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-27 04:15:18,860 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+INFO 2025-07-27 04:15:18,871 basehttp "GET /oidc/callback/?state=Cuwu0i7ywsUzySujxx1ADoEnKftjjxY5&session_state=6c393d1e-4c18-443b-909e-42efdba8c0c9&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=acb0d9de-2cdb-4bbd-9b71-37b0942ddcb0.6c393d1e-4c18-443b-909e-42efdba8c0c9.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-27 04:15:19,228 views Utilisateur staff/admin détecté: None
+INFO 2025-07-27 04:15:19,234 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-27 04:15:19,526 basehttp "GET /administration/ HTTP/1.1" 200 10050
+INFO 2025-07-27 04:15:19,922 basehttp "GET /static/images/admin-bg.jpg HTTP/1.1" 200 2640098
+INFO 2025-07-27 04:15:33,490 basehttp "GET /administration/securite/ HTTP/1.1" 200 22035
+INFO 2025-07-27 04:15:44,820 basehttp "GET /admin/comptes/utilisateur/273/change/ HTTP/1.1" 200 34116
+INFO 2025-07-27 04:15:44,934 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2808
+INFO 2025-07-27 04:15:44,935 basehttp "GET /static/admin/css/base.css HTTP/1.1" 200 22120
+INFO 2025-07-27 04:15:44,952 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+INFO 2025-07-27 04:15:44,956 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 200 8525
+INFO 2025-07-27 04:15:44,980 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 200 16565
+INFO 2025-07-27 04:15:45,001 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 200 1653
+INFO 2025-07-27 04:15:45,158 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+INFO 2025-07-27 04:15:45,186 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 200 11991
+INFO 2025-07-27 04:15:45,238 basehttp "GET /static/admin/js/calendar.js HTTP/1.1" 200 9141
+INFO 2025-07-27 04:15:45,240 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-27 04:15:45,297 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2025-07-27 04:15:45,306 basehttp "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+INFO 2025-07-27 04:15:45,313 basehttp "GET /static/admin/js/SelectBox.js HTTP/1.1" 200 4530
+INFO 2025-07-27 04:15:45,316 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 200 8076
+INFO 2025-07-27 04:15:45,354 basehttp "GET /static/admin/js/core.js HTTP/1.1" 200 6208
+INFO 2025-07-27 04:15:45,371 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2025-07-27 04:15:45,374 basehttp "GET /static/admin/js/SelectFilter2.js HTTP/1.1" 200 15845
+INFO 2025-07-27 04:15:45,398 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2025-07-27 04:15:45,405 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 9777
+INFO 2025-07-27 04:15:45,426 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+INFO 2025-07-27 04:15:45,465 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2025-07-27 04:15:45,493 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2025-07-27 04:15:45,590 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+INFO 2025-07-27 04:15:45,638 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2025-07-27 04:15:45,647 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+INFO 2025-07-27 04:15:45,815 basehttp "GET /static/admin/img/selector-icons.svg HTTP/1.1" 200 3291
+INFO 2025-07-27 04:15:45,834 basehttp "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+INFO 2025-07-27 04:15:45,835 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2025-07-27 04:15:45,901 basehttp "GET /static/admin/img/icon-clock.svg HTTP/1.1" 200 677
+INFO 2025-07-27 04:16:20,389 basehttp "GET /administration/ HTTP/1.1" 200 10050
+INFO 2025-07-27 04:16:26,531 basehttp "GET /administration/users/ HTTP/1.1" 200 8667
+INFO 2025-07-27 04:16:34,663 keycloak_auto_sync 🧹 Données nettoyées: sadikhniang010@gmail.com - Sadikh NIANG
+INFO 2025-07-27 04:16:34,670 views Utilisateur sadikhniang010@gmail.com retiré du groupe administrateurs
+INFO 2025-07-27 04:16:34,674 views Utilisateur sadikhniang010@gmail.com retiré du groupe medecins
+INFO 2025-07-27 04:16:34,680 views Utilisateur sadikhniang010@gmail.com retiré du groupe patients
+INFO 2025-07-27 04:16:34,686 views Utilisateur sadikhniang010@gmail.com ajouté au groupe patients
+INFO 2025-07-27 04:16:34,687 models ✅ Groupes Django auto-synchronisés pour sadikhniang010@gmail.com (rôle: patient)
+INFO 2025-07-27 04:16:34,687 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: sadikhniang010@gmail.com
+WARNING 2025-07-27 04:16:34,819 keycloak_auto_sync ⚠️ Utilisateur sadikhniang010@gmail.com existe déjà dans Keycloak (409) - Mise à jour...
+INFO 2025-07-27 04:16:34,852 keycloak_auto_sync 🔄 Utilisateur existant trouvé - ID: b33208ff-9b5c-423d-be6e-91713b974df8
+INFO 2025-07-27 04:16:34,884 keycloak_auto_sync ✅ Utilisateur Keycloak mis à jour: sadikhniang010@gmail.com
+INFO 2025-07-27 04:16:34,908 keycloak_auto_sync 🎯 Utilisateur sadikhniang010@gmail.com assigné au groupe 'patients' dans Keycloak
+INFO 2025-07-27 04:16:34,936 keycloak_auto_sync 🎭 Rôles REALM assignés à sadikhniang010@gmail.com: ['patient', 'user', 'offline_access']
+INFO 2025-07-27 04:16:35,045 keycloak_auto_sync 🎯 Utilisateur COMPLET créé/mis à jour dans Keycloak: sadikhniang010@gmail.com (rôle: patient)
+INFO 2025-07-27 04:16:35,045 keycloak_auto_sync [SUCCESS] Synchronisation COMPLETE reussie: sadikhniang010@gmail.com
+INFO 2025-07-27 04:16:35,046 keycloak_auto_sync    Profil Keycloak cree/mis a jour
+INFO 2025-07-27 04:16:35,046 keycloak_auto_sync    Groupe assigne selon role: patient
+INFO 2025-07-27 04:16:35,047 keycloak_auto_sync    Roles realm et client assignes
+INFO 2025-07-27 04:16:35,047 keycloak_auto_sync    Utilisateur peut maintenant se connecter!
+INFO 2025-07-27 04:16:35,051 keycloak_auto_sync [SUCCESS] Synchronisation COMPLETE reussie: sadikhniang010@gmail.com
+INFO 2025-07-27 04:16:35,052 keycloak_auto_sync    Profil Keycloak cree/mis a jour
+INFO 2025-07-27 04:16:35,052 keycloak_auto_sync    Groupe assigne selon role: patient
+INFO 2025-07-27 04:16:35,053 keycloak_auto_sync    Roles realm et client assignes
+INFO 2025-07-27 04:16:35,053 keycloak_auto_sync    Utilisateur peut maintenant se connecter!
+INFO 2025-07-27 04:16:35,257 views Utilisateur sadikhniang010@gmail.com retiré du groupe administrateurs
+INFO 2025-07-27 04:16:35,261 views Utilisateur sadikhniang010@gmail.com retiré du groupe medecins
+INFO 2025-07-27 04:16:35,265 views Utilisateur sadikhniang010@gmail.com retiré du groupe patients
+INFO 2025-07-27 04:16:35,269 views Utilisateur sadikhniang010@gmail.com ajouté au groupe patients
+INFO 2025-07-27 04:16:35,269 views Synchronisation Keycloak et Django réussie pour sadikhniang010@gmail.com - Rôle: patient
+INFO 2025-07-27 04:16:35,282 basehttp "POST /administration/definir-role/273/ HTTP/1.1" 302 0
+INFO 2025-07-27 04:16:35,613 basehttp "GET /administration/securite/ HTTP/1.1" 200 21858
+INFO 2025-07-27 04:16:42,527 basehttp "POST /administration/alerte-lue/362/ HTTP/1.1" 302 0
+INFO 2025-07-27 04:16:42,738 basehttp "GET /administration/securite/ HTTP/1.1" 200 21129
+INFO 2025-07-27 04:16:47,023 basehttp "POST /administration/alerte-lue/364/ HTTP/1.1" 302 0
+INFO 2025-07-27 04:16:47,256 basehttp "GET /administration/securite/ HTTP/1.1" 200 20400
+INFO 2025-07-27 04:16:50,336 basehttp "POST /administration/alerte-lue/363/ HTTP/1.1" 302 0
+INFO 2025-07-27 04:16:50,528 basehttp "GET /administration/securite/ HTTP/1.1" 200 19671
+INFO 2025-07-27 04:16:57,025 basehttp "GET /administration/ HTTP/1.1" 200 9466
+INFO 2025-07-27 04:17:06,601 basehttp "GET /administration/statistiques/ HTTP/1.1" 200 22582
+INFO 2025-07-27 04:17:21,342 basehttp "GET /administration/ HTTP/1.1" 200 9466
+INFO 2025-07-27 04:19:06,612 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 16075
+INFO 2025-07-27 04:19:06,853 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+WARNING 2025-07-27 04:19:07,131 log Not Found: /favicon.ico
+INFO 2025-07-27 04:19:07,132 basehttp - Broken pipe from ('127.0.0.1', 62002)
+INFO 2025-07-27 04:20:55,652 basehttp "GET / HTTP/1.1" 200 20978
+WARNING 2025-07-27 04:20:56,421 log Not Found: /favicon.ico
+WARNING 2025-07-27 04:20:56,422 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-27 04:21:02,242 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-27 04:23:52,322 basehttp "GET / HTTP/1.1" 200 20978
+WARNING 2025-07-27 04:23:53,069 log Not Found: /favicon.ico
+WARNING 2025-07-27 04:23:53,070 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-27 04:23:55,103 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-27 05:06:24,731 basehttp "GET /administration/users/ HTTP/1.1" 302 0
+INFO 2025-07-27 05:06:24,798 basehttp "GET / HTTP/1.1" 200 20978
+WARNING 2025-07-27 05:06:26,796 log Not Found: /favicon.ico
+WARNING 2025-07-27 05:06:26,882 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-27 05:06:33,263 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-27 05:06:36,170 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-27 05:07:10,818 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-27 05:07:10,842 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-27 05:07:10,846 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-27 05:07:10,850 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-27 05:07:10,862 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-27 05:07:10,862 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-27 05:07:10,863 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-27 05:07:11,026 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-27 05:07:11,027 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-27 05:07:11,029 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+DEBUG 2025-07-27 05:07:11,029 auth_backends Claims complets pour None: {'sub': 'cb0dd49b-05e3-4647-9fc5-f139faa5b871', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Administrateur Systeme', 'preferred_username': 'admin', 'locale': 'en', 'given_name': 'Administrateur', 'family_name': 'Systeme', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-27 05:07:11,030 auth_backends Rôles realm trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-27 05:07:11,031 auth_backends Rôles extraits pour None: ['admin', 'uma_authorization', 'default-roles-keurdoctorsecure', 'offline_access']
+INFO 2025-07-27 05:07:11,038 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-27 05:07:11,045 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-27 05:07:11,050 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-27 05:07:11,053 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-27 05:07:11,057 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-27 05:07:11,058 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-27 05:07:11,059 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-27 05:07:11,197 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-27 05:07:11,199 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-27 05:07:11,200 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+INFO 2025-07-27 05:07:11,200 auth_backends Champ role_autorise synchronisé: admin@keurdoctor.com -> admin (groupe: administrateurs)
+INFO 2025-07-27 05:07:11,214 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-27 05:07:11,221 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-27 05:07:11,226 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-27 05:07:11,230 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-27 05:07:11,233 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-27 05:07:11,233 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-27 05:07:11,234 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-27 05:07:11,431 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-27 05:07:11,432 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-27 05:07:11,434 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+INFO 2025-07-27 05:07:11,439 basehttp "GET /oidc/callback/?state=qO5CHPJ4nyWvLcOFTQ5DPOYtlGG7ZILw&session_state=5433684c-44f9-409a-9865-47a9d9457d51&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=b7302444-b80d-4b17-ab06-6d655a6709fc.5433684c-44f9-409a-9865-47a9d9457d51.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-27 05:07:11,659 views Utilisateur staff/admin détecté: None
+INFO 2025-07-27 05:07:11,660 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-27 05:07:11,914 basehttp "GET /administration/ HTTP/1.1" 200 9466
+WARNING 2025-07-27 05:07:12,359 log Not Found: /favicon.ico
+WARNING 2025-07-27 05:07:12,362 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-27 05:45:46,497 basehttp "GET /administration/users/ HTTP/1.1" 200 7084
+INFO 2025-07-27 05:45:48,715 basehttp "GET /administration/users/create/ HTTP/1.1" 200 22843
+WARNING 2025-07-27 05:47:10,266 log Forbidden (CSRF token from POST incorrect.): /admin/comptes/utilisateur/
+WARNING 2025-07-27 05:47:10,273 basehttp "POST /admin/comptes/utilisateur/ HTTP/1.1" 403 2526
+WARNING 2025-07-27 05:47:10,566 log Not Found: /favicon.ico
+INFO 2025-07-27 05:47:10,567 basehttp - Broken pipe from ('127.0.0.1', 65532)
+INFO 2025-07-27 05:47:15,752 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 16075
+INFO 2025-07-27 05:47:15,989 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+WARNING 2025-07-27 05:47:16,281 log Not Found: /favicon.ico
+INFO 2025-07-27 05:47:16,282 basehttp - Broken pipe from ('127.0.0.1', 49294)
+INFO 2025-07-27 05:47:17,924 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 16075
+INFO 2025-07-27 05:47:18,224 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+WARNING 2025-07-27 05:47:18,463 log Not Found: /favicon.ico
+INFO 2025-07-27 05:47:18,464 basehttp - Broken pipe from ('127.0.0.1', 49300)
+INFO 2025-07-27 05:47:21,018 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 16075
+INFO 2025-07-27 05:47:21,374 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-27 05:47:37,638 basehttp "POST /admin/comptes/utilisateur/ HTTP/1.1" 200 10046
+INFO 2025-07-27 05:47:40,259 basehttp "POST /admin/comptes/utilisateur/ HTTP/1.1" 302 0
+INFO 2025-07-27 05:47:40,446 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 15557
+INFO 2025-07-27 05:47:40,660 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-27 05:48:02,061 basehttp "GET /administration/users/ HTTP/1.1" 200 6356
+INFO 2025-07-27 05:48:06,005 basehttp "GET /administration/users/create/ HTTP/1.1" 200 22843
+INFO 2025-07-27 05:49:54,308 rfid_arduino_handler Données reçues d'Arduino:                                                                                                                                                                                                                                                  Lecteur RFID initialisé
+INFO 2025-07-27 05:49:54,308 rfid_arduino_handler UID carte détecté:                                                                                                                                                                                                                                                  Lecteur RFID initialisé
+ERROR 2025-07-27 05:49:54,310 views_rfid Erreur lors du scan RFID pour création utilisateur: A string literal cannot contain NUL (0x00) characters.
+INFO 2025-07-27 05:49:54,312 basehttp "POST /api/scan-rfid-user-creation/ HTTP/1.1" 200 116
+INFO 2025-07-27 05:49:57,801 rfid_arduino_handler Données reçues d'Arduino: Lecteur RFID initialisé
+INFO 2025-07-27 05:49:57,802 rfid_arduino_handler UID carte détecté: Lecteur RFID initialisé
+INFO 2025-07-27 05:49:57,816 basehttp "POST /api/scan-rfid-user-creation/ HTTP/1.1" 200 172
+INFO 2025-07-27 05:50:11,544 rfid_arduino_handler Données reçues d'Arduino: Lecteur RFID initialisé
+INFO 2025-07-27 05:50:11,545 rfid_arduino_handler UID carte détecté: Lecteur RFID initialisé
+INFO 2025-07-27 05:50:11,569 basehttp "POST /api/scan-rfid-user-creation/ HTTP/1.1" 200 172
+INFO 2025-07-27 05:50:16,665 keycloak_auto_sync 🧹 Données nettoyées: rassoulmouhamd2@gmail.com - Rassoul DIOP
+INFO 2025-07-27 05:50:16,686 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe administrateurs
+INFO 2025-07-27 05:50:16,689 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe medecins
+INFO 2025-07-27 05:50:16,692 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe patients
+INFO 2025-07-27 05:50:16,701 views Utilisateur rassoulmouhamd2@gmail.com ajouté au groupe medecins
+INFO 2025-07-27 05:50:16,701 models ✅ Groupes Django auto-synchronisés pour rassoulmouhamd2@gmail.com (rôle: medecin)
+INFO 2025-07-27 05:50:16,737 views Carte RFID Lecteur RFID initialisé créée pour le médecin rassoulmouhamd2@gmail.com avec accès direct
+INFO 2025-07-27 05:50:16,738 views Tentative de création de l'utilisateur rassoulmouhamd2@gmail.com dans Keycloak avec le rôle medecin
+INFO 2025-07-27 05:50:17,006 views Création de l'utilisateur rassoulmouhamd2@gmail.com dans Keycloak...
+INFO 2025-07-27 05:50:17,074 views Utilisateur rassoulmouhamd2@gmail.com créé dans Keycloak
+INFO 2025-07-27 05:50:17,157 views [SYNC] Tentative d'ajout de rassoulmouhamd2@gmail.com au groupe 'medecins' dans Keycloak
+INFO 2025-07-27 05:50:17,171 views Groupes disponibles dans Keycloak: ['administrateurs', 'medecins', 'médecins', 'patients']
+INFO 2025-07-27 05:50:17,172 views Groupe 'medecins' trouvé avec ID: fe632dd9-a7ca-4506-be54-67dde8359872
+INFO 2025-07-27 05:50:17,187 views Groupes actuels de rassoulmouhamd2@gmail.com: []
+INFO 2025-07-27 05:50:17,210 views [SYNC] Utilisateur rassoulmouhamd2@gmail.com ajouté au groupe medecins dans Keycloak
+INFO 2025-07-27 05:50:17,243 views [SYNC] Rôle 'medecin' attribué à rassoulmouhamd2@gmail.com dans Keycloak
+INFO 2025-07-27 05:50:17,244 views Utilisateur rassoulmouhamd2@gmail.com synchronisé avec succès dans Keycloak avec le rôle medecin
+INFO 2025-07-27 05:50:21,231 views Email de bienvenue envoyé à rassoulmouhamd2@gmail.com
+INFO 2025-07-27 05:50:21,378 views Attributs RFID mis à jour pour rassoulmouhamd2@gmail.com dans Keycloak
+INFO 2025-07-27 05:50:21,381 views Attributs RFID mis à jour pour rassoulmouhamd2@gmail.com dans Keycloak
+INFO 2025-07-27 05:50:21,382 views Utilisateur rassoulmouhamd2@gmail.com créé avec succès dans Django et Keycloak
+INFO 2025-07-27 05:50:21,391 basehttp "POST /administration/users/create/ HTTP/1.1" 302 0
+INFO 2025-07-27 05:50:21,568 basehttp "GET /administration/users/ HTTP/1.1" 200 7085
+WARNING 2025-07-27 05:50:21,843 log Not Found: /favicon.ico
+WARNING 2025-07-27 05:50:21,844 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-27 05:50:52,025 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 16298
+INFO 2025-07-27 05:50:52,278 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+WARNING 2025-07-27 05:50:52,549 log Not Found: /favicon.ico
+WARNING 2025-07-27 05:50:52,549 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-27 05:51:30,626 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-27 05:51:30,638 basehttp "GET / HTTP/1.1" 200 20978
+INFO 2025-07-27 05:51:34,555 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-27 05:56:50,314 basehttp "GET / HTTP/1.1" 200 20978
+INFO 2025-07-27 05:56:53,682 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-27 05:59:42,819 basehttp "GET / HTTP/1.1" 200 20978
+INFO 2025-07-27 05:59:47,031 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-27 06:08:21,610 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\views.py changed, reloading.
+INFO 2025-07-27 06:08:21,634 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\views.py changed, reloading.
+INFO 2025-07-27 06:08:26,737 autoreload Watching for file changes with StatReloader
+INFO 2025-07-27 06:08:26,838 autoreload Watching for file changes with StatReloader
+INFO 2025-07-27 06:08:33,452 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\keycloak_auto_sync.py changed, reloading.
+INFO 2025-07-27 06:08:33,521 autoreload H:\SRT3\PSFE\ProjetSoutenance_SASPM\KeurDoctor\keur_Doctor_app\comptes\keycloak_auto_sync.py changed, reloading.
+INFO 2025-07-27 06:08:37,152 autoreload Watching for file changes with StatReloader
+INFO 2025-07-27 06:08:37,183 autoreload Watching for file changes with StatReloader
+INFO 2025-07-27 06:09:56,806 basehttp "POST /admin/comptes/utilisateur/ HTTP/1.1" 302 0
+INFO 2025-07-27 06:09:57,105 basehttp "GET /admin/login/?next=/admin/comptes/utilisateur/ HTTP/1.1" 200 4261
+WARNING 2025-07-27 06:09:57,453 log Not Found: /favicon.ico
+WARNING 2025-07-27 06:09:57,454 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-27 06:10:03,346 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-27 06:10:03,389 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-27 06:10:03,398 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-27 06:10:03,402 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-27 06:10:03,418 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-27 06:10:03,418 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-27 06:10:03,419 keycloak_auto_sync 🔧 Premier usage - Configuration automatique Keycloak...
+INFO 2025-07-27 06:10:03,569 keycloak_auto_sync 🎯 Setup Keycloak terminé - Rôles et groupes prêts
+INFO 2025-07-27 06:10:03,570 keycloak_auto_sync ✅ Setup Keycloak terminé
+INFO 2025-07-27 06:10:03,571 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-27 06:10:03,705 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-27 06:10:03,708 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-27 06:10:03,709 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+INFO 2025-07-27 06:10:03,713 basehttp "POST /admin/login/?next=/admin/comptes/utilisateur/ HTTP/1.1" 302 0
+INFO 2025-07-27 06:10:04,081 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 16083
+INFO 2025-07-27 06:10:04,384 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+WARNING 2025-07-27 06:10:04,662 log Not Found: /favicon.ico
+WARNING 2025-07-27 06:10:04,663 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-27 06:10:26,695 basehttp "POST /admin/comptes/utilisateur/ HTTP/1.1" 200 11085
+INFO 2025-07-27 06:10:27,012 basehttp - Broken pipe from ('127.0.0.1', 50370)
+INFO 2025-07-27 06:10:29,448 basehttp "POST /admin/comptes/utilisateur/ HTTP/1.1" 302 0
+INFO 2025-07-27 06:10:29,646 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 14886
+INFO 2025-07-27 06:10:29,962 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+WARNING 2025-07-27 06:10:30,336 log Not Found: /favicon.ico
+INFO 2025-07-27 06:10:30,338 basehttp - Broken pipe from ('127.0.0.1', 50409)
+INFO 2025-07-27 06:10:45,380 basehttp "GET /administration/users/ HTTP/1.1" 200 5629
+INFO 2025-07-27 06:33:54,033 basehttp "GET /administration/users/ HTTP/1.1" 200 5629
+WARNING 2025-07-27 06:33:54,328 log Not Found: /favicon.ico
+INFO 2025-07-27 06:33:54,329 basehttp - Broken pipe from ('127.0.0.1', 51133)
+INFO 2025-07-27 06:34:09,254 basehttp "GET /administration/users/ HTTP/1.1" 200 5629
+WARNING 2025-07-27 06:34:09,564 log Not Found: /favicon.ico
+INFO 2025-07-27 06:34:09,566 basehttp - Broken pipe from ('127.0.0.1', 51147)
+INFO 2025-07-27 06:34:27,799 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 14737
+INFO 2025-07-27 06:34:28,050 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+WARNING 2025-07-27 06:34:28,325 log Not Found: /favicon.ico
+INFO 2025-07-27 06:34:28,326 basehttp - Broken pipe from ('127.0.0.1', 51169)
+INFO 2025-07-27 06:34:41,887 basehttp "GET /administration/users/create/ HTTP/1.1" 200 22843
+INFO 2025-07-27 06:35:18,538 rfid_arduino_handler Données reçues d'Arduino: Lecteur RFID initialisé
+INFO 2025-07-27 06:35:18,539 rfid_arduino_handler UID carte détecté: Lecteur RFID initialisé
+INFO 2025-07-27 06:35:18,550 basehttp "POST /api/scan-rfid-user-creation/ HTTP/1.1" 200 172
+INFO 2025-07-27 06:35:28,266 rfid_arduino_handler Données reçues d'Arduino: Lecteur RFID initialisé
+INFO 2025-07-27 06:35:28,267 rfid_arduino_handler UID carte détecté: Lecteur RFID initialisé
+INFO 2025-07-27 06:35:28,274 basehttp "POST /api/scan-rfid-user-creation/ HTTP/1.1" 200 172
+INFO 2025-07-27 06:35:41,761 keycloak_auto_sync 🧹 Données nettoyées: rassoulmouhamd2@gmail.com - Moustapha DIOP
+INFO 2025-07-27 06:35:41,776 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe administrateurs
+INFO 2025-07-27 06:35:41,782 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe medecins
+INFO 2025-07-27 06:35:41,787 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe patients
+INFO 2025-07-27 06:35:41,794 views Utilisateur rassoulmouhamd2@gmail.com ajouté au groupe medecins
+INFO 2025-07-27 06:35:41,794 models ✅ Groupes Django auto-synchronisés pour rassoulmouhamd2@gmail.com (rôle: medecin)
+INFO 2025-07-27 06:35:41,837 views Carte RFID Lecteur RFID initialisé créée pour le médecin rassoulmouhamd2@gmail.com avec accès direct
+INFO 2025-07-27 06:35:41,838 views Tentative de création de l'utilisateur rassoulmouhamd2@gmail.com dans Keycloak avec le rôle medecin
+INFO 2025-07-27 06:35:41,997 views Création de l'utilisateur rassoulmouhamd2@gmail.com dans Keycloak...
+INFO 2025-07-27 06:35:42,073 views Utilisateur rassoulmouhamd2@gmail.com créé dans Keycloak
+INFO 2025-07-27 06:35:42,183 views [SYNC] Tentative d'ajout de rassoulmouhamd2@gmail.com au groupe 'medecins' dans Keycloak
+INFO 2025-07-27 06:35:42,194 views Groupes disponibles dans Keycloak: ['administrateurs', 'medecins', 'médecins', 'patients']
+INFO 2025-07-27 06:35:42,194 views Groupe 'medecins' trouvé avec ID: fe632dd9-a7ca-4506-be54-67dde8359872
+INFO 2025-07-27 06:35:42,212 views Groupes actuels de rassoulmouhamd2@gmail.com: []
+INFO 2025-07-27 06:35:42,244 views [SYNC] Utilisateur rassoulmouhamd2@gmail.com ajouté au groupe medecins dans Keycloak
+INFO 2025-07-27 06:35:42,294 views [SYNC] Rôle 'medecin' attribué à rassoulmouhamd2@gmail.com dans Keycloak
+INFO 2025-07-27 06:35:42,294 views Utilisateur rassoulmouhamd2@gmail.com synchronisé avec succès dans Keycloak avec le rôle medecin
+INFO 2025-07-27 06:35:47,147 views Email de bienvenue envoyé à rassoulmouhamd2@gmail.com
+INFO 2025-07-27 06:35:47,493 views Attributs RFID mis à jour pour rassoulmouhamd2@gmail.com dans Keycloak
+INFO 2025-07-27 06:35:47,495 views Attributs RFID mis à jour pour rassoulmouhamd2@gmail.com dans Keycloak
+INFO 2025-07-27 06:35:47,496 views Utilisateur rassoulmouhamd2@gmail.com créé avec succès dans Django et Keycloak
+INFO 2025-07-27 06:35:47,508 basehttp "POST /administration/users/create/ HTTP/1.1" 302 0
+INFO 2025-07-27 06:35:47,752 basehttp "GET /administration/users/ HTTP/1.1" 200 6358
+WARNING 2025-07-27 06:35:48,053 log Not Found: /favicon.ico
+WARNING 2025-07-27 06:35:48,054 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-27 06:36:20,840 basehttp "GET / HTTP/1.1" 200 20978
+INFO 2025-07-27 06:36:24,076 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-27 06:45:09,567 views Utilisateur rassoulmouhamd2@gmail.com existe déjà dans Keycloak, mise à jour...
+INFO 2025-07-27 06:45:09,600 views Utilisateur rassoulmouhamd2@gmail.com mis à jour dans Keycloak
+INFO 2025-07-27 06:45:09,745 views [SYNC] Tentative d'ajout de rassoulmouhamd2@gmail.com au groupe 'medecins' dans Keycloak
+INFO 2025-07-27 06:45:09,762 views Groupes disponibles dans Keycloak: ['administrateurs', 'medecins', 'médecins', 'patients']
+INFO 2025-07-27 06:45:09,762 views Groupe 'medecins' trouvé avec ID: fe632dd9-a7ca-4506-be54-67dde8359872
+INFO 2025-07-27 06:45:09,783 views Groupes actuels de rassoulmouhamd2@gmail.com: ['medecins']
+INFO 2025-07-27 06:45:09,784 views [SYNC] Utilisateur rassoulmouhamd2@gmail.com est déjà dans le groupe medecins
+INFO 2025-07-27 06:45:09,821 views [SYNC] Rôle 'medecin' attribué à rassoulmouhamd2@gmail.com dans Keycloak
+INFO 2025-07-27 06:45:09,824 views Utilisateur rassoulmouhamd2@gmail.com synchronisé avec succès dans Keycloak avec le rôle medecin
+INFO 2025-07-27 06:53:08,290 basehttp "GET / HTTP/1.1" 200 20978
+INFO 2025-07-27 06:53:11,024 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-27 06:54:29,686 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 15631
+INFO 2025-07-27 06:54:29,899 basehttp - Broken pipe from ('127.0.0.1', 52416)
+INFO 2025-07-27 06:54:30,076 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+WARNING 2025-07-27 06:54:30,492 log Not Found: /favicon.ico
+WARNING 2025-07-27 06:54:30,493 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-27 16:34:51,938 autoreload Watching for file changes with StatReloader
+INFO 2025-07-27 16:35:06,851 basehttp "GET / HTTP/1.1" 200 20978
+WARNING 2025-07-27 16:35:10,220 log Not Found: /favicon.ico
+WARNING 2025-07-27 16:35:10,300 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-27 16:35:10,939 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-27 16:35:14,474 basehttp "GET /administration/users/ HTTP/1.1" 302 0
+INFO 2025-07-27 16:35:14,875 basehttp "GET / HTTP/1.1" 200 20978
+WARNING 2025-07-27 16:35:16,389 log Not Found: /favicon.ico
+WARNING 2025-07-27 16:35:16,399 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-27 16:35:18,246 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 302 0
+INFO 2025-07-27 16:35:19,305 basehttp "GET /admin/login/?next=/admin/comptes/utilisateur/ HTTP/1.1" 200 4261
+INFO 2025-07-27 16:35:19,754 basehttp - Broken pipe from ('127.0.0.1', 54782)
+INFO 2025-07-27 16:35:19,757 basehttp - Broken pipe from ('127.0.0.1', 54707)
+INFO 2025-07-27 16:35:27,631 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-27 16:35:27,684 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-27 16:35:27,694 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-27 16:35:27,727 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-27 16:35:27,753 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-27 16:35:27,758 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-27 16:35:27,759 keycloak_auto_sync 🔧 Premier usage - Configuration automatique Keycloak...
+INFO 2025-07-27 16:35:31,548 basehttp "GET /oidc/callback/?state=8oYxPDXLuU6rSb3YUiW8tHFJQ3BLkz9o&session_state=aede4c06-42b3-4323-97e9-743879699b4a&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=6c43491f-42f5-4d14-b312-b4d4c07641b5.aede4c06-42b3-4323-97e9-743879699b4a.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-27 16:35:31,575 basehttp "GET / HTTP/1.1" 200 20978
+WARNING 2025-07-27 16:35:32,397 log Not Found: /favicon.ico
+WARNING 2025-07-27 16:35:32,400 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-27 16:35:33,417 keycloak_auto_sync 🎯 Setup Keycloak terminé - Rôles et groupes prêts
+INFO 2025-07-27 16:35:33,418 keycloak_auto_sync ✅ Setup Keycloak terminé
+INFO 2025-07-27 16:35:33,419 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-27 16:35:34,733 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-27 16:35:34,741 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-27 16:35:34,742 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+INFO 2025-07-27 16:35:34,757 basehttp "POST /admin/login/?next=/admin/comptes/utilisateur/ HTTP/1.1" 302 0
+INFO 2025-07-27 16:35:35,305 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 15416
+INFO 2025-07-27 16:35:35,712 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-27 16:35:35,781 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2025-07-27 16:35:35,791 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+INFO 2025-07-27 16:35:35,821 basehttp "GET /static/admin/img/icon-no.svg HTTP/1.1" 200 560
+WARNING 2025-07-27 16:35:36,413 log Not Found: /favicon.ico
+WARNING 2025-07-27 16:35:36,414 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-27 16:35:36,507 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2025-07-27 16:35:36,539 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2025-07-27 16:35:36,547 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+INFO 2025-07-27 16:35:36,569 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2025-07-27 16:38:11,503 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-27 16:38:11,518 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-27 16:38:11,522 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-27 16:38:11,528 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-27 16:38:11,536 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-27 16:38:11,537 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-27 16:38:11,538 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-27 16:38:11,777 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-27 16:38:11,778 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-27 16:38:11,779 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+DEBUG 2025-07-27 16:38:11,780 auth_backends Claims complets pour None: {'sub': 'cb0dd49b-05e3-4647-9fc5-f139faa5b871', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Administrateur Systeme', 'preferred_username': 'admin', 'locale': 'en', 'given_name': 'Administrateur', 'family_name': 'Systeme', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-27 16:38:11,781 auth_backends Rôles realm trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-27 16:38:11,781 auth_backends Rôles extraits pour None: ['default-roles-keurdoctorsecure', 'admin', 'offline_access', 'uma_authorization']
+INFO 2025-07-27 16:38:11,794 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-27 16:38:11,801 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-27 16:38:11,808 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-27 16:38:11,815 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-27 16:38:11,819 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-27 16:38:11,820 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-27 16:38:11,820 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-27 16:38:12,009 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-27 16:38:12,010 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-27 16:38:12,011 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+INFO 2025-07-27 16:38:12,012 auth_backends Champ role_autorise synchronisé: admin@keurdoctor.com -> admin (groupe: administrateurs)
+INFO 2025-07-27 16:38:12,031 basehttp "GET /oidc/callback/?state=hjyWA0FJXg7ZRRdlGftlsf6AEKx6jMIz&session_state=51aa70cc-769c-4517-a2fa-d9d9f9c96ac7&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=71a82248-f63e-4432-9aa7-b26445e214b7.51aa70cc-769c-4517-a2fa-d9d9f9c96ac7.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-27 16:38:12,244 views Utilisateur staff/admin détecté: None
+INFO 2025-07-27 16:38:12,245 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-27 16:38:12,472 basehttp "GET /administration/ HTTP/1.1" 200 9754
+INFO 2025-07-27 16:41:08,211 basehttp "GET /administration/users/ HTTP/1.1" 200 6358
+INFO 2025-07-27 23:01:42,131 autoreload Watching for file changes with StatReloader
+INFO 2025-07-27 23:44:11,390 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 302 0
+INFO 2025-07-27 23:44:11,435 basehttp "GET /admin/login/?next=/admin/comptes/utilisateur/ HTTP/1.1" 200 4261
+WARNING 2025-07-27 23:44:11,835 log Not Found: /favicon.ico
+WARNING 2025-07-27 23:44:11,836 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-27 23:44:18,179 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-27 23:44:18,214 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-27 23:44:18,218 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-27 23:44:18,222 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-27 23:44:18,241 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-27 23:44:18,241 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-27 23:44:18,242 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-27 23:44:18,515 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-27 23:44:18,518 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-27 23:44:18,518 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+INFO 2025-07-27 23:44:18,523 basehttp "POST /admin/login/?next=/admin/comptes/utilisateur/ HTTP/1.1" 302 0
+INFO 2025-07-27 23:44:18,717 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 15416
+INFO 2025-07-27 23:44:18,939 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+WARNING 2025-07-27 23:44:19,156 log Not Found: /favicon.ico
+WARNING 2025-07-27 23:44:19,157 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-27 23:44:39,318 basehttp "GET / HTTP/1.1" 302 0
+INFO 2025-07-27 23:44:39,497 views Utilisateur staff/admin détecté: None
+INFO 2025-07-27 23:44:39,498 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-27 23:44:39,822 basehttp "GET /administration/ HTTP/1.1" 200 9754
+WARNING 2025-07-27 23:44:40,217 log Not Found: /favicon.ico
+INFO 2025-07-27 23:44:40,218 basehttp - Broken pipe from ('127.0.0.1', 62945)
+INFO 2025-07-28 06:08:59,169 basehttp "GET /administration/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:08:59,183 basehttp "GET / HTTP/1.1" 200 20978
+WARNING 2025-07-28 06:09:00,151 log Not Found: /favicon.ico
+WARNING 2025-07-28 06:09:00,152 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-28 06:09:25,849 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:09:25,882 basehttp "GET /admin/login/?next=/admin/comptes/utilisateur/ HTTP/1.1" 200 4261
+WARNING 2025-07-28 06:09:26,357 log Not Found: /favicon.ico
+INFO 2025-07-28 06:09:26,358 basehttp - Broken pipe from ('127.0.0.1', 51925)
+INFO 2025-07-28 06:09:33,109 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-28 06:09:33,148 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-28 06:09:33,164 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-28 06:09:33,170 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-28 06:09:33,191 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-28 06:09:33,191 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-28 06:09:33,192 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-28 06:09:33,520 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-28 06:09:33,521 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-28 06:09:33,522 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+INFO 2025-07-28 06:09:33,528 basehttp "POST /admin/login/?next=/admin/comptes/utilisateur/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:09:33,806 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 15416
+INFO 2025-07-28 06:09:34,098 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+WARNING 2025-07-28 06:09:34,459 log Not Found: /favicon.ico
+WARNING 2025-07-28 06:09:34,460 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-28 06:09:41,819 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:11:00,850 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-28 06:11:00,868 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-28 06:11:00,872 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-28 06:11:00,887 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-28 06:11:00,904 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-28 06:11:00,905 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-28 06:11:00,905 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-28 06:11:01,248 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-28 06:11:01,249 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-28 06:11:01,250 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+DEBUG 2025-07-28 06:11:01,250 auth_backends Claims complets pour None: {'sub': 'cb0dd49b-05e3-4647-9fc5-f139faa5b871', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Administrateur Systeme', 'preferred_username': 'admin', 'locale': 'en', 'given_name': 'Administrateur', 'family_name': 'Systeme', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-28 06:11:01,251 auth_backends Rôles realm trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-28 06:11:01,251 auth_backends Rôles extraits pour None: ['default-roles-keurdoctorsecure', 'admin', 'offline_access', 'uma_authorization']
+INFO 2025-07-28 06:11:01,260 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-28 06:11:01,267 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-28 06:11:01,272 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-28 06:11:01,278 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-28 06:11:01,284 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-28 06:11:01,285 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-28 06:11:01,286 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-28 06:11:01,729 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-28 06:11:01,731 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-28 06:11:01,732 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+INFO 2025-07-28 06:11:01,732 auth_backends Champ role_autorise synchronisé: admin@keurdoctor.com -> admin (groupe: administrateurs)
+INFO 2025-07-28 06:11:01,745 basehttp "GET /oidc/callback/?state=s1H7fC8CvcLfDHTMNCaaNPTXUaaTJmCF&session_state=2c050f6f-e052-41d7-8ae6-547fef5fc274&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=6df55ad9-5142-42ef-b59e-8c073af92db2.2c050f6f-e052-41d7-8ae6-547fef5fc274.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-28 06:11:01,986 views Utilisateur staff/admin détecté: None
+INFO 2025-07-28 06:11:01,988 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:11:02,300 basehttp "GET /administration/ HTTP/1.1" 200 9754
+INFO 2025-07-28 06:11:16,584 basehttp "GET /administration/users/ HTTP/1.1" 200 6358
+INFO 2025-07-28 06:11:46,128 basehttp "POST /admin/comptes/utilisateur/ HTTP/1.1" 200 10208
+INFO 2025-07-28 06:11:48,774 basehttp "POST /admin/comptes/utilisateur/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:11:49,081 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 14885
+INFO 2025-07-28 06:11:49,417 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+INFO 2025-07-28 06:12:14,811 basehttp "GET /administration/users/create/ HTTP/1.1" 200 22843
+INFO 2025-07-28 06:13:22,344 keycloak_auto_sync 🧹 Données nettoyées: rassoulmouhamd2@gmail.com - Moustapha DIOP
+INFO 2025-07-28 06:13:22,354 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe administrateurs
+INFO 2025-07-28 06:13:22,359 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe medecins
+INFO 2025-07-28 06:13:22,363 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe patients
+INFO 2025-07-28 06:13:22,369 views Utilisateur rassoulmouhamd2@gmail.com ajouté au groupe medecins
+INFO 2025-07-28 06:13:22,372 models ✅ Groupes Django auto-synchronisés pour rassoulmouhamd2@gmail.com (rôle: medecin)
+INFO 2025-07-28 06:13:22,402 views Tentative de création de l'utilisateur rassoulmouhamd2@gmail.com dans Keycloak avec le rôle medecin
+INFO 2025-07-28 06:13:22,545 views Création de l'utilisateur rassoulmouhamd2@gmail.com dans Keycloak...
+INFO 2025-07-28 06:13:22,663 views Utilisateur rassoulmouhamd2@gmail.com créé dans Keycloak
+INFO 2025-07-28 06:13:22,849 views [SYNC] Tentative d'ajout de rassoulmouhamd2@gmail.com au groupe 'medecins' dans Keycloak
+INFO 2025-07-28 06:13:22,869 views Groupes disponibles dans Keycloak: ['administrateurs', 'medecins', 'médecins', 'patients']
+INFO 2025-07-28 06:13:22,870 views Groupe 'medecins' trouvé avec ID: fe632dd9-a7ca-4506-be54-67dde8359872
+INFO 2025-07-28 06:13:22,925 views Groupes actuels de rassoulmouhamd2@gmail.com: []
+INFO 2025-07-28 06:13:22,996 views [SYNC] Utilisateur rassoulmouhamd2@gmail.com ajouté au groupe medecins dans Keycloak
+INFO 2025-07-28 06:13:23,135 views [SYNC] Rôle 'medecin' attribué à rassoulmouhamd2@gmail.com dans Keycloak
+INFO 2025-07-28 06:13:23,136 views Utilisateur rassoulmouhamd2@gmail.com synchronisé avec succès dans Keycloak avec le rôle medecin
+ERROR 2025-07-28 06:13:35,280 views Erreur lors de l'envoi de l'email: [Errno 11001] getaddrinfo failed
+INFO 2025-07-28 06:13:35,281 views Utilisateur rassoulmouhamd2@gmail.com créé avec succès dans Django et Keycloak
+INFO 2025-07-28 06:13:35,293 basehttp "POST /administration/users/create/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:13:35,630 basehttp "GET /administration/users/ HTTP/1.1" 200 6358
+WARNING 2025-07-28 06:13:36,249 log Not Found: /favicon.ico
+WARNING 2025-07-28 06:13:36,251 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-28 06:13:55,431 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 15631
+INFO 2025-07-28 06:13:55,697 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+WARNING 2025-07-28 06:13:55,974 log Not Found: /favicon.ico
+WARNING 2025-07-28 06:13:55,975 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-28 06:14:01,746 basehttp "GET /administration/users/create/ HTTP/1.1" 200 22843
+INFO 2025-07-28 06:15:13,142 keycloak_auto_sync 🧹 Données nettoyées: mouharassoulmd@gmail.com - Loly DIOP
+INFO 2025-07-28 06:15:13,152 views Utilisateur mouharassoulmd@gmail.com retiré du groupe administrateurs
+INFO 2025-07-28 06:15:13,156 views Utilisateur mouharassoulmd@gmail.com retiré du groupe medecins
+INFO 2025-07-28 06:15:13,159 views Utilisateur mouharassoulmd@gmail.com retiré du groupe patients
+INFO 2025-07-28 06:15:13,169 views Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins
+INFO 2025-07-28 06:15:13,169 models ✅ Groupes Django auto-synchronisés pour mouharassoulmd@gmail.com (rôle: medecin)
+INFO 2025-07-28 06:15:13,197 views Tentative de création de l'utilisateur mouharassoulmd@gmail.com dans Keycloak avec le rôle medecin
+INFO 2025-07-28 06:15:13,335 views Création de l'utilisateur mouharassoulmd@gmail.com dans Keycloak...
+INFO 2025-07-28 06:15:13,424 views Utilisateur mouharassoulmd@gmail.com créé dans Keycloak
+INFO 2025-07-28 06:15:13,546 views [SYNC] Tentative d'ajout de mouharassoulmd@gmail.com au groupe 'medecins' dans Keycloak
+INFO 2025-07-28 06:15:13,598 views Groupes disponibles dans Keycloak: ['administrateurs', 'medecins', 'médecins', 'patients']
+INFO 2025-07-28 06:15:13,599 views Groupe 'medecins' trouvé avec ID: fe632dd9-a7ca-4506-be54-67dde8359872
+INFO 2025-07-28 06:15:13,625 views Groupes actuels de mouharassoulmd@gmail.com: []
+INFO 2025-07-28 06:15:13,663 views [SYNC] Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins dans Keycloak
+INFO 2025-07-28 06:15:13,720 views [SYNC] Rôle 'medecin' attribué à mouharassoulmd@gmail.com dans Keycloak
+INFO 2025-07-28 06:15:13,721 views Utilisateur mouharassoulmd@gmail.com synchronisé avec succès dans Keycloak avec le rôle medecin
+INFO 2025-07-28 06:15:19,957 views Email de bienvenue envoyé à mouharassoulmd@gmail.com
+INFO 2025-07-28 06:15:19,960 views Utilisateur mouharassoulmd@gmail.com créé avec succès dans Django et Keycloak
+INFO 2025-07-28 06:15:19,989 basehttp "POST /administration/users/create/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:15:20,273 basehttp "GET /administration/users/ HTTP/1.1" 200 7086
+WARNING 2025-07-28 06:15:20,642 log Not Found: /favicon.ico
+WARNING 2025-07-28 06:15:20,643 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-28 06:15:56,627 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:15:56,759 basehttp "GET / HTTP/1.1" 200 20978
+WARNING 2025-07-28 06:15:57,611 log Not Found: /favicon.ico
+WARNING 2025-07-28 06:15:57,614 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-28 06:15:59,186 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:16:49,901 keycloak_auto_sync 🧹 Données nettoyées: mouharassoulmd@gmail.com - Loly DIOP
+INFO 2025-07-28 06:16:49,919 views Utilisateur mouharassoulmd@gmail.com retiré du groupe administrateurs
+INFO 2025-07-28 06:16:49,925 views Utilisateur mouharassoulmd@gmail.com retiré du groupe medecins
+INFO 2025-07-28 06:16:49,930 views Utilisateur mouharassoulmd@gmail.com retiré du groupe patients
+INFO 2025-07-28 06:16:49,981 views Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins
+INFO 2025-07-28 06:16:49,982 models ✅ Groupes Django auto-synchronisés pour mouharassoulmd@gmail.com (rôle: medecin)
+INFO 2025-07-28 06:16:49,998 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: mouharassoulmd@gmail.com
+INFO 2025-07-28 06:16:50,352 keycloak_auto_sync 🎯 Utilisateur mouharassoulmd@gmail.com assigné au groupe 'médecins' dans Keycloak
+INFO 2025-07-28 06:16:50,442 keycloak_auto_sync 🎭 Rôles REALM assignés à mouharassoulmd@gmail.com: ['medecin', 'user', 'offline_access']
+INFO 2025-07-28 06:16:50,807 keycloak_auto_sync ✅ Profil ET groupes Keycloak mis à jour automatiquement: mouharassoulmd@gmail.com
+INFO 2025-07-28 06:16:50,811 keycloak_auto_sync [SUCCESS] Synchronisation COMPLETE reussie: mouharassoulmd@gmail.com
+INFO 2025-07-28 06:16:50,812 keycloak_auto_sync    Profil Keycloak cree/mis a jour
+INFO 2025-07-28 06:16:50,817 keycloak_auto_sync    Groupe assigne selon role: medecin
+INFO 2025-07-28 06:16:50,819 keycloak_auto_sync    Roles realm et client assignes
+INFO 2025-07-28 06:16:50,821 keycloak_auto_sync    Utilisateur peut maintenant se connecter!
+DEBUG 2025-07-28 06:16:50,826 auth_backends Claims complets pour None: {'sub': 'e315542f-d4c2-4a54-8dbb-8d3b3e57b205', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']}, 'name': 'Loly DIOP', 'preferred_username': 'mouharassoulmd@gmail.com', 'given_name': 'Loly', 'family_name': 'DIOP', 'email': 'mouharassoulmd@gmail.com'}
+DEBUG 2025-07-28 06:16:50,841 auth_backends Rôles realm trouvés: ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']
+INFO 2025-07-28 06:16:50,848 auth_backends Rôles extraits pour None: ['default-roles-keurdoctorsecure', 'medecin', 'offline_access', 'uma_authorization']
+INFO 2025-07-28 06:16:50,872 keycloak_auto_sync 🧹 Données nettoyées: mouharassoulmd@gmail.com - Loly DIOP
+INFO 2025-07-28 06:16:50,883 views Utilisateur mouharassoulmd@gmail.com retiré du groupe administrateurs
+INFO 2025-07-28 06:16:50,887 views Utilisateur mouharassoulmd@gmail.com retiré du groupe medecins
+INFO 2025-07-28 06:16:50,893 views Utilisateur mouharassoulmd@gmail.com retiré du groupe patients
+INFO 2025-07-28 06:16:50,902 views Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins
+INFO 2025-07-28 06:16:50,903 models ✅ Groupes Django auto-synchronisés pour mouharassoulmd@gmail.com (rôle: medecin)
+INFO 2025-07-28 06:16:50,903 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: mouharassoulmd@gmail.com
+INFO 2025-07-28 06:16:51,171 keycloak_auto_sync 🎯 Utilisateur mouharassoulmd@gmail.com assigné au groupe 'médecins' dans Keycloak
+INFO 2025-07-28 06:16:51,290 keycloak_auto_sync 🎭 Rôles REALM assignés à mouharassoulmd@gmail.com: ['medecin', 'user', 'offline_access']
+INFO 2025-07-28 06:16:51,350 keycloak_auto_sync ✅ Profil ET groupes Keycloak mis à jour automatiquement: mouharassoulmd@gmail.com
+INFO 2025-07-28 06:16:51,351 keycloak_auto_sync [SUCCESS] Synchronisation COMPLETE reussie: mouharassoulmd@gmail.com
+INFO 2025-07-28 06:16:51,352 keycloak_auto_sync    Profil Keycloak cree/mis a jour
+INFO 2025-07-28 06:16:51,353 keycloak_auto_sync    Groupe assigne selon role: medecin
+INFO 2025-07-28 06:16:51,353 keycloak_auto_sync    Roles realm et client assignes
+INFO 2025-07-28 06:16:51,354 keycloak_auto_sync    Utilisateur peut maintenant se connecter!
+INFO 2025-07-28 06:16:51,354 auth_backends Champ role_autorise synchronisé: mouharassoulmd@gmail.com -> medecin (groupe: médecins)
+INFO 2025-07-28 06:16:51,374 keycloak_auto_sync 🧹 Données nettoyées: mouharassoulmd@gmail.com - Loly DIOP
+INFO 2025-07-28 06:16:51,384 views Utilisateur mouharassoulmd@gmail.com retiré du groupe administrateurs
+INFO 2025-07-28 06:16:51,389 views Utilisateur mouharassoulmd@gmail.com retiré du groupe medecins
+INFO 2025-07-28 06:16:51,394 views Utilisateur mouharassoulmd@gmail.com retiré du groupe patients
+INFO 2025-07-28 06:16:51,398 views Utilisateur mouharassoulmd@gmail.com ajouté au groupe medecins
+INFO 2025-07-28 06:16:51,399 models ✅ Groupes Django auto-synchronisés pour mouharassoulmd@gmail.com (rôle: medecin)
+INFO 2025-07-28 06:16:51,399 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: mouharassoulmd@gmail.com
+INFO 2025-07-28 06:16:51,737 keycloak_auto_sync 🎯 Utilisateur mouharassoulmd@gmail.com assigné au groupe 'médecins' dans Keycloak
+INFO 2025-07-28 06:16:51,829 keycloak_auto_sync 🎭 Rôles REALM assignés à mouharassoulmd@gmail.com: ['medecin', 'user', 'offline_access']
+INFO 2025-07-28 06:16:51,890 keycloak_auto_sync ✅ Profil ET groupes Keycloak mis à jour automatiquement: mouharassoulmd@gmail.com
+INFO 2025-07-28 06:16:51,892 keycloak_auto_sync [SUCCESS] Synchronisation COMPLETE reussie: mouharassoulmd@gmail.com
+INFO 2025-07-28 06:16:51,892 keycloak_auto_sync    Profil Keycloak cree/mis a jour
+INFO 2025-07-28 06:16:51,893 keycloak_auto_sync    Groupe assigne selon role: medecin
+INFO 2025-07-28 06:16:51,899 keycloak_auto_sync    Roles realm et client assignes
+INFO 2025-07-28 06:16:51,903 keycloak_auto_sync    Utilisateur peut maintenant se connecter!
+INFO 2025-07-28 06:16:51,914 basehttp "GET /oidc/callback/?state=OvBZGiSlDrLeSimnP6ATgQT35ghRWOwg&session_state=f96c8265-67ff-4a50-bad6-cda7ebf9e6e4&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=f60815c1-9f5d-4c85-b81e-8bb4bbe575c7.f96c8265-67ff-4a50-bad6-cda7ebf9e6e4.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-28 06:16:52,133 views Utilisateur: None, Groupes: ['médecins', 'medecins']
+INFO 2025-07-28 06:16:52,135 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:16:52,520 basehttp "GET /medecin/ HTTP/1.1" 200 8107
+INFO 2025-07-28 06:16:52,675 basehttp "GET /static/images/medecin.jpg HTTP/1.1" 304 0
+WARNING 2025-07-28 06:16:53,530 log Not Found: /favicon.ico
+WARNING 2025-07-28 06:16:53,531 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-28 06:17:02,528 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:17:02,634 basehttp "GET / HTTP/1.1" 200 20978
+WARNING 2025-07-28 06:17:03,246 log Not Found: /favicon.ico
+WARNING 2025-07-28 06:17:03,249 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-28 06:17:06,996 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:17:48,976 keycloak_auto_sync 🧹 Données nettoyées: rassoulmouhamd2@gmail.com - Moustapha DIOP
+INFO 2025-07-28 06:17:49,004 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe administrateurs
+INFO 2025-07-28 06:17:49,010 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe medecins
+INFO 2025-07-28 06:17:49,019 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe patients
+INFO 2025-07-28 06:17:49,034 views Utilisateur rassoulmouhamd2@gmail.com ajouté au groupe medecins
+INFO 2025-07-28 06:17:49,035 models ✅ Groupes Django auto-synchronisés pour rassoulmouhamd2@gmail.com (rôle: medecin)
+INFO 2025-07-28 06:17:49,035 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: rassoulmouhamd2@gmail.com
+INFO 2025-07-28 06:17:49,371 keycloak_auto_sync 🎯 Utilisateur rassoulmouhamd2@gmail.com assigné au groupe 'médecins' dans Keycloak
+INFO 2025-07-28 06:17:49,468 keycloak_auto_sync 🎭 Rôles REALM assignés à rassoulmouhamd2@gmail.com: ['medecin', 'user', 'offline_access']
+INFO 2025-07-28 06:17:49,550 keycloak_auto_sync ✅ Profil ET groupes Keycloak mis à jour automatiquement: rassoulmouhamd2@gmail.com
+INFO 2025-07-28 06:17:49,554 keycloak_auto_sync [SUCCESS] Synchronisation COMPLETE reussie: rassoulmouhamd2@gmail.com
+INFO 2025-07-28 06:17:49,564 keycloak_auto_sync    Profil Keycloak cree/mis a jour
+INFO 2025-07-28 06:17:49,565 keycloak_auto_sync    Groupe assigne selon role: medecin
+INFO 2025-07-28 06:17:49,565 keycloak_auto_sync    Roles realm et client assignes
+INFO 2025-07-28 06:17:49,565 keycloak_auto_sync    Utilisateur peut maintenant se connecter!
+DEBUG 2025-07-28 06:17:49,566 auth_backends Claims complets pour None: {'sub': 'd64b4804-a3bf-4a82-a56e-ee3272a37b20', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']}, 'name': 'Moustapha DIOP', 'preferred_username': 'rassoulmouhamd2@gmail.com', 'given_name': 'Moustapha', 'family_name': 'DIOP', 'email': 'rassoulmouhamd2@gmail.com'}
+DEBUG 2025-07-28 06:17:49,566 auth_backends Rôles realm trouvés: ['offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure', 'medecin']
+INFO 2025-07-28 06:17:49,568 auth_backends Rôles extraits pour None: ['default-roles-keurdoctorsecure', 'medecin', 'offline_access', 'uma_authorization']
+INFO 2025-07-28 06:17:49,586 keycloak_auto_sync 🧹 Données nettoyées: rassoulmouhamd2@gmail.com - Moustapha DIOP
+INFO 2025-07-28 06:17:49,608 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe administrateurs
+INFO 2025-07-28 06:17:49,620 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe medecins
+INFO 2025-07-28 06:17:49,624 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe patients
+INFO 2025-07-28 06:17:49,640 views Utilisateur rassoulmouhamd2@gmail.com ajouté au groupe medecins
+INFO 2025-07-28 06:17:49,640 models ✅ Groupes Django auto-synchronisés pour rassoulmouhamd2@gmail.com (rôle: medecin)
+INFO 2025-07-28 06:17:49,643 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: rassoulmouhamd2@gmail.com
+INFO 2025-07-28 06:17:49,886 keycloak_auto_sync 🎯 Utilisateur rassoulmouhamd2@gmail.com assigné au groupe 'médecins' dans Keycloak
+INFO 2025-07-28 06:17:49,954 keycloak_auto_sync 🎭 Rôles REALM assignés à rassoulmouhamd2@gmail.com: ['medecin', 'user', 'offline_access']
+INFO 2025-07-28 06:17:50,027 keycloak_auto_sync ✅ Profil ET groupes Keycloak mis à jour automatiquement: rassoulmouhamd2@gmail.com
+INFO 2025-07-28 06:17:50,029 keycloak_auto_sync [SUCCESS] Synchronisation COMPLETE reussie: rassoulmouhamd2@gmail.com
+INFO 2025-07-28 06:17:50,030 keycloak_auto_sync    Profil Keycloak cree/mis a jour
+INFO 2025-07-28 06:17:50,030 keycloak_auto_sync    Groupe assigne selon role: medecin
+INFO 2025-07-28 06:17:50,031 keycloak_auto_sync    Roles realm et client assignes
+INFO 2025-07-28 06:17:50,031 keycloak_auto_sync    Utilisateur peut maintenant se connecter!
+INFO 2025-07-28 06:17:50,031 auth_backends Champ role_autorise synchronisé: rassoulmouhamd2@gmail.com -> medecin (groupe: médecins)
+INFO 2025-07-28 06:17:50,048 keycloak_auto_sync 🧹 Données nettoyées: rassoulmouhamd2@gmail.com - Moustapha DIOP
+INFO 2025-07-28 06:17:50,056 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe administrateurs
+INFO 2025-07-28 06:17:50,062 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe medecins
+INFO 2025-07-28 06:17:50,068 views Utilisateur rassoulmouhamd2@gmail.com retiré du groupe patients
+INFO 2025-07-28 06:17:50,072 views Utilisateur rassoulmouhamd2@gmail.com ajouté au groupe medecins
+INFO 2025-07-28 06:17:50,072 models ✅ Groupes Django auto-synchronisés pour rassoulmouhamd2@gmail.com (rôle: medecin)
+INFO 2025-07-28 06:17:50,079 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: rassoulmouhamd2@gmail.com
+INFO 2025-07-28 06:17:50,458 keycloak_auto_sync 🎯 Utilisateur rassoulmouhamd2@gmail.com assigné au groupe 'médecins' dans Keycloak
+INFO 2025-07-28 06:17:50,639 keycloak_auto_sync 🎭 Rôles REALM assignés à rassoulmouhamd2@gmail.com: ['medecin', 'user', 'offline_access']
+INFO 2025-07-28 06:17:50,782 keycloak_auto_sync ✅ Profil ET groupes Keycloak mis à jour automatiquement: rassoulmouhamd2@gmail.com
+INFO 2025-07-28 06:17:50,806 keycloak_auto_sync [SUCCESS] Synchronisation COMPLETE reussie: rassoulmouhamd2@gmail.com
+INFO 2025-07-28 06:17:50,815 keycloak_auto_sync    Profil Keycloak cree/mis a jour
+INFO 2025-07-28 06:17:50,818 keycloak_auto_sync    Groupe assigne selon role: medecin
+INFO 2025-07-28 06:17:50,818 keycloak_auto_sync    Roles realm et client assignes
+INFO 2025-07-28 06:17:50,819 keycloak_auto_sync    Utilisateur peut maintenant se connecter!
+INFO 2025-07-28 06:17:50,830 basehttp "GET /oidc/callback/?state=GPfqTMpPid4AvYPvw6j8PT8xrxYtZuu6&session_state=20012239-6105-45ef-9e17-1d756816c676&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=591c8d9d-b830-4edb-8644-8ac9aac12761.20012239-6105-45ef-9e17-1d756816c676.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-28 06:17:51,285 views Utilisateur: None, Groupes: ['medecins', 'médecins']
+INFO 2025-07-28 06:17:51,295 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:17:51,598 basehttp "GET /medecin/ HTTP/1.1" 200 8113
+WARNING 2025-07-28 06:17:52,105 log Not Found: /favicon.ico
+WARNING 2025-07-28 06:17:52,106 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-28 06:18:05,145 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:18:05,230 basehttp "GET / HTTP/1.1" 200 20978
+WARNING 2025-07-28 06:18:05,698 log Not Found: /favicon.ico
+WARNING 2025-07-28 06:18:05,701 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-28 06:18:07,616 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:18:29,245 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-28 06:18:29,262 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-28 06:18:29,266 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-28 06:18:29,270 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-28 06:18:29,284 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-28 06:18:29,285 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-28 06:18:29,285 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-28 06:18:29,454 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-28 06:18:29,455 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-28 06:18:29,456 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+DEBUG 2025-07-28 06:18:29,456 auth_backends Claims complets pour None: {'sub': 'cb0dd49b-05e3-4647-9fc5-f139faa5b871', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Administrateur Systeme', 'preferred_username': 'admin', 'locale': 'en', 'given_name': 'Administrateur', 'family_name': 'Systeme', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-28 06:18:29,457 auth_backends Rôles realm trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-28 06:18:29,457 auth_backends Rôles extraits pour None: ['default-roles-keurdoctorsecure', 'admin', 'offline_access', 'uma_authorization']
+INFO 2025-07-28 06:18:29,468 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-28 06:18:29,474 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-28 06:18:29,478 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-28 06:18:29,482 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-28 06:18:29,487 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-28 06:18:29,487 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-28 06:18:29,492 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-28 06:18:29,648 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-28 06:18:29,649 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-28 06:18:29,649 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+INFO 2025-07-28 06:18:29,650 auth_backends Champ role_autorise synchronisé: admin@keurdoctor.com -> admin (groupe: administrateurs)
+INFO 2025-07-28 06:18:29,668 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-28 06:18:29,676 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-28 06:18:29,679 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-28 06:18:29,682 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-28 06:18:29,686 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-28 06:18:29,689 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-28 06:18:29,696 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-28 06:18:29,877 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-28 06:18:29,879 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-28 06:18:29,880 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+INFO 2025-07-28 06:18:29,885 basehttp "GET /oidc/callback/?state=VDh5IUd3Jif5kuhCdnr6bV78e0WhzMxY&session_state=97ed5d56-b494-4bbb-aff0-aec714dcedfd&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=a9ec194b-a4d0-46f0-a2f2-e4497e47f5cd.97ed5d56-b494-4bbb-aff0-aec714dcedfd.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-28 06:18:30,115 views Utilisateur staff/admin détecté: None
+INFO 2025-07-28 06:18:30,117 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:18:30,511 basehttp "GET /administration/ HTTP/1.1" 200 9754
+WARNING 2025-07-28 06:18:30,887 log Not Found: /favicon.ico
+WARNING 2025-07-28 06:18:30,888 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-28 06:18:34,877 basehttp "GET /administration/users/ HTTP/1.1" 200 7086
+INFO 2025-07-28 06:18:38,587 basehttp "GET /administration/users/create/ HTTP/1.1" 200 23250
+WARNING 2025-07-28 06:18:39,057 log Not Found: /favicon.ico
+WARNING 2025-07-28 06:18:39,059 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-28 06:20:04,426 keycloak_auto_sync 🧹 Données nettoyées: sadikhniang010@gmail.com - Babacar NIANG
+INFO 2025-07-28 06:20:04,443 views Utilisateur sadikhniang010@gmail.com retiré du groupe administrateurs
+INFO 2025-07-28 06:20:04,447 views Utilisateur sadikhniang010@gmail.com retiré du groupe medecins
+INFO 2025-07-28 06:20:04,451 views Utilisateur sadikhniang010@gmail.com retiré du groupe patients
+INFO 2025-07-28 06:20:04,485 views Utilisateur sadikhniang010@gmail.com ajouté au groupe patients
+INFO 2025-07-28 06:20:04,497 models ✅ Groupes Django auto-synchronisés pour sadikhniang010@gmail.com (rôle: patient)
+INFO 2025-07-28 06:20:04,554 views Tentative de création de l'utilisateur sadikhniang010@gmail.com dans Keycloak avec le rôle patient
+INFO 2025-07-28 06:20:05,201 views Création de l'utilisateur sadikhniang010@gmail.com dans Keycloak...
+INFO 2025-07-28 06:20:05,637 views Utilisateur sadikhniang010@gmail.com créé dans Keycloak
+INFO 2025-07-28 06:20:06,004 views [SYNC] Tentative d'ajout de sadikhniang010@gmail.com au groupe 'patients' dans Keycloak
+INFO 2025-07-28 06:20:06,070 views Groupes disponibles dans Keycloak: ['administrateurs', 'medecins', 'médecins', 'patients']
+INFO 2025-07-28 06:20:06,088 views Groupe 'patients' trouvé avec ID: 0cb1e7e0-3d69-4c2e-ae8b-cdbe346357d9
+INFO 2025-07-28 06:20:06,120 views Groupes actuels de sadikhniang010@gmail.com: []
+INFO 2025-07-28 06:20:06,264 views [SYNC] Utilisateur sadikhniang010@gmail.com ajouté au groupe patients dans Keycloak
+INFO 2025-07-28 06:20:06,685 views [SYNC] Rôle 'patient' attribué à sadikhniang010@gmail.com dans Keycloak
+INFO 2025-07-28 06:20:06,710 views Utilisateur sadikhniang010@gmail.com synchronisé avec succès dans Keycloak avec le rôle patient
+INFO 2025-07-28 06:20:14,446 views Email de bienvenue envoyé à sadikhniang010@gmail.com
+INFO 2025-07-28 06:20:14,447 views Utilisateur sadikhniang010@gmail.com créé avec succès dans Django et Keycloak
+INFO 2025-07-28 06:20:14,476 basehttp "POST /administration/users/create/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:20:14,697 basehttp "GET /administration/users/ HTTP/1.1" 200 7813
+WARNING 2025-07-28 06:20:15,001 log Not Found: /favicon.ico
+WARNING 2025-07-28 06:20:15,005 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-28 06:20:26,693 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:20:26,824 basehttp "GET / HTTP/1.1" 200 20978
+WARNING 2025-07-28 06:20:27,613 log Not Found: /favicon.ico
+WARNING 2025-07-28 06:20:27,627 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-28 06:20:31,210 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:21:37,319 keycloak_auto_sync 🧹 Données nettoyées: sadikhniang010@gmail.com - Babacar NIANG
+INFO 2025-07-28 06:21:37,345 views Utilisateur sadikhniang010@gmail.com retiré du groupe administrateurs
+INFO 2025-07-28 06:21:37,351 views Utilisateur sadikhniang010@gmail.com retiré du groupe medecins
+INFO 2025-07-28 06:21:37,355 views Utilisateur sadikhniang010@gmail.com retiré du groupe patients
+INFO 2025-07-28 06:21:37,368 views Utilisateur sadikhniang010@gmail.com ajouté au groupe patients
+INFO 2025-07-28 06:21:37,371 models ✅ Groupes Django auto-synchronisés pour sadikhniang010@gmail.com (rôle: patient)
+INFO 2025-07-28 06:21:37,372 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: sadikhniang010@gmail.com
+INFO 2025-07-28 06:21:37,575 keycloak_auto_sync 🎯 Utilisateur sadikhniang010@gmail.com assigné au groupe 'patients' dans Keycloak
+INFO 2025-07-28 06:21:37,625 keycloak_auto_sync 🎭 Rôles REALM assignés à sadikhniang010@gmail.com: ['patient', 'user', 'offline_access']
+INFO 2025-07-28 06:21:37,673 keycloak_auto_sync ✅ Profil ET groupes Keycloak mis à jour automatiquement: sadikhniang010@gmail.com
+INFO 2025-07-28 06:21:37,677 keycloak_auto_sync [SUCCESS] Synchronisation COMPLETE reussie: sadikhniang010@gmail.com
+INFO 2025-07-28 06:21:37,678 keycloak_auto_sync    Profil Keycloak cree/mis a jour
+INFO 2025-07-28 06:21:37,679 keycloak_auto_sync    Groupe assigne selon role: patient
+INFO 2025-07-28 06:21:37,686 keycloak_auto_sync    Roles realm et client assignes
+INFO 2025-07-28 06:21:37,686 keycloak_auto_sync    Utilisateur peut maintenant se connecter!
+DEBUG 2025-07-28 06:21:37,687 auth_backends Claims complets pour None: {'sub': '72d23055-8014-4c70-89a9-c3d79cffd8ba', 'email_verified': True, 'realm_access': {'roles': ['patient', 'offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Babacar NIANG', 'preferred_username': 'sadikhniang010@gmail.com', 'given_name': 'Babacar', 'family_name': 'NIANG', 'email': 'sadikhniang010@gmail.com'}
+DEBUG 2025-07-28 06:21:37,688 auth_backends Rôles realm trouvés: ['patient', 'offline_access', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-28 06:21:37,689 auth_backends Rôles extraits pour None: ['default-roles-keurdoctorsecure', 'patient', 'offline_access', 'uma_authorization']
+INFO 2025-07-28 06:21:37,704 keycloak_auto_sync 🧹 Données nettoyées: sadikhniang010@gmail.com - Babacar NIANG
+INFO 2025-07-28 06:21:37,712 views Utilisateur sadikhniang010@gmail.com retiré du groupe administrateurs
+INFO 2025-07-28 06:21:37,716 views Utilisateur sadikhniang010@gmail.com retiré du groupe medecins
+INFO 2025-07-28 06:21:37,727 views Utilisateur sadikhniang010@gmail.com retiré du groupe patients
+INFO 2025-07-28 06:21:37,732 views Utilisateur sadikhniang010@gmail.com ajouté au groupe patients
+INFO 2025-07-28 06:21:37,738 models ✅ Groupes Django auto-synchronisés pour sadikhniang010@gmail.com (rôle: patient)
+INFO 2025-07-28 06:21:37,740 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: sadikhniang010@gmail.com
+INFO 2025-07-28 06:21:37,942 keycloak_auto_sync 🎯 Utilisateur sadikhniang010@gmail.com assigné au groupe 'patients' dans Keycloak
+INFO 2025-07-28 06:21:38,010 keycloak_auto_sync 🎭 Rôles REALM assignés à sadikhniang010@gmail.com: ['patient', 'user', 'offline_access']
+INFO 2025-07-28 06:21:38,055 keycloak_auto_sync ✅ Profil ET groupes Keycloak mis à jour automatiquement: sadikhniang010@gmail.com
+INFO 2025-07-28 06:21:38,059 keycloak_auto_sync [SUCCESS] Synchronisation COMPLETE reussie: sadikhniang010@gmail.com
+INFO 2025-07-28 06:21:38,060 keycloak_auto_sync    Profil Keycloak cree/mis a jour
+INFO 2025-07-28 06:21:38,061 keycloak_auto_sync    Groupe assigne selon role: patient
+INFO 2025-07-28 06:21:38,061 keycloak_auto_sync    Roles realm et client assignes
+INFO 2025-07-28 06:21:38,061 keycloak_auto_sync    Utilisateur peut maintenant se connecter!
+INFO 2025-07-28 06:21:38,062 auth_backends Champ role_autorise synchronisé: sadikhniang010@gmail.com -> patient (groupe: patients)
+INFO 2025-07-28 06:21:38,082 keycloak_auto_sync 🧹 Données nettoyées: sadikhniang010@gmail.com - Babacar NIANG
+INFO 2025-07-28 06:21:38,090 views Utilisateur sadikhniang010@gmail.com retiré du groupe administrateurs
+INFO 2025-07-28 06:21:38,093 views Utilisateur sadikhniang010@gmail.com retiré du groupe medecins
+INFO 2025-07-28 06:21:38,100 views Utilisateur sadikhniang010@gmail.com retiré du groupe patients
+INFO 2025-07-28 06:21:38,107 views Utilisateur sadikhniang010@gmail.com ajouté au groupe patients
+INFO 2025-07-28 06:21:38,107 models ✅ Groupes Django auto-synchronisés pour sadikhniang010@gmail.com (rôle: patient)
+INFO 2025-07-28 06:21:38,108 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: sadikhniang010@gmail.com
+INFO 2025-07-28 06:21:38,374 keycloak_auto_sync 🎯 Utilisateur sadikhniang010@gmail.com assigné au groupe 'patients' dans Keycloak
+INFO 2025-07-28 06:21:38,419 keycloak_auto_sync 🎭 Rôles REALM assignés à sadikhniang010@gmail.com: ['patient', 'user', 'offline_access']
+INFO 2025-07-28 06:21:38,455 keycloak_auto_sync ✅ Profil ET groupes Keycloak mis à jour automatiquement: sadikhniang010@gmail.com
+INFO 2025-07-28 06:21:38,457 keycloak_auto_sync [SUCCESS] Synchronisation COMPLETE reussie: sadikhniang010@gmail.com
+INFO 2025-07-28 06:21:38,460 keycloak_auto_sync    Profil Keycloak cree/mis a jour
+INFO 2025-07-28 06:21:38,461 keycloak_auto_sync    Groupe assigne selon role: patient
+INFO 2025-07-28 06:21:38,463 keycloak_auto_sync    Roles realm et client assignes
+INFO 2025-07-28 06:21:38,468 keycloak_auto_sync    Utilisateur peut maintenant se connecter!
+INFO 2025-07-28 06:21:38,483 basehttp "GET /oidc/callback/?state=ipGZntEXpQWFldTbtBLPaq5pve3WDOtG&session_state=2d3661d4-408a-4edc-b24d-11cd4b639f5a&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=fb8214a0-f983-4df8-926e-acee894b6fb4.2d3661d4-408a-4edc-b24d-11cd4b639f5a.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-28 06:21:38,818 views Utilisateur: None, Groupes: ['patients']
+INFO 2025-07-28 06:21:38,820 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:21:39,006 basehttp "GET /patient/ HTTP/1.1" 200 7299
+INFO 2025-07-28 06:21:39,125 basehttp "GET /static/images/patient-bg.jpg HTTP/1.1" 304 0
+WARNING 2025-07-28 06:21:39,491 log Not Found: /favicon.ico
+WARNING 2025-07-28 06:21:39,492 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-28 06:21:57,876 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:21:57,978 basehttp "GET / HTTP/1.1" 200 20978
+WARNING 2025-07-28 06:21:58,376 log Not Found: /favicon.ico
+WARNING 2025-07-28 06:21:58,377 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-28 06:22:02,932 basehttp "GET /oidc/authenticate/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:22:25,803 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-28 06:22:25,835 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-28 06:22:25,840 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-28 06:22:25,844 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-28 06:22:25,864 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-28 06:22:25,870 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-28 06:22:25,871 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-28 06:22:26,077 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-28 06:22:26,078 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-28 06:22:26,081 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+DEBUG 2025-07-28 06:22:26,081 auth_backends Claims complets pour None: {'sub': 'cb0dd49b-05e3-4647-9fc5-f139faa5b871', 'email_verified': True, 'realm_access': {'roles': ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']}, 'name': 'Administrateur Systeme', 'preferred_username': 'admin', 'locale': 'en', 'given_name': 'Administrateur', 'family_name': 'Systeme', 'email': 'admin@keurdoctor.com'}
+DEBUG 2025-07-28 06:22:26,085 auth_backends Rôles realm trouvés: ['offline_access', 'admin', 'uma_authorization', 'default-roles-keurdoctorsecure']
+INFO 2025-07-28 06:22:26,087 auth_backends Rôles extraits pour None: ['default-roles-keurdoctorsecure', 'admin', 'offline_access', 'uma_authorization']
+INFO 2025-07-28 06:22:26,104 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-28 06:22:26,112 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-28 06:22:26,122 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-28 06:22:26,126 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-28 06:22:26,131 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-28 06:22:26,132 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-28 06:22:26,134 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-28 06:22:26,306 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-28 06:22:26,307 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-28 06:22:26,308 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+INFO 2025-07-28 06:22:26,309 auth_backends Champ role_autorise synchronisé: admin@keurdoctor.com -> admin (groupe: administrateurs)
+INFO 2025-07-28 06:22:26,322 keycloak_auto_sync 🧹 Données nettoyées: admin@keurdoctor.com - Administrateur Systeme
+INFO 2025-07-28 06:22:26,328 views Utilisateur admin@keurdoctor.com retiré du groupe administrateurs
+INFO 2025-07-28 06:22:26,334 views Utilisateur admin@keurdoctor.com retiré du groupe medecins
+INFO 2025-07-28 06:22:26,338 views Utilisateur admin@keurdoctor.com retiré du groupe patients
+INFO 2025-07-28 06:22:26,345 views Utilisateur admin@keurdoctor.com ajouté au groupe administrateurs
+INFO 2025-07-28 06:22:26,348 models ✅ Groupes Django auto-synchronisés pour admin@keurdoctor.com (rôle: admin)
+INFO 2025-07-28 06:22:26,350 keycloak_auto_sync 🔄 Modification détectée - Synchronisation COMPLÈTE: admin@keurdoctor.com
+ERROR 2025-07-28 06:22:26,503 keycloak_auto_sync ❌ Erreur mise à jour Keycloak: 400
+WARNING 2025-07-28 06:22:26,505 keycloak_auto_sync [WARNING] Synchronisation COMPLETE echouee: admin@keurdoctor.com
+WARNING 2025-07-28 06:22:26,506 keycloak_auto_sync    L'utilisateur pourrait ne pas pouvoir se connecter
+INFO 2025-07-28 06:22:26,509 basehttp "GET /oidc/callback/?state=tvXrPZwv4uTU1yVw27DbT25kQxKdNi2B&session_state=5c7b11fe-e10f-4592-92db-0fe1717008f5&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2FKeurDoctorSecure&code=bc4c0e32-2ed5-489d-8e82-dce997068d08.5c7b11fe-e10f-4592-92db-0fe1717008f5.3cf588c0-4566-44db-bd7f-0752d263d590 HTTP/1.1" 302 0
+INFO 2025-07-28 06:22:26,714 views Utilisateur staff/admin détecté: None
+INFO 2025-07-28 06:22:26,716 basehttp "GET /redirection/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:22:26,934 basehttp "GET /administration/ HTTP/1.1" 200 9754
+WARNING 2025-07-28 06:22:27,326 log Not Found: /favicon.ico
+WARNING 2025-07-28 06:22:27,327 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-28 06:22:29,147 basehttp "GET /administration/securite/ HTTP/1.1" 200 21901
+WARNING 2025-07-28 06:22:29,525 log Not Found: /favicon.ico
+INFO 2025-07-28 06:22:29,526 basehttp - Broken pipe from ('127.0.0.1', 52579)
+INFO 2025-07-28 06:22:49,574 basehttp "GET /administration/ HTTP/1.1" 200 9754
+WARNING 2025-07-28 06:22:49,906 log Not Found: /favicon.ico
+INFO 2025-07-28 06:22:49,907 basehttp - Broken pipe from ('127.0.0.1', 52112)
+INFO 2025-07-28 06:22:53,501 basehttp "GET /administration/statistiques/ HTTP/1.1" 200 22860
+WARNING 2025-07-28 06:22:53,996 log Not Found: /favicon.ico
+INFO 2025-07-28 06:22:53,997 basehttp - Broken pipe from ('127.0.0.1', 55108)
+INFO 2025-07-28 06:23:02,664 basehttp "GET /administration/ HTTP/1.1" 200 9754
+INFO 2025-07-28 06:23:27,401 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 17060
+INFO 2025-07-28 06:23:27,665 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+WARNING 2025-07-28 06:23:27,961 log Not Found: /favicon.ico
+WARNING 2025-07-28 06:23:27,969 basehttp "GET /favicon.ico HTTP/1.1" 404 19991
+INFO 2025-07-28 06:23:59,536 basehttp "POST /admin/comptes/utilisateur/ HTTP/1.1" 200 11214
+INFO 2025-07-28 06:24:02,561 basehttp "POST /admin/comptes/utilisateur/ HTTP/1.1" 302 0
+INFO 2025-07-28 06:24:02,827 basehttp "GET /admin/comptes/utilisateur/ HTTP/1.1" 200 14886
+INFO 2025-07-28 06:24:03,160 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8634
+WARNING 2025-07-28 06:24:03,483 log Not Found: /favicon.ico
+INFO 2025-07-28 06:24:03,485 basehttp - Broken pipe from ('127.0.0.1', 55164)
+INFO 2025-07-28 06:24:11,392 basehttp "GET /administration/ HTTP/1.1" 200 9466
+INFO 2025-07-28 06:24:17,291 basehttp "GET /administration/users/ HTTP/1.1" 200 5629
+WARNING 2025-07-28 06:24:17,675 log Not Found: /favicon.ico
+INFO 2025-07-28 06:24:17,678 basehttp - Broken pipe from ('127.0.0.1', 55126)
+INFO 2025-07-28 06:24:20,118 basehttp "GET /administration/users/create/ HTTP/1.1" 200 22843
+WARNING 2025-07-28 06:24:20,518 log Not Found: /favicon.ico
+INFO 2025-07-28 06:24:20,519 basehttp - Broken pipe from ('127.0.0.1', 55242)

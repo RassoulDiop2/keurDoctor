@@ -1464,7 +1464,7 @@ def create_keycloak_user_with_role(utilisateur, role, password):
             password_payload = {
                 "type": "password",
                 "value": password,
-                "temporary": True  # L'utilisateur devra changer son mot de passe à la première connexion
+                "temporary": False  # ✅ Mot de passe permanent - pas de changement forcé
             }
             pwd_url = f"{settings.KEYCLOAK_SERVER_URL}/admin/realms/{settings.OIDC_REALM}/users/{user_id}/reset-password"
             pwd_resp = requests.put(pwd_url, json=password_payload, headers=headers)
